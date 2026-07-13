@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7e1f10fdef450b04390edf16f9b8ed7c
+timeCreated: 1531520627
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 123184
+  packageName: Geiger Counter Radiation XRAY Nuclear Tester
+  packageVersion: 1.0
+  assetPath: Assets/devotid/Geiger Counter/Materials/Geiger Counter.mat
+  uploadId: 747421

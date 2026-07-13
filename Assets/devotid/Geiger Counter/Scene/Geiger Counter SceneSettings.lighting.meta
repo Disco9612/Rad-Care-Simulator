@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d094484b79d1c624d994191cf1f0898e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 123184
+  packageName: Geiger Counter Radiation XRAY Nuclear Tester
+  packageVersion: 1.0
+  assetPath: Assets/devotid/Geiger Counter/Scene/Geiger Counter SceneSettings.lighting
+  uploadId: 747421

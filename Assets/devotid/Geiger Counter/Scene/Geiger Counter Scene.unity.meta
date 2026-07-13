@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fc0beb744e0b0d845b0332347d809025
+timeCreated: 1531521442
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 123184
+  packageName: Geiger Counter Radiation XRAY Nuclear Tester
+  packageVersion: 1.0
+  assetPath: Assets/devotid/Geiger Counter/Scene/Geiger Counter Scene.unity
+  uploadId: 747421

@@ -8,7 +8,8 @@ public enum ScenarioStep
     SurveyMeterInteraction,
     SurveyMeterWarningInteraction,
     SalineInteraction,
-    ToolDisposal,
+    ForcepsInteraction,
+    DisposeStage,
     ResultVerification
 }
 
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     private void GameStart(bool isPinching)
     {
-        if (isPinching)
+        if (isPinching && currentStep == ScenarioStep.Briefing)
         {
             mainUI.alpha = 0f;
             mainUI.blocksRaycasts = false;

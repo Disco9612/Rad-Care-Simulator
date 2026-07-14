@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using static UnityEngine.ParticleSystem;
 
 public class ParticleContactDetector : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class ParticleContactDetector : MonoBehaviour
 
     private Coroutine checkCoroutine;
     private bool isContacting = false;
-
-    // 파티클 트리거 모듈이 감지할 때마다 호출됨
     void OnParticleTrigger()
     {
         List<ParticleSystem.Particle> insideParticles = new List<ParticleSystem.Particle>();
@@ -47,6 +46,10 @@ public class ParticleContactDetector : MonoBehaviour
 
     void TriggerSpecialEvent()
     {
-        targetObject.gameObject.SetActive(false);
+        SalineBottle _salineBottle = GetComponentInParent<SalineBottle>();
+        if (_salineBottle.placeHolder != null)
+        {
+            _salineBottle.placeHolder.gameObject.SetActive(true);
+        }
     }
 }

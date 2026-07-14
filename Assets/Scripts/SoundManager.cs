@@ -16,7 +16,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip trashSound;
     public AudioClip itemSound;
     [Header("NPC")]
-    public AudioSource NPC1;
+    public AudioClip NPC1;
     public AudioClip NPC2;
     public AudioClip NPC3;
     public AudioClip NPC4;

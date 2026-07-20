@@ -17,7 +17,7 @@ public class SalineBottle : MonoBehaviour
 
     private Coroutine _glowCoroutine;
     private Material _material;
-    private Grabbable _grabbable;
+    private Transform grabInteraction;
     public GameObject placeHolder;
 
     private float pouringTimer = 0f;
@@ -31,10 +31,10 @@ public class SalineBottle : MonoBehaviour
             placeHolder.SetActive(false);
         }
 
-        _grabbable = GetComponent<Grabbable>();
-        if (_grabbable != null)
+        grabInteraction = transform.Find("[BuildingBlock] HandGrabInstallationRoutine");
+        if (grabInteraction != null)
         {
-            _grabbable.enabled = false;
+            grabInteraction.gameObject.SetActive(false);
         }
 
         Renderer rend = GetComponent<Renderer>();
@@ -62,9 +62,9 @@ public class SalineBottle : MonoBehaviour
         }
         if (GameManager.Instance.currentStep == ScenarioStep.SalineInteraction && other.name.Contains("PlaceHolder"))
         {
+            grabInteraction.gameObject.SetActive(false);
             transform.position = other.transform.position;
             transform.rotation = other.transform.rotation;
-            _grabbable.enabled = false;
             GameManager.Instance.currentStep = ScenarioStep.ForcepsInteraction;
             other.gameObject.SetActive(false);
             Debug.Log("상태 : ForcepsInteraction");
@@ -154,7 +154,7 @@ public class SalineBottle : MonoBehaviour
         // 특정 단계일 때만 코루틴 시작
         if (newStep == ScenarioStep.SalineInteraction)
         {
-            _grabbable.enabled = true;
+            grabInteraction.gameObject.SetActive(true);  
             _glowCoroutine = StartCoroutine(GlowRoutine());
         }
     }

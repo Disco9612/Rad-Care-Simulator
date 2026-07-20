@@ -6,7 +6,7 @@ public class Forceps : MonoBehaviour
 {
     private Coroutine _glowCoroutine;
     private Material _material;
-    private Grabbable _grabbable;
+    private Transform grabInteraction;
     public GameObject placeHolder;
     public GameObject targetObject;
     public float requiredTime;
@@ -14,6 +14,10 @@ public class Forceps : MonoBehaviour
     private Coroutine checkCoroutine;
     private bool isContacting = false;
     private Renderer rend;
+    public Material emptyMaterial;
+
+    public GameObject surveyMeter;
+    private SurveyMeter _srurveyMeter;
     void Start()
     {
         GameManager.Instance.OnStepChanged += HandleStepChanged;
@@ -23,10 +27,10 @@ public class Forceps : MonoBehaviour
             placeHolder.SetActive(false);
         }
 
-        _grabbable = GetComponent<Grabbable>();
-        if (_grabbable != null)
+        grabInteraction = transform.Find("[BuildingBlock] HandGrabInstallationRoutine");
+        if (grabInteraction != null)
         {
-            _grabbable.enabled = false;
+            grabInteraction.gameObject.SetActive(false);
         }
 
         rend = GetComponent<Renderer>();
@@ -35,14 +39,14 @@ public class Forceps : MonoBehaviour
             _material = GetComponent<Renderer>().material;
             _material.EnableKeyword("_EMISSION");
         }
-        void OnDestroy()
-        {
-            if (GameManager.Instance != null)
-                GameManager.Instance.OnStepChanged -= HandleStepChanged;
-        }
+      
 
     }
-
+    void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnStepChanged -= HandleStepChanged;
+    }
     void OnTriggerStay(Collider other)
     {
         if(GameManager.Instance.currentStep == ScenarioStep.ForcepsInteraction && other.gameObject == targetObject)
@@ -77,14 +81,33 @@ public class Forceps : MonoBehaviour
         {
             StopGlow();
         }
-        if(GameManager.Instance.currentStep == ScenarioStep.ForcepsInteraction && other.name.Contains("PlaceHolder"))
+        if(GameManager.Instance.currentStep == ScenarioStep.DisposeStage && other.name.Contains("PlaceHolder"))
         {
+            Debug.Log("집게 제자리로 돌아옴");
+            grabInteraction.gameObject.SetActive(false);
             transform.position = other.transform.position;
             transform.rotation = other.transform.rotation;
-            _grabbable.enabled = false;
-            //GameManager.Instance.currentStep = ScenarioStep.DisposeStage;
+
+            GameManager.Instance.currentStep = ScenarioStep.SurveyMeterInteraction;
+            _srurveyMeter = surveyMeter.GetComponent<SurveyMeter>();
+            _srurveyMeter.isTreatmentComplete = true;
+
             other.gameObject.SetActive(false);
             Debug.Log("상태 : DisposeStage");
+        }
+
+        if (GameManager.Instance.currentStep == ScenarioStep.DisposeStage && other.name.Contains("container"))
+        {
+            Material[] materials = rend.materials;
+            if(materials.Length > 0)
+            {
+                materials[0] = emptyMaterial;
+                rend.materials = materials;
+                gameObject.transform.Find("ForcepsBall_Colliders").gameObject.SetActive(false);
+                placeHolder.gameObject.SetActive(true);
+
+            }
+
         }
     }
 
@@ -123,7 +146,7 @@ public class Forceps : MonoBehaviour
         // 특정 단계일 때만 코루틴 시작
         if (newStep == ScenarioStep.ForcepsInteraction)
         {
-            _grabbable.enabled = true;
+            grabInteraction.gameObject.SetActive(true);
             _glowCoroutine = StartCoroutine(GlowRoutine());
         }
     }

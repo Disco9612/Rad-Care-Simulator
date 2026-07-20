@@ -11,6 +11,13 @@ public class ParticleContactDetector : MonoBehaviour
 
     private Coroutine checkCoroutine;
     private bool isContacting = false;
+
+    private ParticleSystem ps;
+
+    private void Start()
+    {
+        
+    }
     void OnParticleTrigger()
     {
         List<ParticleSystem.Particle> insideParticles = new List<ParticleSystem.Particle>();

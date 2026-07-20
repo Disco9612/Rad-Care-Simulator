@@ -8,12 +8,14 @@ public class SurveyMeter: MonoBehaviour
     private bool isScanningPlaying = false;
     private bool isWarningPlaying = false;
     private float bloodContactTimer = 0f;
+    private float rescanTime = 0f;
 
     private Coroutine _glowCoroutine;
     private Material _material;
-    private Grabbable _grabbable;
+    private Transform grabInteraction;
     public GameObject placeHolder;
     private bool isReported =false;
+    public bool isTreatmentComplete = false;
     private void Start()
     {
         GameManager.Instance.OnStepChanged += HandleStepChanged;
@@ -23,10 +25,10 @@ public class SurveyMeter: MonoBehaviour
             placeHolder.SetActive(false);
         }
 
-        _grabbable = GetComponent<Grabbable>();
-        if (_grabbable != null)
+        grabInteraction = transform.Find("[BuildingBlock] HandGrabInstallationRoutine");
+        if (grabInteraction != null)
         {
-            _grabbable.enabled = false;
+            grabInteraction.gameObject.SetActive(false);
         }
 
         Renderer rend = GetComponent<Renderer>();
@@ -48,45 +50,86 @@ public class SurveyMeter: MonoBehaviour
         {
             StopGlow();
         }
-        if (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction && other.name.Contains("PlaceHolder"))
+        if ((GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction 
+            || GameManager.Instance.currentStep == ScenarioStep.ResultVerification)
+            && other.name.Contains("PlaceHolder"))
         {
+            grabInteraction.gameObject.SetActive(false);
             transform.position = other.transform.position;
             transform.rotation = other.transform.rotation;
-            _grabbable.enabled = false;
-            GameManager.Instance.currentStep = ScenarioStep.SalineInteraction;
+            if(GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction)
+            {
+                GameManager.Instance.currentStep = ScenarioStep.SalineInteraction;
+            }
+            else if (GameManager.Instance.currentStep == ScenarioStep.ResultVerification)
+            {
+                GameManager.Instance.currentStep = ScenarioStep.End;
+            }
             other.gameObject.SetActive(false);
             Debug.Log("상태 : SalineInteraction");
         }
     }
     void OnTriggerStay(Collider other)
     {
-        if (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction && other.name.Contains("Collider"))
+        bool isStepValid = (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction
+                     || GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction);
+
+        // 1. Blood 충돌 처리 (우선순위: 경고음이 더 중요함)
+        if (other.name == "Blood")
+        {
+            if (!isWarningPlaying)
+            {
+                SoundManager.Instance.StopSFX(); // 스캔음 끄고
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.warningSound); // 경고음 재생
+                isWarningPlaying = true;
+                isScanningPlaying = false;
+            }
+
+            bloodContactTimer += Time.deltaTime;
+            if (bloodContactTimer >= 1.0f && !isReported)
+            {
+                isReported = true;
+                Invoke("ReportSituation", 3f);
+            }
+            return; // Blood 처리 후에는 아래 스캔 로직을 타지 않도록 종료
+        }
+
+        // 2. Collider 충돌 처리
+        if (isStepValid && other.name.Contains("Collider"))
+        {
+            // Blood 경고음이 재생 중이 아닐 때만 스캔음 재생
+            if (!isWarningPlaying && !isScanningPlaying)
+            {
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.scanSound);
+                isScanningPlaying = true;
+            }
+
+            // isTreatmentComplete 처리 로직
+            if (isTreatmentComplete)
+            {
+                rescanTime += Time.deltaTime;
+                if (rescanTime >= 2.0f && !isReported)
+                {
+                    Invoke("ReportSituation", 3f);
+                }
+            }
+        }
+
+        if (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction && other.name.Contains("Collider")
+           && isTreatmentComplete)
         {
             if (!isScanningPlaying)
             {
-                SoundManager.Instance.StopSFX();
                 isWarningPlaying = false;
 
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.scanSound);
                 isScanningPlaying = true;
             }
-        }
-        else if (other.name == "Blood")
-        {
 
-            if (!isWarningPlaying)
-            {                
-                SoundManager.Instance.StopSFX();
-                isScanningPlaying = false;
+            rescanTime += Time.deltaTime;
 
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.warningSound);
-                isWarningPlaying = true;
-
-                bloodContactTimer += Time.deltaTime;
-            }
-            if (bloodContactTimer >= 1.0f && !isReported)
+            if(rescanTime >= 2.0f && !isReported)
             {
-                isReported = true; // 실행했음을 표시
                 Invoke("ReportSituation", 3f);
             }
         }
@@ -108,9 +151,21 @@ public class SurveyMeter: MonoBehaviour
 
     public void ReportSituation()
     {
-        Debug.Log("NPC1 대사");
-        SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC1);
-        GameManager.Instance.currentStep = ScenarioStep.SurveyMeterWarningInteraction;
+        if (!isTreatmentComplete)
+        {
+            Debug.Log("NPC1 대사");
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC1);
+            GameManager.Instance.currentStep = ScenarioStep.SurveyMeterWarningInteraction;
+            isReported = false;
+        }
+        else
+        {
+            Debug.Log("NPC4 대사");
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC4);
+            GameManager.Instance.currentStep = ScenarioStep.ResultVerification;
+            isReported = false;
+        }
+
     }
 
     private void HandleStepChanged(ScenarioStep newStep)
@@ -123,13 +178,13 @@ public class SurveyMeter: MonoBehaviour
 
         if (newStep == ScenarioStep.SurveyMeterInteraction)
         {
-            if (_grabbable != null)
+            if (grabInteraction != null)
             {
-                _grabbable.enabled = true;
+                grabInteraction.gameObject.SetActive(true);
             }
             _glowCoroutine = StartCoroutine(GlowRoutine());
         }
-        else if(newStep == ScenarioStep.SurveyMeterWarningInteraction)
+        else if(newStep == ScenarioStep.SurveyMeterWarningInteraction || newStep == ScenarioStep.ResultVerification)
         {
             if (placeHolder != null)
             {

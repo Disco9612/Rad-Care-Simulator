@@ -10,7 +10,8 @@ public enum ScenarioStep
     SalineInteraction,
     ForcepsInteraction,
     DisposeStage,
-    ResultVerification
+    ResultVerification,
+    End
 }
 
 public class GameManager : MonoBehaviour
@@ -55,9 +56,9 @@ public class GameManager : MonoBehaviour
         }
 
         OnPinchStateChanged += GameStart;
-    }
+}
 
-    void OnDestroy()
+void OnDestroy()
     {
         OnPinchStateChanged -= GameStart;
     }

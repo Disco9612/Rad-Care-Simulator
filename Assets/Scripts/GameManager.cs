@@ -1,6 +1,6 @@
 using System;
+using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public enum ScenarioStep
 {
@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
 
     private ScenarioStep _currentStep = ScenarioStep.Briefing;
     public CanvasGroup mainUI;
+    public TextMeshProUGUI uIText;
     private bool _isCurrentlyPinching = false;
-    [SerializeField] private OVRHand righHand;
+    [SerializeField] private OVRHand leftHand;
 
     // 이벤트 기반으로 변경: 상태가 변경될 때만 처리
     private event Action<bool> OnPinchStateChanged;
@@ -65,7 +66,7 @@ void OnDestroy()
 
     void LateUpdate()
     {
-        bool isPinching = righHand.GetFingerIsPinching(OVRHand.HandFinger.Index);
+        bool isPinching = leftHand.GetFingerIsPinching(OVRHand.HandFinger.Index);
 
         if (isPinching != _isCurrentlyPinching)
         {
@@ -84,7 +85,14 @@ void OnDestroy()
             mainUI.alpha = 0f;
             mainUI.blocksRaycasts = false;
             currentStep = ScenarioStep.SurveyMeterInteraction;
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC1);
+            uIText.text = "제염 미션 완료. 결과 리포트를 출력합니다";
         }
     }
 
+    public void GameResult()
+    {
+        mainUI.alpha = 255f;
+        mainUI.blocksRaycasts = true;
+    }
 }

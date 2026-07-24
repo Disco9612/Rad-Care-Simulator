@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using static UnityEngine.ParticleSystem;
+using static Oculus.Interaction.Context;
 
 public class ParticleContactDetector : MonoBehaviour
 {
     public ParticleSystem liquidParticle;
-    public GameObject targetObject;
     public float requiredTime;
 
     private Coroutine checkCoroutine;
@@ -53,6 +52,8 @@ public class ParticleContactDetector : MonoBehaviour
 
     void TriggerSpecialEvent()
     {
+        SoundManager.Instance.StopSFX();
+        SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC5);
         SalineBottle _salineBottle = GetComponentInParent<SalineBottle>();
         if (_salineBottle.placeHolder != null)
         {

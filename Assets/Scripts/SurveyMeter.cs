@@ -1,7 +1,5 @@
-using Oculus.Interaction;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class SurveyMeter: MonoBehaviour
 {
@@ -11,11 +9,13 @@ public class SurveyMeter: MonoBehaviour
     private float rescanTime = 0f;
 
     private Coroutine _glowCoroutine;
-    private Material _material;
+    private Material[] _materials;
     private Transform grabInteraction;
     public GameObject placeHolder;
-    private bool isReported =false;
+    private bool isReported = false;
     public bool isTreatmentComplete = false;
+    private Color[] _originalEmissionColors;
+
     private void Start()
     {
         GameManager.Instance.OnStepChanged += HandleStepChanged;
@@ -25,19 +25,31 @@ public class SurveyMeter: MonoBehaviour
             placeHolder.SetActive(false);
         }
 
+        Renderer[] rends = GetComponentsInChildren<Renderer>();
+        if (rends != null && rends.Length > 0)
+        {
+            _materials = new Material[rends.Length];
+            _originalEmissionColors = new Color[rends.Length]; // 배열 크기 할당
+
+            for (int i = 0; i < rends.Length; i++)
+            {
+                _materials[i] = rends[i].material;
+                _materials[i].EnableKeyword("_EMISSION");
+
+                // 1. 각 머티리얼의 원래 Emission 색상을 미리 저장해 둠 (디폴트가 흰색이든 검은색이든 상관없어짐)
+                if (_materials[i].HasProperty("_EmissionColor"))
+                {
+                    _originalEmissionColors[i] = _materials[i].GetColor("_EmissionColor");
+                }
+            }
+        }
+
+
         grabInteraction = transform.Find("[BuildingBlock] HandGrabInstallationRoutine");
         if (grabInteraction != null)
         {
             grabInteraction.gameObject.SetActive(false);
         }
-
-        Renderer rend = GetComponent<Renderer>();
-        if (GetComponent<Renderer>() != null)
-        {
-            _material = GetComponent<Renderer>().material;
-            _material.EnableKeyword("_EMISSION");
-        }
-
     }
     void OnDestroy()
     {
@@ -59,6 +71,7 @@ public class SurveyMeter: MonoBehaviour
             transform.rotation = other.transform.rotation;
             if(GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction)
             {
+                Debug.Log("들어옴");
                 GameManager.Instance.currentStep = ScenarioStep.SalineInteraction;
             }
             else if (GameManager.Instance.currentStep == ScenarioStep.ResultVerification)
@@ -66,7 +79,7 @@ public class SurveyMeter: MonoBehaviour
                 GameManager.Instance.currentStep = ScenarioStep.End;
             }
             other.gameObject.SetActive(false);
-            Debug.Log("상태 : SalineInteraction");
+            
         }
     }
     void OnTriggerStay(Collider other)
@@ -75,21 +88,21 @@ public class SurveyMeter: MonoBehaviour
                      || GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction);
 
         // 1. Blood 충돌 처리 (우선순위: 경고음이 더 중요함)
-        if (other.name == "Blood")
+        if (other.name == "Blood" && isStepValid)
         {
             if (!isWarningPlaying)
             {
                 SoundManager.Instance.StopSFX(); // 스캔음 끄고
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.warningSound); // 경고음 재생
+                SoundManager.Instance.PlaySFXOneShot(SoundManager.Instance.warningSound); // 경고음 재생
                 isWarningPlaying = true;
                 isScanningPlaying = false;
             }
 
             bloodContactTimer += Time.deltaTime;
-            if (bloodContactTimer >= 1.0f && !isReported)
+            if (bloodContactTimer >= 1.0f && !isReported) 
             {
                 isReported = true;
-                Invoke("ReportSituation", 3f);
+                Invoke("ReportSituation",0f); //첫번재 보고
             }
             return; // Blood 처리 후에는 아래 스캔 로직을 타지 않도록 종료
         }
@@ -103,17 +116,8 @@ public class SurveyMeter: MonoBehaviour
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.scanSound);
                 isScanningPlaying = true;
             }
-
-            // isTreatmentComplete 처리 로직
-            if (isTreatmentComplete)
-            {
-                rescanTime += Time.deltaTime;
-                if (rescanTime >= 2.0f && !isReported)
-                {
-                    Invoke("ReportSituation", 3f);
-                }
-            }
         }
+
 
         if (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction && other.name.Contains("Collider")
            && isTreatmentComplete)
@@ -122,15 +126,18 @@ public class SurveyMeter: MonoBehaviour
             {
                 isWarningPlaying = false;
 
-                SoundManager.Instance.PlaySFX(SoundManager.Instance.scanSound);
+                SoundManager.Instance.PlaySFXOneShot(SoundManager.Instance.scanSound);
                 isScanningPlaying = true;
             }
-
+        }
+        if (other.name.Contains("Patient") && isTreatmentComplete)
+        {
             rescanTime += Time.deltaTime;
 
-            if(rescanTime >= 2.0f && !isReported)
+            if (rescanTime >= 2.0f && isReported)
             {
-                Invoke("ReportSituation", 3f);
+                isReported = false;
+                Invoke("ReportSituation", 0f); //두번째 보고
             }
         }
     }
@@ -153,17 +160,16 @@ public class SurveyMeter: MonoBehaviour
     {
         if (!isTreatmentComplete)
         {
-            Debug.Log("NPC1 대사");
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC1);
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC2);
             GameManager.Instance.currentStep = ScenarioStep.SurveyMeterWarningInteraction;
-            isReported = false;
+
         }
         else
         {
-            Debug.Log("NPC4 대사");
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC4);
             GameManager.Instance.currentStep = ScenarioStep.ResultVerification;
-            isReported = false;
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC11);
+
+
         }
 
     }
@@ -188,8 +194,14 @@ public class SurveyMeter: MonoBehaviour
         {
             if (placeHolder != null)
             {
+
                 placeHolder.gameObject.SetActive(true);
             }
+        }
+        else if(newStep == ScenarioStep.End)
+        {
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC12);
+            GameManager.Instance.GameResult();
         }
     }
 
@@ -197,10 +209,20 @@ public class SurveyMeter: MonoBehaviour
     {
         while (true)
         {
-            if (_material == null) yield break;
+            if (_materials == null || _materials.Length == 0) yield break;
+
             float emission = Mathf.PingPong(Time.time * 2, 1.0f);
-            _material.SetColor("_EmissionColor", Color.white * emission);
-            yield return null; 
+
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                if (_materials[i] != null)
+                {
+                    // 원래 색상에 반짝이는 강도를 곱해줌 (원래 색상이 흰색이면 흰색으로, 컬러풀하면 그 색상 기반으로 빛남)
+                    Color baseColor = _originalEmissionColors[i] == Color.black ? Color.white : _originalEmissionColors[i];
+                    _materials[i].SetColor("_EmissionColor", baseColor * emission);
+                }
+            }
+            yield return null;
         }
     }
 
@@ -212,9 +234,17 @@ public class SurveyMeter: MonoBehaviour
             _glowCoroutine = null;
         }
 
-        if (_material != null)
+        if (_materials != null)
         {
-            _material.SetColor("_EmissionColor", Color.black); // 발광 끄기
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                if (_materials[i] != null)
+                {
+                    // 2. 끌 때는 무조건 검은색으로 만드는 대신, 저장해 뒀던 원래 디폴트 색상으로 복구
+                    _materials[i].SetColor("_EmissionColor", _originalEmissionColors[i]);
+                }
+            }
         }
     }
+
 }

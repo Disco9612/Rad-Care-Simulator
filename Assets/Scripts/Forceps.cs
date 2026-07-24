@@ -1,4 +1,3 @@
-using Oculus.Interaction;
 using System.Collections;
 using UnityEngine;
 
@@ -9,13 +8,18 @@ public class Forceps : MonoBehaviour
     private Transform grabInteraction;
     public GameObject placeHolder;
     public GameObject targetObject;
-    public float requiredTime;
+    public float requiredTime1;
+    public float requiredTime2;
+    public float requiredTime3;
     public Material bloodMaterial;
     private Coroutine checkCoroutine;
     private bool isContacting = false;
     private Renderer rend;
     public Material emptyMaterial;
 
+    private bool isNPCSound1 = false;
+    private bool isNPCSound2 = false;
+    private bool isNPCSound3 = false;
     public GameObject surveyMeter;
     private SurveyMeter _srurveyMeter;
     void Start()
@@ -114,13 +118,44 @@ public class Forceps : MonoBehaviour
     IEnumerator ContactTimer()
     {
         float elapsed = 0f;
-        while (elapsed < requiredTime)
+
+        while (elapsed < requiredTime1)
         {
             elapsed += Time.deltaTime;
             Debug.Log("elapsed");
             yield return null;
         }
-        
+        if (!isNPCSound1)
+        {
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC6);
+            isNPCSound1 = true;
+        }
+
+        while (elapsed < requiredTime2)
+        {
+            elapsed += Time.deltaTime;
+            Debug.Log("elapsed");
+            yield return null;
+        }
+        if(!isNPCSound2)
+        {
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC7);
+            isNPCSound2 = true;
+        }
+     
+        while (elapsed < requiredTime3)
+        {
+            elapsed += Time.deltaTime;
+            Debug.Log("elapsed");
+            yield return null;
+        }
+        if (!isNPCSound3)
+        {
+            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC8);
+            Invoke("ResultSound", 3f);
+            isNPCSound3 = true;
+        }
+       
         targetObject.SetActive(false);
 
         Material[] materials = rend.materials;
@@ -197,6 +232,10 @@ public class Forceps : MonoBehaviour
         }
     }
 
+    private void ResultSound()
+    {
+        SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC9);
+    }
     // Update is called once per frame
     void Update()
     {

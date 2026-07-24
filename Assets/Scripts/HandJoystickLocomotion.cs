@@ -13,7 +13,9 @@ public class HandJoystickLocomotion : MonoBehaviour
 
     // 핀치 상태 변화를 감지하기 위한 Action
     private event Action<bool> OnPinchStateChanged;
-
+    [Header("Collision Settings")]
+    public LayerMask obstacleLayer; // 충돌을 막을 레이어 지정
+    public float collisionRadius = 0.3f; // 플레이어의 충돌 크기 반경
     void Awake()
     {
         // 핀치 상태가 변경될 때 실행될 로직 구독
@@ -60,9 +62,22 @@ public class HandJoystickLocomotion : MonoBehaviour
             Vector3 offset = hand.PointerPose.position - _neutralPosition;
             Vector3 moveDirection = new Vector3(offset.x, 0, offset.z);
 
-            transform.position += moveDirection * moveSpeed * Time.deltaTime;
+            Vector3 nextMotion = moveDirection * moveSpeed * Time.deltaTime;
 
-            yield return null; // 다음 프레임까지 대기
+            // 이동하려는 방향에 장애물이 있는지 구형 레이캐스트(SphereCast)로 검사
+            if (nextMotion.sqrMagnitude > 0.0001f)
+            {
+                Vector3 moveDirNormalized = nextMotion.normalized;
+                float moveDistance = nextMotion.magnitude;
+
+                // 이동 경로상에 obstacleLayer에 속한 오브젝트가 있다면 이동 차단
+                if (!Physics.SphereCast(transform.position, collisionRadius, moveDirNormalized, out RaycastHit hit, moveDistance, obstacleLayer))
+                {
+                    transform.position += nextMotion;
+                }
+            }
+
+            yield return null;
         }
     }
 }

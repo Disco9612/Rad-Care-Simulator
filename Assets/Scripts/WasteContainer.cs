@@ -78,7 +78,8 @@ public class WasteContainer : MonoBehaviour
                 {
                     // 원래 색상에 반짝이는 강도를 곱해줌 (원래 색상이 흰색이면 흰색으로, 컬러풀하면 그 색상 기반으로 빛남)
                     Color baseColor = _originalEmissionColors[i] == Color.black ? Color.white : _originalEmissionColors[i];
-                    _materials[i].SetColor("_EmissionColor", baseColor * emission);
+                    float weakIntensity = 0.5f;
+                    _materials[i].SetColor("_EmissionColor", baseColor * emission * weakIntensity);
                 }
             }
             yield return null;

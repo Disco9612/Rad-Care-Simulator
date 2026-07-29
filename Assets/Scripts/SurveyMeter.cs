@@ -30,7 +30,7 @@ public class SurveyMeter: MonoBehaviour
         {
             _materials = new Material[rends.Length];
             _originalEmissionColors = new Color[rends.Length]; // 배열 크기 할당
-
+            Debug.Log($"{_materials.Length} 메터리얼수");
             for (int i = 0; i < rends.Length; i++)
             {
                 _materials[i] = rends[i].material;
@@ -137,7 +137,7 @@ public class SurveyMeter: MonoBehaviour
             if (rescanTime >= 2.0f && isReported)
             {
                 isReported = false;
-                Invoke("ReportSituation", 0f); //두번째 보고
+                Invoke("ReportSituation", 0f);
             }
         }
     }

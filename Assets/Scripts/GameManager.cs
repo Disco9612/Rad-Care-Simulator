@@ -84,7 +84,8 @@ void OnDestroy()
         {
             mainUI.alpha = 0f;
             mainUI.blocksRaycasts = false;
-            currentStep = ScenarioStep.SurveyMeterInteraction;
+            //currentStep = ScenarioStep.SurveyMeterInteraction;
+            currentStep = ScenarioStep.SalineInteraction;
             SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC1);
             uIText.text = "제염 미션 완료. 결과 리포트를 출력합니다";
         }

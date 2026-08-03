@@ -92,7 +92,8 @@ public class SalineBottle : MonoBehaviour
     void OnTriggerStay(Collider other)  
     {
         isTouchingTarget = true;
-
+        Debug.Log($"isTouchingTarget = {isTouchingTarget}");
+        Debug.Log($"currentStage = {GameManager.Instance.currentStep}");
         if (flowCoroutine == null)
         {
             flowCoroutine = StartCoroutine(FlowRoutine());
@@ -117,55 +118,56 @@ public class SalineBottle : MonoBehaviour
         if (liquidParticle != null && !liquidParticle.isPlaying)
             liquidParticle.Play();
 
+        var em = liquidParticle.emission;
+
         while (isTouchingTarget)
         {
-            // 1. 뒤집혔는지 판단 (임계값 -0.8f 추천)
+            // 1. 뒤집혔는지 판단 (임계값 -0.6f)
             float dot = Vector3.Dot(transform.up, Vector3.up);
             bool isCurrentlyUpsideDown = dot < -0.6f;
 
-            // 2. 타이머 로직 (중요: 뒤집혔을 때만 증가, 아니면 즉시 0)
+            // 2. 타이머 로직
             if (isCurrentlyUpsideDown)
             {
                 pouringTimer += Time.deltaTime;
             }
             else
             {
-                pouringTimer = 0f; // 0.5초가 안 되었는데 병을 세우면 즉시 0으로 초기화
+                pouringTimer = 0f;
             }
 
             // 3. 0.5초 이상 유지되었을 때만 파티클 배출
             bool isPouring = pouringTimer >= 0.5f;
 
-            var em = liquidParticle.emission;
-            var rate = em.rateOverTime;
+            // 현재 배출량 가져오기 (안전하게 가져오기)
+            float currentRate = em.rateOverTime.constant;
 
             if (isPouring && GameManager.Instance.currentStep == ScenarioStep.SalineInteraction)
             {
-                // 물이 쏟아지는 상태
-                rate.constant = Mathf.Lerp(rate.constant, maxEmissionRate, Time.deltaTime * lerpSpeed);
+                // 물이 쏟아지는 상태: 부드럽게 증가
+                float targetRate = Mathf.Lerp(currentRate, maxEmissionRate, Time.deltaTime * lerpSpeed);
 
-                // PlaySFXOneShot 대신 루프형 지속음인 PlaySFX 사용 (중복 재생 방지 기능 포함)
+                // [핵심 수정] MinMaxCurve 구조체를 새로 만들어 통째로 할당
+                em.rateOverTime = new ParticleSystem.MinMaxCurve(targetRate);
+
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.waterSound);
             }
             else
             {
-                // 0.5초 미만이거나 똑바로 서 있을 때
-                rate.constant = 0f;
+                // 0.5초 미만이거나 똑바로 서 있을 때: 0으로 설정
+                em.rateOverTime = new ParticleSystem.MinMaxCurve(0f);
 
-                // 물 쏟는 상태가 아니면 SFX 정지
                 if (SoundManager.Instance.sfxSource.clip == SoundManager.Instance.waterSound)
                 {
                     SoundManager.Instance.StopSFX();
                 }
             }
 
-            em.rateOverTime = rate;
             yield return null;
         }
 
         // 종료 처리 (손을 뗐을 때)
-        var finalEm = liquidParticle.emission;
-        finalEm.rateOverTime = 0f;
+        em.rateOverTime = new ParticleSystem.MinMaxCurve(0f);
         pouringTimer = 0f;
 
         // 물 소리 정지

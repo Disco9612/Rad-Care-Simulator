@@ -1,0 +1,117 @@
+{
+  "materials": [
+    {
+      "id": "MAT_axle_metal",
+      "texture": "MAT_axle_metal.png",
+      "roughness": 0.5099999904632568,
+      "metallic": 0.6499999761581421,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_dark_rubber",
+      "texture": "MAT_dark_rubber.png",
+      "roughness": 0.8299999833106995,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_hub",
+      "texture": "MAT_wheel_hub.png",
+      "roughness": 0.5600000023841858,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_yellow_lid",
+      "texture": "MAT_yellow_lid.png",
+      "roughness": 0.3100000023841858,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_yellow_plastic",
+      "texture": "MAT_yellow_plastic.png",
+      "roughness": 0.36000001430511475,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "my_asset_hollow_tapered_body",
+      "material": "MAT_yellow_plastic"
+    },
+    {
+      "part": "my_asset_front_top_rim",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_rear_top_rim",
+      "material": "MAT_yellow_plastic"
+    },
+    {
+      "part": "my_asset_left_top_rim",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_right_top_rim",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_removable_lid_plate",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_lid_raised_center",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_lid_front_grip",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_grip_left_support",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_grip_right_support",
+      "material": "MAT_yellow_lid"
+    },
+    {
+      "part": "my_asset_front_left_vertical_rib",
+      "material": "MAT_yellow_plastic"
+    },
+    {
+      "part": "my_asset_front_right_vertical_rib",
+      "material": "MAT_yellow_plastic"
+    },
+    {
+      "part": "my_asset_front_rim_gussets",
+      "material": "MAT_yellow_plastic"
+    },
+    {
+      "part": "my_asset_rear_axle",
+      "material": "MAT_axle_metal"
+    },
+    {
+      "part": "my_asset_left_wheel",
+      "material": "MAT_dark_rubber"
+    },
+    {
+      "part": "my_asset_right_wheel",
+      "material": "MAT_dark_rubber"
+    },
+    {
+      "part": "my_asset_left_wheel_hub",
+      "material": "MAT_wheel_hub"
+    },
+    {
+      "part": "my_asset_right_wheel_hub",
+      "material": "MAT_wheel_hub"
+    },
+    {
+      "part": "my_asset_front_bottom_contact",
+      "material": "MAT_yellow_plastic"
+    }
+  ]
+}

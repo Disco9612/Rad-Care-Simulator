@@ -18,14 +18,14 @@ public class WasteContainer : MonoBehaviour
         if (rends != null && rends.Length > 0)
         {
             _materials = new Material[rends.Length];
-            _originalEmissionColors = new Color[rends.Length]; // ¹è¿­ Å©±â ÇÒ´ç
+            _originalEmissionColors = new Color[rends.Length]; // ë°°ì—´ í¬ê¸° í• ë‹¹
 
             for (int i = 0; i < rends.Length; i++)
             {
                 _materials[i] = rends[i].material;
                 _materials[i].EnableKeyword("_EMISSION");
 
-                // 1. °¢ ¸ÓÆ¼¸®¾óÀÇ ¿ø·¡ Emission »ö»óÀ» ¹Ì¸® ÀúÀåÇØ µÒ (µğÆúÆ®°¡ Èò»öÀÌµç °ËÀº»öÀÌµç »ó°ü¾ø¾îÁü)
+                // 1. ê° ë¨¸í‹°ë¦¬ì–¼ì˜ ì›ë˜ Emission ìƒ‰ìƒì„ ë¯¸ë¦¬ ì €ì¥í•´ ë‘  (ë””í´íŠ¸ê°€ í°ìƒ‰ì´ë“  ê²€ì€ìƒ‰ì´ë“  ìƒê´€ì—†ì–´ì§)
                 if (_materials[i].HasProperty("_EmissionColor"))
                 {
                     _originalEmissionColors[i] = _materials[i].GetColor("_EmissionColor");
@@ -41,24 +41,29 @@ public class WasteContainer : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.name.Contains("Forceps"))
+        Forceps forceps = other.GetComponentInParent<Forceps>();
+        if (forceps != null)
         {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.trashSound);
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC10);
-            closeContainer.SetActive(true);
-            openContainer.SetActive(false);
+            TryDispose(forceps);
         }
+    }
+
+    public void TryDispose(Forceps forceps)
+    {
+        if (forceps == null || !GameManager.Instance.ReportWasteDisposed())
+        {
+            return;
+        }
+        forceps.ApplyDisposalVisuals();
+        StopGlow();
+        closeContainer.SetActive(true);
+        openContainer.SetActive(false);
     }
 
     private void HandleStepChanged(ScenarioStep newStep)
     {
-        if (_glowCoroutine != null)
-        {
-            StopCoroutine(_glowCoroutine);
-            _glowCoroutine = null;
-        }
-
-        if (newStep == ScenarioStep.DisposeStage)
+        StopGlow();
+        if (GameManager.Instance.CanDispose)
         {
             _glowCoroutine = StartCoroutine(GlowRoutine());
         }
@@ -76,7 +81,6 @@ public class WasteContainer : MonoBehaviour
             {
                 if (_materials[i] != null)
                 {
-                    // ¿ø·¡ »ö»ó¿¡ ¹İÂ¦ÀÌ´Â °­µµ¸¦ °öÇØÁÜ (¿ø·¡ »ö»óÀÌ Èò»öÀÌ¸é Èò»öÀ¸·Î, ÄÃ·¯Ç®ÇÏ¸é ±× »ö»ó ±â¹İÀ¸·Î ºû³²)
                     Color baseColor = _originalEmissionColors[i] == Color.black ? Color.white : _originalEmissionColors[i];
                     float weakIntensity = 0.5f;
                     _materials[i].SetColor("_EmissionColor", baseColor * emission * weakIntensity);
@@ -100,7 +104,7 @@ public class WasteContainer : MonoBehaviour
             {
                 if (_materials[i] != null)
                 {
-                    // 2. ²ø ¶§´Â ¹«Á¶°Ç °ËÀº»öÀ¸·Î ¸¸µå´Â ´ë½Å, ÀúÀåÇØ µ×´ø ¿ø·¡ µğÆúÆ® »ö»óÀ¸·Î º¹±¸
+                    // 2. ëŒ ë•ŒëŠ” ë¬´ì¡°ê±´ ê²€ì€ìƒ‰ìœ¼ë¡œ ë§Œë“œëŠ” ëŒ€ì‹ , ì €ì¥í•´ ë’€ë˜ ì›ë˜ ë””í´íŠ¸ ìƒ‰ìƒìœ¼ë¡œ ë³µêµ¬
                     _materials[i].SetColor("_EmissionColor", _originalEmissionColors[i]);
                 }
             }

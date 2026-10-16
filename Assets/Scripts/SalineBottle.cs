@@ -45,14 +45,14 @@ public class SalineBottle : MonoBehaviour
         if (rends != null && rends.Length > 0)
         {
             _materials = new Material[rends.Length];
-            _originalEmissionColors = new Color[rends.Length]; // ¹è¿­ Å©±â ÇÒ´ç
+            _originalEmissionColors = new Color[rends.Length]; // ë°°ì—´ í¬ê¸° í• ë‹¹
 
             for (int i = 0; i < rends.Length; i++)
             {
                 _materials[i] = rends[i].material;
                 _materials[i].EnableKeyword("_EMISSION");
 
-                // 1. °¢ ¸ÓÆ¼¸®¾óÀÇ ¿ø·¡ Emission »ö»óÀ» ¹Ì¸® ÀúÀåÇØ µÒ (µğÆúÆ®°¡ Èò»öÀÌµç °ËÀº»öÀÌµç »ó°ü¾ø¾îÁü)
+                // 1. ê° ë¨¸í‹°ë¦¬ì–¼ì˜ ì›ë˜ Emission ìƒ‰ìƒì„ ë¯¸ë¦¬ ì €ì¥í•´ ë‘  (ë””í´íŠ¸ê°€ í°ìƒ‰ì´ë“  ê²€ì€ìƒ‰ì´ë“  ìƒê´€ì—†ì–´ì§)
                 if (_materials[i].HasProperty("_EmissionColor"))
                 {
                     _originalEmissionColors[i] = _materials[i].GetColor("_EmissionColor");
@@ -75,32 +75,35 @@ public class SalineBottle : MonoBehaviour
         if (_glowCoroutine != null)
         {
             StopGlow();
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC4);
+            GameManager.Instance.ReportSalineContact();
         }
-        if (GameManager.Instance.currentStep == ScenarioStep.SalineInteraction && other.name.Contains("PlaceHolder"))
+        if (placeHolder != null && placeHolder.activeInHierarchy
+            && other.transform.IsChildOf(placeHolder.transform)
+            && GameManager.Instance.ReportSalineReturned())
         {
             grabInteraction.gameObject.SetActive(false);
-            transform.position = other.transform.position;
-            transform.rotation = other.transform.rotation;
-            GameManager.Instance.currentStep = ScenarioStep.ForcepsInteraction;
-            other.gameObject.SetActive(false);
-            Debug.Log("»óÅÂ : ForcepsInteraction");
+            transform.SetPositionAndRotation(placeHolder.transform.position, placeHolder.transform.rotation);
+            placeHolder.SetActive(false);
         }
     }
 
-    // ´ë»ó ¿ÀºêÁ§Æ®¿Í Á¢ÃË ÁßÀÏ ¶§¸¸ Ã¼Å© ½ÃÀÛ
-    void OnTriggerStay(Collider other)  
+    // ëŒ€ìƒ ì˜¤ë¸Œì íŠ¸ì™€ ì ‘ì´‰ ì¤‘ì¼ ë•Œë§Œ ì²´í¬ ì‹œì‘
+    void OnTriggerStay(Collider other)
     {
+        if (!GameManager.Instance.CanWash || liquidParticle == null)
+        {
+            return;
+        }
         isTouchingTarget = true;
         Debug.Log($"isTouchingTarget = {isTouchingTarget}");
-        Debug.Log($"currentStage = {GameManager.Instance.currentStep}");
+
         if (flowCoroutine == null)
         {
             flowCoroutine = StartCoroutine(FlowRoutine());
         }
     }
 
-    // Á¢ÃËÀÌ ³¡³ª¸é ·ÎÁ÷ Á¤Áö Àâ°íÀÖ´Â »óÅÂ
+    // ì ‘ì´‰ì´ ëë‚˜ë©´ ë¡œì§ ì •ì§€ ì¡ê³ ìˆëŠ” ìƒíƒœ
     void OnTriggerExit(Collider other)
     {
         isTouchingTarget = false;
@@ -120,13 +123,13 @@ public class SalineBottle : MonoBehaviour
 
         var em = liquidParticle.emission;
 
-        while (isTouchingTarget)
+        while (isTouchingTarget && GameManager.Instance.CanWash)
         {
-            // 1. µÚÁıÇû´ÂÁö ÆÇ´Ü (ÀÓ°è°ª -0.6f)
+            // 1. ë’¤ì§‘í˜”ëŠ”ì§€ íŒë‹¨ (ì„ê³„ê°’ -0.6f)
             float dot = Vector3.Dot(transform.up, Vector3.up);
             bool isCurrentlyUpsideDown = dot < -0.6f;
 
-            // 2. Å¸ÀÌ¸Ó ·ÎÁ÷
+            // 2. íƒ€ì´ë¨¸ ë¡œì§
             if (isCurrentlyUpsideDown)
             {
                 pouringTimer += Time.deltaTime;
@@ -136,25 +139,24 @@ public class SalineBottle : MonoBehaviour
                 pouringTimer = 0f;
             }
 
-            // 3. 0.5ÃÊ ÀÌ»ó À¯ÁöµÇ¾úÀ» ¶§¸¸ ÆÄÆ¼Å¬ ¹èÃâ
-            bool isPouring = pouringTimer >= 0.5f;
+            // 3. 0.5ì´ˆ ì´ìƒ ìœ ì§€ë˜ì—ˆì„ ë•Œë§Œ íŒŒí‹°í´ ë°°ì¶œ
+            bool isPouring = pouringTimer >= RequiredPouringTime;
 
-            // ÇöÀç ¹èÃâ·® °¡Á®¿À±â (¾ÈÀüÇÏ°Ô °¡Á®¿À±â)
             float currentRate = em.rateOverTime.constant;
 
-            if (isPouring && GameManager.Instance.currentStep == ScenarioStep.SalineInteraction)
+            if (isPouring && GameManager.Instance.CanWash)
             {
-                // ¹°ÀÌ ½ñ¾ÆÁö´Â »óÅÂ: ºÎµå·´°Ô Áõ°¡
+                // ë¬¼ì´ ìŸì•„ì§€ëŠ” ìƒíƒœ: ë¶€ë“œëŸ½ê²Œ ì¦ê°€
                 float targetRate = Mathf.Lerp(currentRate, maxEmissionRate, Time.deltaTime * lerpSpeed);
 
-                // [ÇÙ½É ¼öÁ¤] MinMaxCurve ±¸Á¶Ã¼¸¦ »õ·Î ¸¸µé¾î ÅëÂ°·Î ÇÒ´ç
+                // [í•µì‹¬ ìˆ˜ì •] MinMaxCurve êµ¬ì¡°ì²´ë¥¼ ìƒˆë¡œ ë§Œë“¤ì–´ í†µì§¸ë¡œ í• ë‹¹
                 em.rateOverTime = new ParticleSystem.MinMaxCurve(targetRate);
 
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.waterSound);
             }
             else
             {
-                // 0.5ÃÊ ¹Ì¸¸ÀÌ°Å³ª ¶È¹Ù·Î ¼­ ÀÖÀ» ¶§: 0À¸·Î ¼³Á¤
+                // 0.5ì´ˆ ë¯¸ë§Œì´ê±°ë‚˜ ë˜‘ë°”ë¡œ ì„œ ìˆì„ ë•Œ: 0ìœ¼ë¡œ ì„¤ì •
                 em.rateOverTime = new ParticleSystem.MinMaxCurve(0f);
 
                 if (SoundManager.Instance.sfxSource.clip == SoundManager.Instance.waterSound)
@@ -166,11 +168,12 @@ public class SalineBottle : MonoBehaviour
             yield return null;
         }
 
-        // Á¾·á Ã³¸® (¼ÕÀ» ¶ÃÀ» ¶§)
+        // ì¢…ë£Œ ì²˜ë¦¬ (ì†ì„ ë—ì„ ë•Œ)
         em.rateOverTime = new ParticleSystem.MinMaxCurve(0f);
         pouringTimer = 0f;
+        flowCoroutine = null;
 
-        // ¹° ¼Ò¸® Á¤Áö
+        // ë¬¼ ì†Œë¦¬ ì •ì§€
         if (SoundManager.Instance.sfxSource.clip == SoundManager.Instance.waterSound)
         {
             SoundManager.Instance.StopSFX();
@@ -179,18 +182,33 @@ public class SalineBottle : MonoBehaviour
 
     private void HandleStepChanged(ScenarioStep newStep)
     {
-        if (_glowCoroutine != null)
+        StopGlow();
+        bool canUse = GameManager.Instance.CanUseSaline;
+        if (grabInteraction != null)
         {
-            StopCoroutine(_glowCoroutine);
-            _glowCoroutine = null;
+            grabInteraction.gameObject.SetActive(canUse);
         }
-
-        // Æ¯Á¤ ´Ü°èÀÏ ¶§¸¸ ÄÚ·çÆ¾ ½ÃÀÛ
-        if (newStep == ScenarioStep.SalineInteraction)
+        if (placeHolder != null)
         {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC3);
-            grabInteraction.gameObject.SetActive(true);  
+            placeHolder.SetActive(GameManager.Instance.CanReturnSaline);
+        }
+        if (canUse)
+        {
             _glowCoroutine = StartCoroutine(GlowRoutine());
+        }
+        else
+        {
+            isTouchingTarget = false;
+            pouringTimer = 0f;
+            if (flowCoroutine != null)
+            {
+                StopCoroutine(flowCoroutine);
+                flowCoroutine = null;
+            }
+            if (liquidParticle != null)
+            {
+                emissionModule.rateOverTime = 0f;
+            }
         }
     }
 
@@ -206,7 +224,7 @@ public class SalineBottle : MonoBehaviour
             {
                 if (_materials[i] != null)
                 {
-                    // ¿ø·¡ »ö»ó¿¡ ¹İÂ¦ÀÌ´Â °­µµ¸¦ °öÇØÁÜ (¿ø·¡ »ö»óÀÌ Èò»öÀÌ¸é Èò»öÀ¸·Î, ÄÃ·¯Ç®ÇÏ¸é ±× »ö»ó ±â¹İÀ¸·Î ºû³²)
+                    // ì›ë˜ ìƒ‰ìƒì— ë°˜ì§ì´ëŠ” ê°•ë„ë¥¼ ê³±í•´ì¤Œ (ì›ë˜ ìƒ‰ìƒì´ í°ìƒ‰ì´ë©´ í°ìƒ‰ìœ¼ë¡œ, ì»¬ëŸ¬í’€í•˜ë©´ ê·¸ ìƒ‰ìƒ ê¸°ë°˜ìœ¼ë¡œ ë¹›ë‚¨)
                     Color baseColor = _originalEmissionColors[i] == Color.black ? Color.white : _originalEmissionColors[i];
                     _materials[i].SetColor("_EmissionColor", baseColor * emission);
                 }
@@ -229,7 +247,7 @@ public class SalineBottle : MonoBehaviour
             {
                 if (_materials[i] != null)
                 {
-                    // 2. ²ø ¶§´Â ¹«Á¶°Ç °ËÀº»öÀ¸·Î ¸¸µå´Â ´ë½Å, ÀúÀåÇØ µ×´ø ¿ø·¡ µğÆúÆ® »ö»óÀ¸·Î º¹±¸
+                    // 2. ëŒ ë•ŒëŠ” ë¬´ì¡°ê±´ ê²€ì€ìƒ‰ìœ¼ë¡œ ë§Œë“œëŠ” ëŒ€ì‹ , ì €ì¥í•´ ë’€ë˜ ì›ë˜ ë””í´íŠ¸ ìƒ‰ìƒìœ¼ë¡œ ë³µêµ¬
                     _materials[i].SetColor("_EmissionColor", _originalEmissionColors[i]);
                 }
             }

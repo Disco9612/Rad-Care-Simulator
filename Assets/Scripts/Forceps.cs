@@ -17,11 +17,7 @@ public class Forceps : MonoBehaviour
     private Renderer rend;
     public Material emptyMaterial;
 
-    private bool isNPCSound1 = false;
-    private bool isNPCSound2 = false;
-    private bool isNPCSound3 = false;
     public GameObject surveyMeter;
-    private SurveyMeter _srurveyMeter;
     void Start()
     {
         GameManager.Instance.OnStepChanged += HandleStepChanged;
@@ -43,7 +39,7 @@ public class Forceps : MonoBehaviour
             _material = GetComponent<Renderer>().material;
             _material.EnableKeyword("_EMISSION");
         }
-      
+
 
     }
     void OnDestroy()
@@ -53,11 +49,11 @@ public class Forceps : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if(GameManager.Instance.currentStep == ScenarioStep.ForcepsInteraction && other.gameObject == targetObject)
+        if(GameManager.Instance.CanTreat && other.gameObject == targetObject)
         {
             if (!isContacting)
             {
-                Debug.Log("µÈæÓø»");
+                Debug.Log("Îì§Ïñ¥Ïò¥");
                 isContacting = true;
                 checkCoroutine = StartCoroutine(ContactTimer());
             }
@@ -65,7 +61,7 @@ public class Forceps : MonoBehaviour
     }
     void OnTriggerExit(Collider other)
     {
-        // 2. ¡¢√À¿Ã ≥°≥µ¿ª ∂ß∏∏ ƒ⁄∑Á∆æ ¡§¡ˆ π◊ ∫Øºˆ √ ±‚»≠
+        // 2. Ï†ëÏ¥âÏù¥ ÎÅùÎÇ¨ÏùÑ ÎïåÎßå ÏΩîÎ£®Ìã¥ Ï†ïÏßÄ Î∞è Î≥ÄÏàò Ï¥àÍ∏∞Ìôî
         if (other.gameObject == targetObject)
         {
             if (isContacting)
@@ -85,33 +81,38 @@ public class Forceps : MonoBehaviour
         {
             StopGlow();
         }
-        if(GameManager.Instance.currentStep == ScenarioStep.DisposeStage && other.name.Contains("PlaceHolder"))
+        if (placeHolder != null && placeHolder.activeInHierarchy
+            && other.transform.IsChildOf(placeHolder.transform)
+            && GameManager.Instance.ReportForcepsReturned())
         {
-            Debug.Log("¡˝∞‘ ¡¶¿⁄∏Æ∑Œ µπæ∆ø»");
             grabInteraction.gameObject.SetActive(false);
-            transform.position = other.transform.position;
-            transform.rotation = other.transform.rotation;
-
-            GameManager.Instance.currentStep = ScenarioStep.SurveyMeterInteraction;
-            _srurveyMeter = surveyMeter.GetComponent<SurveyMeter>();
-            _srurveyMeter.isTreatmentComplete = true;
-
-            other.gameObject.SetActive(false);
-            Debug.Log("ªÛ≈¬ : DisposeStage");
+            transform.SetPositionAndRotation(placeHolder.transform.position, placeHolder.transform.rotation);
+            placeHolder.SetActive(false);
         }
 
-        if (GameManager.Instance.currentStep == ScenarioStep.DisposeStage && other.name.Contains("container"))
+        WasteContainer container = other.GetComponentInParent<WasteContainer>();
+        if (container != null)
         {
-            Material[] materials = rend.materials;
-            if(materials.Length > 0)
-            {
-                materials[0] = emptyMaterial;
-                rend.materials = materials;
-                gameObject.transform.Find("ForcepsBall_Colliders").gameObject.SetActive(false);
-                placeHolder.gameObject.SetActive(true);
+            container.TryDispose(this);
+        }
+    }
 
-            }
-
+    public void ApplyDisposalVisuals()
+    {
+        Material[] materials = rend.materials;
+        if (materials.Length > 0)
+        {
+            materials[0] = emptyMaterial;
+            rend.materials = materials;
+        }
+        Transform wasteCollider = transform.Find("ForcepsBall_Colliders");
+        if (wasteCollider != null)
+        {
+            wasteCollider.gameObject.SetActive(false);
+        }
+        if (placeHolder != null)
+        {
+            placeHolder.SetActive(true);
         }
     }
 
@@ -125,11 +126,7 @@ public class Forceps : MonoBehaviour
             Debug.Log("elapsed");
             yield return null;
         }
-        if (!isNPCSound1)
-        {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC6);
-            isNPCSound1 = true;
-        }
+        GameManager.Instance.ReportTreatmentProgress(1);
 
         while (elapsed < requiredTime2)
         {
@@ -137,25 +134,20 @@ public class Forceps : MonoBehaviour
             Debug.Log("elapsed");
             yield return null;
         }
-        if(!isNPCSound2)
-        {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC7);
-            isNPCSound2 = true;
-        }
-     
+        GameManager.Instance.ReportTreatmentProgress(2);
+
         while (elapsed < requiredTime3)
         {
             elapsed += Time.deltaTime;
             Debug.Log("elapsed");
             yield return null;
         }
-        if (!isNPCSound3)
+        GameManager.Instance.ReportTreatmentProgress(3);
+
+        if (!GameManager.Instance.ReportTreatmentCompleted())
         {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC8);
-            Invoke("ResultSound", 3f);
-            isNPCSound3 = true;
+            yield break;
         }
-       
         targetObject.SetActive(false);
 
         Material[] materials = rend.materials;
@@ -165,23 +157,26 @@ public class Forceps : MonoBehaviour
 
             rend.materials = materials;
         }
-        GameManager.Instance.currentStep = ScenarioStep.DisposeStage;
+        checkCoroutine = null;
     }
 
 
 
     private void HandleStepChanged(ScenarioStep newStep)
     {
-        if (_glowCoroutine != null)
+        StopGlow();
+        bool canUse = GameManager.Instance.CanTreat || GameManager.Instance.CanDispose
+            || GameManager.Instance.CanReturnForceps;
+        if (grabInteraction != null)
         {
-            StopCoroutine(_glowCoroutine);
-            _glowCoroutine = null;
+            grabInteraction.gameObject.SetActive(canUse);
         }
-
-        // ∆Ø¡§ ¥‹∞Ë¿œ ∂ß∏∏ ƒ⁄∑Á∆æ Ω√¿€
-        if (newStep == ScenarioStep.ForcepsInteraction)
+        if (placeHolder != null)
         {
-            grabInteraction.gameObject.SetActive(true);
+            placeHolder.SetActive(GameManager.Instance.CanReturnForceps);
+        }
+        if (GameManager.Instance.CanTreat)
+        {
             _glowCoroutine = StartCoroutine(GlowRoutine());
         }
     }
@@ -192,13 +187,13 @@ public class Forceps : MonoBehaviour
 
         while (true)
         {
-            // 1. ∏≈ «¡∑π¿” ∏”∆º∏ÆæÛ πËø≠ ¿¸√º∏¶ ∞°¡Æø…¥œ¥Ÿ.
+            // 1. Îß§ ÌîÑÎ†àÏûÑ Î®∏Ìã∞Î¶¨Ïñº Î∞∞Ïó¥ Ï†ÑÏ≤¥Î•º Í∞ÄÏ†∏ÏòµÎãàÎã§.
             Material[] materials = rend.materials;
 
             float emission = Mathf.PingPong(Time.time * 2, 1.0f);
             Color emissionColor = Color.white * emission;
 
-            // 2. ∏µÁ ø§∏Æ∏’∆Æ∏¶ º¯»∏«œ∏Á ¿˚øÎ«’¥œ¥Ÿ.
+            // 2. Î™®Îì† ÏóòÎ¶¨Î®ºÌä∏Î•º ÏàúÌöåÌïòÎ©∞ Ï†ÅÏö©Ìï©ÎãàÎã§.
             for (int i = 0; i < materials.Length; i++)
             {
                 if (materials[i] != null)
@@ -232,13 +227,4 @@ public class Forceps : MonoBehaviour
         }
     }
 
-    private void ResultSound()
-    {
-        SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC9);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

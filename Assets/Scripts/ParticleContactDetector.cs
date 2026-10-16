@@ -18,12 +18,16 @@ public class ParticleContactDetector : MonoBehaviour
         }
     }
 
-    // Inside = Callback À¸·Î ¼³Á¤µÇ¾î ÀÖÀ» ¶§ ¸Å ÇÁ·¹ÀÓ È£ÃâµÊ
+    // Inside = Callback ìœ¼ë¡œ ì„¤ì •ë˜ì–´ ìˆì„ ë•Œ ë§¤ í”„ë ˆì„ í˜¸ì¶œë¨
     void OnParticleTrigger()
     {
-        if (liquidParticle == null) return;
+        if (liquidParticle == null || GameManager.Instance == null || !GameManager.Instance.CanWash)
+        {
+            ResetContact();
+            return;
+        }
 
-        // [ÇÙ½É ¹æ¾î 1] È­¸é¿¡ »ì¾ÆÀÖ´Â ÆÄÆ¼Å¬ÀÌ ¾Æ¿¹ ¾ø´Ù¸é ¹«½Ã (³ª¿ÀÁöµµ ¾Ê¾Ò´Âµ¥ ÀÛµ¿ÇÏ´Â ¹ö±× ¿øÃµ Â÷´Ü)
+        // [í•µì‹¬ ë°©ì–´ 1] í™”ë©´ì— ì‚´ì•„ìˆëŠ” íŒŒí‹°í´ì´ ì•„ì˜ˆ ì—†ë‹¤ë©´ ë¬´ì‹œ (ë‚˜ì˜¤ì§€ë„ ì•Šì•˜ëŠ”ë° ì‘ë™í•˜ëŠ” ë²„ê·¸ ì›ì²œ ì°¨ë‹¨)
         if (liquidParticle.particleCount <= 0)
         {
             ResetContact();
@@ -35,18 +39,18 @@ public class ParticleContactDetector : MonoBehaviour
 
         bool currentlyTouching = (numInside > 0);
 
-        // ½ÇÁ¦·Î ÆÄÆ¼Å¬ÀÌ Æ®¸®°Å ³»ºÎ·Î µé¾î¿Í ÀÖ°í, ¾ÆÁ÷ Å¸ÀÌ¸Ó°¡ ½ÃÀÛ ¾È µÈ °æ¿ì
+        // ì‹¤ì œë¡œ íŒŒí‹°í´ì´ íŠ¸ë¦¬ê±° ë‚´ë¶€ë¡œ ë“¤ì–´ì™€ ìˆê³ , ì•„ì§ íƒ€ì´ë¨¸ê°€ ì‹œì‘ ì•ˆ ëœ ê²½ìš°
         if (currentlyTouching && !isContacting)
         {
-            Debug.Log($"ÆÄÆ¼Å¬ Inside °¨Áö ½ÃÀÛ (³»ºÎ ÆÄÆ¼Å¬ ¼ö: {numInside})");
+            Debug.Log($"íŒŒí‹°í´ Inside ê°ì§€ ì‹œì‘ (ë‚´ë¶€ íŒŒí‹°í´ ìˆ˜: {numInside})");
             isContacting = true;
             if (checkCoroutine != null) StopCoroutine(checkCoroutine);
             checkCoroutine = StartCoroutine(ContactTimer());
         }
-        // ÆÄÆ¼Å¬ÀÌ ´õ ÀÌ»ó ³»ºÎ¿¡ ¾ø´Âµ¥ Å¸ÀÌ¸Ó°¡ µ¹°í ÀÖ´ø °æ¿ì -> Áï½Ã Áß´Ü
+        // íŒŒí‹°í´ì´ ë” ì´ìƒ ë‚´ë¶€ì— ì—†ëŠ”ë° íƒ€ì´ë¨¸ê°€ ëŒê³  ìˆë˜ ê²½ìš° -> ì¦‰ì‹œ ì¤‘ë‹¨
         else if (!currentlyTouching && isContacting)
         {
-            Debug.Log("ÆÄÆ¼Å¬ Inside ¹ş¾î³² - Å¸ÀÌ¸Ó Áß´Ü");
+            Debug.Log("íŒŒí‹°í´ Inside ë²—ì–´ë‚¨ - íƒ€ì´ë¨¸ ì¤‘ë‹¨");
             ResetContact();
         }
     }
@@ -65,23 +69,25 @@ public class ParticleContactDetector : MonoBehaviour
     {
         float elapsed = 0f;
 
-        while (elapsed < requiredTime)
+        while (elapsed < requiredTime && GameManager.Instance.CanWash)
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // ÁöÁ¤µÈ ½Ã°£ µ¿¾È Inside »óÅÂ°¡ À¯ÁöµÇ¾úÀ» ¶§ ½ÇÇà
+        // ì§€ì •ëœ ì‹œê°„ ë™ì•ˆ Inside ìƒíƒœê°€ ìœ ì§€ë˜ì—ˆì„ ë•Œ ì‹¤í–‰
         TriggerSpecialEvent();
 
-        // ÀÌº¥Æ® ½ÇÇà ÈÄ »óÅÂ ÃÊ±âÈ­
+        // ì´ë²¤íŠ¸ ì‹¤í–‰ í›„ ìƒíƒœ ì´ˆê¸°í™”
         ResetContact();
     }
 
     void TriggerSpecialEvent()
     {
-        SoundManager.Instance.StopSFX();
-        SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC5);
+        if (!GameManager.Instance.ReportWashingCompleted())
+        {
+            return;
+        }
 
         SalineBottle _salineBottle = GetComponentInParent<SalineBottle>();
         if (_salineBottle != null && _salineBottle.placeHolder != null)

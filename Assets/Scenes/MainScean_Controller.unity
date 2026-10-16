@@ -8836,10 +8836,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[\uC784\uBB34] \uD658\uC790 \uC774\uC1A1 \uC644\uB8CC.\n\uC989\uC2DC \uC81C\uC5FC
-    \uC791\uC5C5\uC744 \uC2DC\uC791\uD558\uC5EC 2\uCC28 \uC624\uC5FC\uC744 \uBC29\uC9C0\uD558\uC2ED\uC2DC\uC624.\n\n\uC67C\uC190
-    \uC5C4\uC9C0\uC640 \uAC80\uC9C0\uB97C \uB9DE\uB300\uC5B4 \uD540\uCE58(Pinch)\uD558\uBA74
-    \uC784\uBB34\uAC00 \uC2DC\uC791\uB429\uB2C8\uB2E4."
+  m_text: "[임무] 환자 이송 완료.\n측정기로 오염 부위를 확인한 뒤 제염 작업을 진행하십시오.\n\n오른쪽 컨트롤러 A 버튼: 임무 시작\n트리거 한 번: 가까운 도구 잡기 (버튼을 놓아도 유지)\n왼쪽 스틱: 이동\n도구를 환자에게 접촉하여 사용하고, 표시된 반납 위치에 놓으면 자동으로 분리됩니다."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 59685e71178ed1f4b8e7ece4761b26dd, type: 2}
   m_sharedMaterial: {fileID: -7922478900395125166, guid: 59685e71178ed1f4b8e7ece4761b26dd, type: 2}
@@ -9890,6 +9887,8 @@ MonoBehaviour:
   mainUI: {fileID: 8363085757228784624}
   uIText: {fileID: 508168505}
   leftHand: {fileID: 651993589}
+  useControllers: 1
+  firstStep: 1
 --- !u!4 &714809193
 Transform:
   m_ObjectHideFlags: 0
@@ -11451,8 +11450,8 @@ Camera:
   m_GameObject: {fileID: 976360063}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -15511,7 +15510,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _data: {fileID: 0}
-  _pointableElement: {fileID: 0}
+  _pointableElement: {fileID: 2028340147}
   _rigidbody: {fileID: 2028340145}
   _grabSource: {fileID: 0}
   _useClosestPointAsGrabSource: 0
@@ -23960,6 +23959,8 @@ GameObject:
   - component: {fileID: 1886905410}
   - component: {fileID: 1886905409}
   - component: {fileID: 1886905414}
+  - component: {fileID: 1886905415}
+  - component: {fileID: 1886905416}
   m_Layer: 0
   m_Name: '[BuildingBlock] Camera Rig'
   m_TagString: Untagged
@@ -24074,7 +24075,7 @@ MonoBehaviour:
   AllowRecenter: 1
   LateControllerUpdate: 1
   LateLatching: 0
-  controllerDrivenHandPosesType: 0
+  controllerDrivenHandPosesType: 2
   SimultaneousHandsAndControllersEnabled: 0
   _readOnlyWideMotionModeHandPosesEnabled: 0
   wideMotionModeHandPosesEnabled: 0
@@ -24138,7 +24139,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1886905408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e546c89c107a159458dd82857145342d, type: 3}
   m_Name: 
@@ -24149,6 +24150,37 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   collisionRadius: 0.1
+--- !u!114 &1886905415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886905408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835169cc5db14a2a98c214d594914d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestControllerScene
+  moveSpeed: 1.5
+  deadZone: 0.15
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  collisionRadius: 0.2
+--- !u!114 &1886905416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886905408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 012436ff937a4b56b85e2ff931b28a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestTriggerGrab
+  grabRadius: 0.12
 --- !u!1 &1890366032
 GameObject:
   m_ObjectHideFlags: 0

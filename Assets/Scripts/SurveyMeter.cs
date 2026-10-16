@@ -12,8 +12,7 @@ public class SurveyMeter: MonoBehaviour
     private Material[] _materials;
     private Transform grabInteraction;
     public GameObject placeHolder;
-    private bool isReported = false;
-    public bool isTreatmentComplete = false;
+    public bool isTreatmentComplete => GameManager.Instance != null && GameManager.Instance.IsTreatmentComplete;
     private Color[] _originalEmissionColors;
 
     private void Start()
@@ -62,33 +61,21 @@ public class SurveyMeter: MonoBehaviour
         {
             StopGlow();
         }
-        if ((GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction 
-            || GameManager.Instance.currentStep == ScenarioStep.ResultVerification)
-            && other.name.Contains("PlaceHolder"))
+        if (placeHolder != null && placeHolder.activeInHierarchy
+            && other.transform.IsChildOf(placeHolder.transform)
+            && GameManager.Instance.ReportSurveyMeterReturned())
         {
             grabInteraction.gameObject.SetActive(false);
-            transform.position = other.transform.position;
-            transform.rotation = other.transform.rotation;
-            if(GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction)
-            {
-                Debug.Log("들어옴");
-                GameManager.Instance.currentStep = ScenarioStep.SalineInteraction;
-            }
-            else if (GameManager.Instance.currentStep == ScenarioStep.ResultVerification)
-            {
-                GameManager.Instance.currentStep = ScenarioStep.End;
-            }
-            other.gameObject.SetActive(false);
-            
+            transform.SetPositionAndRotation(placeHolder.transform.position, placeHolder.transform.rotation);
+            placeHolder.SetActive(false);
         }
     }
     void OnTriggerStay(Collider other)
     {
-        bool isStepValid = (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction
-                     || GameManager.Instance.currentStep == ScenarioStep.SurveyMeterWarningInteraction);
+        bool isStepValid = GameManager.Instance.CanScan;
 
         // 1. Blood 충돌 처리 (우선순위: 경고음이 더 중요함)
-        if (other.name == "Blood" && isStepValid)
+        if (other.name == "Blood" && GameManager.Instance.CanDetectContamination)
         {
             if (!isWarningPlaying)
             {
@@ -99,10 +86,9 @@ public class SurveyMeter: MonoBehaviour
             }
 
             bloodContactTimer += Time.deltaTime;
-            if (bloodContactTimer >= 1.0f && !isReported) 
+            if (bloodContactTimer >= 1.0f)
             {
-                isReported = true;
-                Invoke("ReportSituation",0f); //첫번재 보고
+                ReportSituation();
             }
             return; // Blood 처리 후에는 아래 스캔 로직을 타지 않도록 종료
         }
@@ -119,7 +105,7 @@ public class SurveyMeter: MonoBehaviour
         }
 
 
-        if (GameManager.Instance.currentStep == ScenarioStep.SurveyMeterInteraction && other.name.Contains("Collider")
+        if (GameManager.Instance.CanVerifyTreatment && other.name.Contains("Collider")
            && isTreatmentComplete)
         {
             if (!isScanningPlaying)
@@ -130,14 +116,13 @@ public class SurveyMeter: MonoBehaviour
                 isScanningPlaying = true;
             }
         }
-        if (other.name.Contains("Patient") && isTreatmentComplete)
+        if (other.name.Contains("Patient") && GameManager.Instance.CanVerifyTreatment)
         {
             rescanTime += Time.deltaTime;
 
-            if (rescanTime >= 2.0f && isReported)
+            if (rescanTime >= 2.0f)
             {
-                isReported = false;
-                Invoke("ReportSituation", 0f);
+                ReportSituation();
             }
         }
     }
@@ -158,50 +143,28 @@ public class SurveyMeter: MonoBehaviour
 
     public void ReportSituation()
     {
-        if (!isTreatmentComplete)
-        {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC2);
-            GameManager.Instance.currentStep = ScenarioStep.SurveyMeterWarningInteraction;
-
-        }
-        else
-        {
-            GameManager.Instance.currentStep = ScenarioStep.ResultVerification;
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC11);
-
-
-        }
-
+        GameManager.Instance.ReportMeasurementCompleted();
     }
 
     private void HandleStepChanged(ScenarioStep newStep)
     {
-        if (_glowCoroutine != null)
+        StopGlow();
+        bloodContactTimer = 0f;
+        rescanTime = 0f;
+        isScanningPlaying = false;
+        isWarningPlaying = false;
+        bool canUse = GameManager.Instance.CanScan || GameManager.Instance.CanReturnSurveyMeter;
+        if (grabInteraction != null)
         {
-            StopCoroutine(_glowCoroutine);
-            _glowCoroutine = null;
+            grabInteraction.gameObject.SetActive(canUse);
         }
-
-        if (newStep == ScenarioStep.SurveyMeterInteraction)
+        if (placeHolder != null)
         {
-            if (grabInteraction != null)
-            {
-                grabInteraction.gameObject.SetActive(true);
-            }
+            placeHolder.SetActive(GameManager.Instance.CanReturnSurveyMeter);
+        }
+        if (GameManager.Instance.CanScan && !GameManager.Instance.CanReturnSurveyMeter)
+        {
             _glowCoroutine = StartCoroutine(GlowRoutine());
-        }
-        else if(newStep == ScenarioStep.SurveyMeterWarningInteraction || newStep == ScenarioStep.ResultVerification)
-        {
-            if (placeHolder != null)
-            {
-
-                placeHolder.gameObject.SetActive(true);
-            }
-        }
-        else if(newStep == ScenarioStep.End)
-        {
-            SoundManager.Instance.PlayNPC(SoundManager.Instance.NPC12);
-            GameManager.Instance.GameResult();
         }
     }
 

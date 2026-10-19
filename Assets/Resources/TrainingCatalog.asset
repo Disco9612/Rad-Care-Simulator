@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823a5c4777174f439acd54360c8f43aa, type: 3}
+  m_Name: TrainingCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingCatalog
+  lobbyScene: Assets/Scenes/MainLobby.unity
+  font: {fileID: 11400000, guid: 59685e71178ed1f4b8e7ece4761b26dd, type: 2}
+  scenarios:
+  - title: 병원 제염 교육
+    description: 오염 측정 / 식염수 세척 / 집게 처치 및 폐기 / 재측정
+    tutorialScene: Assets/Scenes/MainScean_Controller.unity
+    evaluationScene: Assets/Scenes/MainScean_Evaluation.unity

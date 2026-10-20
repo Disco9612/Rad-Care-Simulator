@@ -1,0 +1,85 @@
+{
+  "materials": [
+    {
+      "id": "MAT_base_pale_gray",
+      "texture": "MAT_base_pale_gray.png",
+      "roughness": 0.41999998688697815,
+      "metallic": 0.15000000596046448,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_medical_white",
+      "texture": "MAT_medical_white.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_rubber_dark",
+      "texture": "MAT_rubber_dark.png",
+      "roughness": 0.8500000238418579,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_screen_black",
+      "texture": "MAT_screen_black.png",
+      "roughness": 0.20000000298023224,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_stand_gray",
+      "texture": "MAT_stand_gray.png",
+      "roughness": 0.41999998688697815,
+      "metallic": 0.3499999940395355,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_chart_tablet_tablet_white_body",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_chart_tablet_tablet_black_screen",
+      "material": "MAT_screen_black"
+    },
+    {
+      "part": "radcare_chart_tablet_rear_mount_plate",
+      "material": "MAT_stand_gray"
+    },
+    {
+      "part": "radcare_chart_tablet_fixed_mount_neck",
+      "material": "MAT_stand_gray"
+    },
+    {
+      "part": "radcare_chart_tablet_support_column",
+      "material": "MAT_stand_gray"
+    },
+    {
+      "part": "radcare_chart_tablet_column_base_collar",
+      "material": "MAT_base_pale_gray"
+    },
+    {
+      "part": "radcare_chart_tablet_wide_base_plate",
+      "material": "MAT_base_pale_gray"
+    },
+    {
+      "part": "radcare_chart_tablet_front_left_foot",
+      "material": "MAT_rubber_dark"
+    },
+    {
+      "part": "radcare_chart_tablet_front_right_foot",
+      "material": "MAT_rubber_dark"
+    },
+    {
+      "part": "radcare_chart_tablet_rear_left_foot",
+      "material": "MAT_rubber_dark"
+    },
+    {
+      "part": "radcare_chart_tablet_rear_right_foot",
+      "material": "MAT_rubber_dark"
+    }
+  ]
+}

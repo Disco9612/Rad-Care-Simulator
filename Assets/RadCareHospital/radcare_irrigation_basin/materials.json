@@ -1,0 +1,17 @@
+{
+  "materials": [
+    {
+      "id": "MAT_light_teal_medical_plastic",
+      "texture": "MAT_light_teal_medical_plastic.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_irrigation_basin_hollow_basin_integrated_thick_rim",
+      "material": "MAT_light_teal_medical_plastic"
+    }
+  ]
+}

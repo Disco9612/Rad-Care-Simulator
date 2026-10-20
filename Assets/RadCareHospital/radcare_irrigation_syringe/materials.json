@@ -1,0 +1,70 @@
+{
+  "materials": [
+    {
+      "id": "MAT_cool_white",
+      "texture": "MAT_cool_white.png",
+      "roughness": 0.3199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_medical_off_white",
+      "texture": "MAT_medical_off_white.png",
+      "roughness": 0.36000001430511475,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_recess_shadow",
+      "texture": "MAT_recess_shadow.png",
+      "roughness": 0.6499999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal_polymer",
+      "texture": "MAT_teal_polymer.png",
+      "roughness": 0.3799999952316284,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_irrigation_syringe_barrel",
+      "material": "MAT_medical_off_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_barrel_lower_shoulder",
+      "material": "MAT_medical_off_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_rounded_irrigation_tip",
+      "material": "MAT_cool_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_tip_outlet_recess",
+      "material": "MAT_recess_shadow"
+    },
+    {
+      "part": "radcare_irrigation_syringe_flange_center_collar",
+      "material": "MAT_cool_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_finger_flange_left",
+      "material": "MAT_cool_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_finger_flange_right",
+      "material": "MAT_cool_white"
+    },
+    {
+      "part": "radcare_irrigation_syringe_plunger_stem",
+      "material": "MAT_teal_polymer"
+    },
+    {
+      "part": "radcare_irrigation_syringe_plunger_thumb_handle",
+      "material": "MAT_teal_polymer"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+    "unity": "6000.3.0f1",
+    "status": "passed",
+    "assets": [
+        {
+            "name": "radcare_chart_tablet",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                2068,
+                1012,
+                506
+            ],
+            "collisionMeshes": 11,
+            "error": ""
+        },
+        {
+            "name": "radcare_dressing_kit",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                1820,
+                890,
+                444
+            ],
+            "collisionMeshes": 10,
+            "error": ""
+        },
+        {
+            "name": "radcare_exam_light",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                25332,
+                12412,
+                6206
+            ],
+            "collisionMeshes": 64,
+            "error": ""
+        },
+        {
+            "name": "radcare_irrigation_basin",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                640,
+                312,
+                156
+            ],
+            "collisionMeshes": 1,
+            "error": ""
+        },
+        {
+            "name": "radcare_irrigation_syringe",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                3588,
+                1758,
+                878
+            ],
+            "collisionMeshes": 9,
+            "error": ""
+        },
+        {
+            "name": "radcare_patient_monitor",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                4008,
+                1962,
+                980
+            ],
+            "collisionMeshes": 19,
+            "error": ""
+        },
+        {
+            "name": "radcare_treatment_cart",
+            "original": true,
+            "lod": true,
+            "triangles": [
+                22988,
+                11264,
+                5632
+            ],
+            "collisionMeshes": 53,
+            "error": ""
+        }
+    ],
+    "limitations": [
+        "Static models only; XR interactions, UI and clinical behavior not implemented.",
+        "Collision FBX imported but not attached: coarse boxes can obstruct concave bowls. Configure colliders for the intended interaction.",
+        "LOD transitions, VR performance and final rendered appearance require in-engine review."
+    ]
+}

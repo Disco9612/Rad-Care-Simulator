@@ -1,0 +1,124 @@
+{
+  "materials": [
+    {
+      "id": "MAT_bezel_blue_gray",
+      "texture": "MAT_bezel_blue_gray.png",
+      "roughness": 0.46000000834465027,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_control_teal",
+      "texture": "MAT_control_teal.png",
+      "roughness": 0.3799999952316284,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_medical_white",
+      "texture": "MAT_medical_white.png",
+      "roughness": 0.36000001430511475,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_rear_white",
+      "texture": "MAT_rear_white.png",
+      "roughness": 0.4300000071525574,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_rubber_gray",
+      "texture": "MAT_rubber_gray.png",
+      "roughness": 0.7799999713897705,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_screen_navy",
+      "texture": "MAT_screen_navy.png",
+      "roughness": 0.3199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_patient_monitor_main_enclosure",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_patient_monitor_rear_service_cover",
+      "material": "MAT_rear_white"
+    },
+    {
+      "part": "radcare_patient_monitor_screen_bezel",
+      "material": "MAT_bezel_blue_gray"
+    },
+    {
+      "part": "radcare_patient_monitor_blank_ui_screen",
+      "material": "MAT_screen_navy"
+    },
+    {
+      "part": "radcare_patient_monitor_teal_button_01",
+      "material": "MAT_control_teal"
+    },
+    {
+      "part": "radcare_patient_monitor_teal_button_02",
+      "material": "MAT_control_teal"
+    },
+    {
+      "part": "radcare_patient_monitor_teal_button_03",
+      "material": "MAT_control_teal"
+    },
+    {
+      "part": "radcare_patient_monitor_teal_button_04",
+      "material": "MAT_control_teal"
+    },
+    {
+      "part": "radcare_patient_monitor_knob_mount",
+      "material": "MAT_bezel_blue_gray"
+    },
+    {
+      "part": "radcare_patient_monitor_rotary_control_knob",
+      "material": "MAT_control_teal"
+    },
+    {
+      "part": "radcare_patient_monitor_handle_left_support",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_patient_monitor_handle_right_support",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_patient_monitor_handle_top_grip",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_patient_monitor_pedestal_neck",
+      "material": "MAT_rear_white"
+    },
+    {
+      "part": "radcare_patient_monitor_stable_base",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_patient_monitor_front_left_foot",
+      "material": "MAT_rubber_gray"
+    },
+    {
+      "part": "radcare_patient_monitor_front_right_foot",
+      "material": "MAT_rubber_gray"
+    },
+    {
+      "part": "radcare_patient_monitor_rear_left_foot",
+      "material": "MAT_rubber_gray"
+    },
+    {
+      "part": "radcare_patient_monitor_rear_right_foot",
+      "material": "MAT_rubber_gray"
+    }
+  ]
+}

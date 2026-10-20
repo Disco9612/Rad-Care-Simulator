@@ -9,13 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/MainLobby.unity
     guid: 36cce2c506dc4b31a62d3ac921e71c76
   - enabled: 1
-    path: Assets/Scenes/MainScean_Controller.unity
+    path: Assets/Scenes/Emergency_Decon_Tutorial.unity
     guid: 8d797ea95d5244bd9fd6d01d97024e9c
   - enabled: 1
-    path: Assets/Scenes/MainScean_Evaluation.unity
+    path: Assets/Scenes/Emergency_Decon_Evaluation.unity
     guid: ea761fb97c70ac605a9b8b4645db7df2
   - enabled: 0
-    path: Assets/Scenes/MainScean.unity
+    path: Assets/Scenes/Emergency_Decon_Tutorial_Hand.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
     WebXR.Settings: {fileID: 11400000, guid: deafe72638502d944b12fee97dadc22c, type: 2}

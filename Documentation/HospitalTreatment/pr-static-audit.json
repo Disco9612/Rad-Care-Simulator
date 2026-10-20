@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "checks": {
+    "script_moves": [
+      {
+        "from": "Assets/Scripts/ArmSwinger.cs",
+        "to": "Assets/Scripts/Emergency_Decon/ArmSwinger.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/ArmSwinger.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/ArmSwinger.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/Forceps.cs",
+        "to": "Assets/Scripts/Emergency_Decon/Forceps.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/Forceps.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/Forceps.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/GameManager.cs",
+        "to": "Assets/Scripts/Emergency_Decon/GameManager.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/GameManager.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/GameManager.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/HandJoystickLocomotion.cs",
+        "to": "Assets/Scripts/Emergency_Decon/HandJoystickLocomotion.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/HandJoystickLocomotion.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/HandJoystickLocomotion.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/ParticleContactDetector.cs",
+        "to": "Assets/Scripts/Emergency_Decon/ParticleContactDetector.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/ParticleContactDetector.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/ParticleContactDetector.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/QuestControllerScene.cs",
+        "to": "Assets/Scripts/Emergency_Decon/QuestControllerScene.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/QuestControllerScene.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/QuestControllerScene.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/QuestTriggerGrab.cs",
+        "to": "Assets/Scripts/Emergency_Decon/QuestTriggerGrab.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/QuestTriggerGrab.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/QuestTriggerGrab.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SalineBottle.cs",
+        "to": "Assets/Scripts/Emergency_Decon/SalineBottle.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SalineBottle.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/SalineBottle.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SoundManager.cs",
+        "to": "Assets/Scripts/Emergency_Decon/SoundManager.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SoundManager.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/SoundManager.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SurveyMeter.cs",
+        "to": "Assets/Scripts/Emergency_Decon/SurveyMeter.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/SurveyMeter.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/SurveyMeter.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/VirtualRealityObjectDetection.cs",
+        "to": "Assets/Scripts/Emergency_Decon/VirtualRealityObjectDetection.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/VirtualRealityObjectDetection.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/VirtualRealityObjectDetection.cs.meta",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/WasteContainer.cs",
+        "to": "Assets/Scripts/Emergency_Decon/WasteContainer.cs",
+        "unchanged": true
+      },
+      {
+        "from": "Assets/Scripts/WasteContainer.cs.meta",
+        "to": "Assets/Scripts/Emergency_Decon/WasteContainer.cs.meta",
+        "unchanged": true
+      }
+    ],
+    "scene_renames": [
+      {
+        "old": "MainScean",
+        "new": "Emergency_Decon_Tutorial_Hand",
+        "guid_preserved": true,
+        "content_unchanged": true
+      },
+      {
+        "old": "MainScean_Controller",
+        "new": "Emergency_Decon_Tutorial",
+        "guid_preserved": true,
+        "content_unchanged": true
+      },
+      {
+        "old": "MainScean_Evaluation",
+        "new": "Emergency_Decon_Evaluation",
+        "guid_preserved": true,
+        "content_unchanged": true
+      }
+    ],
+    "catalog_and_build_paths": true,
+    "missing_guids": {},
+    "duplicate_new_guids": {},
+    "new_file_count": 513,
+    "new_bytes": 37703239,
+    "oversize_files": [],
+    "differences_from_verified_assets": [
+      "RadCareExpansion/radcare_assistant_nurse/MAT_eyes.mat",
+      "RadCareExpansion/radcare_patient/MAT_eyes.mat"
+    ],
+    "imported_prefabs": 23
+  },
+  "limitations": [
+    "Static file/reference validation; no Quest run or full project build performed in this PR preparation."
+  ],
+  "errors": []
+}

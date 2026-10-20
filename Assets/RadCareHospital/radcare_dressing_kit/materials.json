@@ -1,0 +1,81 @@
+{
+  "materials": [
+    {
+      "id": "MAT_stainless_steel",
+      "texture": "MAT_stainless_steel.png",
+      "roughness": 0.2800000011920929,
+      "metallic": 1.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal_sealed_border",
+      "texture": "MAT_teal_sealed_border.png",
+      "roughness": 0.47999998927116394,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_white_fixation_tape",
+      "texture": "MAT_white_fixation_tape.png",
+      "roughness": 0.8199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_white_gauze",
+      "texture": "MAT_white_gauze.png",
+      "roughness": 0.9399999976158142,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_white_packet",
+      "texture": "MAT_white_packet.png",
+      "roughness": 0.49000000953674316,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_dressing_kit_tray_base",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_dressing_kit_tray_front_wall",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_dressing_kit_tray_back_wall",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_dressing_kit_tray_left_wall",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_dressing_kit_tray_right_wall",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_dressing_kit_gauze_pad_front",
+      "material": "MAT_white_gauze"
+    },
+    {
+      "part": "radcare_dressing_kit_gauze_pad_back",
+      "material": "MAT_white_gauze"
+    },
+    {
+      "part": "radcare_dressing_kit_sealed_packet_border",
+      "material": "MAT_teal_sealed_border"
+    },
+    {
+      "part": "radcare_dressing_kit_sealed_packet_white_panel",
+      "material": "MAT_white_packet"
+    },
+    {
+      "part": "radcare_dressing_kit_fixation_tape_roll",
+      "material": "MAT_white_fixation_tape"
+    }
+  ]
+}

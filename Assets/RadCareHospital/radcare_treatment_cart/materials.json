@@ -1,0 +1,267 @@
+{
+  "materials": [
+    {
+      "id": "MAT_caster_metal",
+      "texture": "MAT_caster_metal.png",
+      "roughness": 0.36000001430511475,
+      "metallic": 0.8500000238418579,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_light_gray_shelf",
+      "texture": "MAT_light_gray_shelf.png",
+      "roughness": 0.4300000071525574,
+      "metallic": 0.15000000596046448,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_stainless_steel",
+      "texture": "MAT_stainless_steel.png",
+      "roughness": 0.28999999165534973,
+      "metallic": 0.949999988079071,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_axle_steel",
+      "texture": "MAT_wheel_axle_steel.png",
+      "roughness": 0.27000001072883606,
+      "metallic": 0.8999999761581421,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_hub_polymer",
+      "texture": "MAT_wheel_hub_polymer.png",
+      "roughness": 0.41999998688697815,
+      "metallic": 0.11999999731779099,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_rim_satin",
+      "texture": "MAT_wheel_rim_satin.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.7200000286102295,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_tire_rubber",
+      "texture": "MAT_wheel_tire_rubber.png",
+      "roughness": 0.8199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_treatment_cart_frame_front_left_post",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_frame_front_right_post",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_frame_back_left_post",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_frame_back_right_post",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_shelf_upper",
+      "material": "MAT_light_gray_shelf"
+    },
+    {
+      "part": "radcare_treatment_cart_shelf_lower",
+      "material": "MAT_light_gray_shelf"
+    },
+    {
+      "part": "radcare_treatment_cart_upper_rail_front",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_upper_rail_back",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_upper_rail_left",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_upper_rail_right",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_rail_front_left_riser",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_rail_front_right_riser",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_rail_back_left_riser",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_rail_back_right_riser",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_push_handle_grip",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_push_handle_front_arm",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_push_handle_back_arm",
+      "material": "MAT_stainless_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_caster_front_left_mount",
+      "material": "MAT_caster_metal"
+    },
+    {
+      "part": "radcare_treatment_cart_caster_front_right_mount",
+      "material": "MAT_caster_metal"
+    },
+    {
+      "part": "radcare_treatment_cart_caster_back_left_mount",
+      "material": "MAT_caster_metal"
+    },
+    {
+      "part": "radcare_treatment_cart_caster_back_right_mount",
+      "material": "MAT_caster_metal"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_left_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_front_right_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_left_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_treatment_cart_wheel_back_right_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    }
+  ]
+}

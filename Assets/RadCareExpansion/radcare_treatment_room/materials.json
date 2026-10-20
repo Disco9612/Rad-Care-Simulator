@@ -1,0 +1,275 @@
+{
+  "materials": [
+    {
+      "id": "MAT_dark",
+      "texture": "MAT_dark.png",
+      "roughness": 0.7799999713897705,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_fabric",
+      "texture": "MAT_fabric.png",
+      "roughness": 0.9300000071525574,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_floor",
+      "texture": "MAT_floor.png",
+      "roughness": 0.699999988079071,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_ivory",
+      "texture": "MAT_ivory.png",
+      "roughness": 0.550000011920929,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_sheet",
+      "texture": "MAT_sheet.png",
+      "roughness": 0.9200000166893005,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_steel",
+      "texture": "MAT_steel.png",
+      "roughness": 0.3199999928474426,
+      "metallic": 0.8500000238418579,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal",
+      "texture": "MAT_teal.png",
+      "roughness": 0.550000011920929,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_treatment_room_floor_slab",
+      "material": "MAT_floor"
+    },
+    {
+      "part": "radcare_treatment_room_back_wall",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_treatment_room_left_wall",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_treatment_room_back_skirt",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_left_skirt",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_wall_bumper",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_headwall_panel",
+      "material": "MAT_sheet"
+    },
+    {
+      "part": "radcare_treatment_room_service_socket_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_socket_center_0",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_treatment_room_service_socket_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_socket_center_1",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_treatment_room_service_socket_2",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_socket_center_2",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_treatment_room_service_socket_3",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_socket_center_3",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_treatment_room_cabinet",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_treatment_room_counter",
+      "material": "MAT_sheet"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_0",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_pull_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_1",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_pull_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_2",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_drawer_pull_2",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_sanitizer_body",
+      "material": "MAT_sheet"
+    },
+    {
+      "part": "radcare_treatment_room_sanitizer_nozzle",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_disposal_bin",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_treatment_room_bin_lid",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_treatment_room_bin_pedal",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_track",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_0",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_1",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_2",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_2",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_3",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_3",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_4",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_4",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_5",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_5",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_6",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_6",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_7",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_7",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_8",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_8",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_9",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_9",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_10",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_hook_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_curtain_fold_11",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_treatment_room_wall_light_mount",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_treatment_room_wall_light_diffuser",
+      "material": "MAT_sheet"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+    "status": "passed",
+    "unity": "6000.3.0f1",
+    "assets": [
+        {
+            "name": "radcare_assistant_nurse",
+            "passed": true,
+            "meshes": 6,
+            "triangles": [],
+            "error": ""
+        },
+        {
+            "name": "radcare_kidney_basin",
+            "passed": true,
+            "meshes": 1,
+            "triangles": [
+                896,
+                438,
+                218
+            ],
+            "error": ""
+        },
+        {
+            "name": "radcare_patient",
+            "passed": true,
+            "meshes": 6,
+            "triangles": [],
+            "error": ""
+        },
+        {
+            "name": "radcare_patient_bed",
+            "passed": true,
+            "meshes": 75,
+            "triangles": [
+                28724,
+                14074,
+                7036
+            ],
+            "error": ""
+        },
+        {
+            "name": "radcare_treatment_room",
+            "passed": true,
+            "meshes": 55,
+            "triangles": [
+                18020,
+                8828,
+                4414
+            ],
+            "error": ""
+        }
+    ],
+    "limitations": [
+        "Unity human prefabs are static snapshots. Rigged source files are supplied separately; native humanoid retargeting and clinical animation are not validated.",
+        "Room is a two-wall cutaway. No colliders, XR interaction, cloth simulation or clinical logic are included.",
+        "Prop LOD geometry was checked; headset performance and visual distance transitions require review."
+    ]
+}

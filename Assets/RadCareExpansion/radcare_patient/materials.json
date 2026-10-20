@@ -1,0 +1,72 @@
+{
+  "materials": [
+    {
+      "id": "MAT_brows",
+      "texture": "MAT_brows.png",
+      "roughness": 0.6499999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": true
+    },
+    {
+      "id": "MAT_eyes",
+      "texture": "MAT_eyes.png",
+      "roughness": 0.6499999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_hair",
+      "texture": "MAT_hair.png",
+      "roughness": 0.6499999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": true
+    },
+    {
+      "id": "MAT_outfit",
+      "texture": "MAT_outfit.png",
+      "roughness": 0.8999999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_shoes",
+      "texture": "MAT_shoes.png",
+      "roughness": 0.75,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_skin",
+      "texture": "MAT_skin.png",
+      "roughness": 0.47999998927116394,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_patient_body",
+      "material": "MAT_skin"
+    },
+    {
+      "part": "radcare_patient_outfit",
+      "material": "MAT_outfit"
+    },
+    {
+      "part": "radcare_patient_shoes",
+      "material": "MAT_shoes"
+    },
+    {
+      "part": "radcare_patient_eyes",
+      "material": "MAT_eyes"
+    },
+    {
+      "part": "radcare_patient_brows",
+      "material": "MAT_brows"
+    },
+    {
+      "part": "radcare_patient_hair",
+      "material": "MAT_hair"
+    }
+  ]
+}

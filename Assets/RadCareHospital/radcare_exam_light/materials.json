@@ -1,0 +1,318 @@
+{
+  "materials": [
+    {
+      "id": "MAT_gray_metal",
+      "texture": "MAT_gray_metal.png",
+      "roughness": 0.28999999165534973,
+      "metallic": 0.75,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_lens_bright",
+      "texture": "MAT_lens_bright.png",
+      "roughness": 0.2199999988079071,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_medical_white",
+      "texture": "MAT_medical_white.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal",
+      "texture": "MAT_teal.png",
+      "roughness": 0.4000000059604645,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_axle_steel",
+      "texture": "MAT_wheel_axle_steel.png",
+      "roughness": 0.27000001072883606,
+      "metallic": 0.8999999761581421,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_hub_polymer",
+      "texture": "MAT_wheel_hub_polymer.png",
+      "roughness": 0.41999998688697815,
+      "metallic": 0.11999999731779099,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_rim_satin",
+      "texture": "MAT_wheel_rim_satin.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.7200000286102295,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_tire_rubber",
+      "texture": "MAT_wheel_tire_rubber.png",
+      "roughness": 0.8199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_exam_light_base_hub",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_base_spoke_01",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_base_spoke_02",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_base_spoke_03",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_base_spoke_04",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_base_spoke_05",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_pole_base_socket",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_pole_lower_sleeve",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_pole_adjustment_collar",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_pole_upper_tube",
+      "material": "MAT_gray_metal"
+    },
+    {
+      "part": "radcare_exam_light_joint_shoulder",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_joint_shoulder_cap",
+      "material": "MAT_gray_metal"
+    },
+    {
+      "part": "radcare_exam_light_lower_arm",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_joint_elbow",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_joint_elbow_cap",
+      "material": "MAT_gray_metal"
+    },
+    {
+      "part": "radcare_exam_light_upper_arm",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_joint_head_pivot",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_head_mount_neck",
+      "material": "MAT_gray_metal"
+    },
+    {
+      "part": "radcare_exam_light_head_housing",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_head_teal_bezel",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_lens",
+      "material": "MAT_lens_bright"
+    },
+    {
+      "part": "radcare_exam_light_handle_left_support",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_handle_right_support",
+      "material": "MAT_medical_white"
+    },
+    {
+      "part": "radcare_exam_light_handle_grip",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_01_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_02_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_03_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_04_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_recessed_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_fork_a",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_fork_b",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_exam_light_caster_wheel_05_fork_bridge",
+      "material": "MAT_wheel_rim_satin"
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+{
+  "materials": [
+    {
+      "id": "MAT_dark",
+      "texture": "MAT_dark.png",
+      "roughness": 0.7799999713897705,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_fabric",
+      "texture": "MAT_fabric.png",
+      "roughness": 0.9300000071525574,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_ivory",
+      "texture": "MAT_ivory.png",
+      "roughness": 0.550000011920929,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_sheet",
+      "texture": "MAT_sheet.png",
+      "roughness": 0.9200000166893005,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_steel",
+      "texture": "MAT_steel.png",
+      "roughness": 0.3199999928474426,
+      "metallic": 0.8500000238418579,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal",
+      "texture": "MAT_teal.png",
+      "roughness": 0.550000011920929,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_axle_steel",
+      "texture": "MAT_wheel_axle_steel.png",
+      "roughness": 0.27000001072883606,
+      "metallic": 0.8999999761581421,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_hub_polymer",
+      "texture": "MAT_wheel_hub_polymer.png",
+      "roughness": 0.41999998688697815,
+      "metallic": 0.11999999731779099,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_rim_satin",
+      "texture": "MAT_wheel_rim_satin.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.7200000286102295,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_wheel_tire_rubber",
+      "texture": "MAT_wheel_tire_rubber.png",
+      "roughness": 0.8199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_patient_bed_chassis",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_tire",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_fork_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_fork_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_bridge",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_swivel",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_0_brake",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_tire",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_fork_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_fork_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_bridge",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_swivel",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_1_brake",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_tire",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_fork_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_fork_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_bridge",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_swivel",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_2_brake",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_tire",
+      "material": "MAT_wheel_tire_rubber"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_rim",
+      "material": "MAT_wheel_rim_satin"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_spokes",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_hub",
+      "material": "MAT_wheel_hub_polymer"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_axle",
+      "material": "MAT_wheel_axle_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_fork_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_fork_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_bridge",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_swivel",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_caster_3_brake",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_patient_bed_lift_column_0",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_column_sleeve_0",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_patient_bed_lift_column_1",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_column_sleeve_1",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_patient_bed_deck",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_patient_bed_mattress",
+      "material": "MAT_fabric"
+    },
+    {
+      "part": "radcare_patient_bed_sheet_top",
+      "material": "MAT_sheet"
+    },
+    {
+      "part": "radcare_patient_bed_pillow",
+      "material": "MAT_sheet"
+    },
+    {
+      "part": "radcare_patient_bed_board_post_00",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_board_post_01",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_endboard_0",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_patient_bed_board_inlay_0",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_patient_bed_board_post_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_board_post_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_endboard_1",
+      "material": "MAT_ivory"
+    },
+    {
+      "part": "radcare_patient_bed_board_inlay_1",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pillar_00",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pivot_00",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pillar_01",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pivot_01",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_bar_00",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_bar_01",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_spacer_00",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_spacer_01",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_release_0",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pillar_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pivot_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pillar_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_pivot_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_bar_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_bar_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_spacer_10",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_spacer_11",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_patient_bed_rail_release_1",
+      "material": "MAT_teal"
+    }
+  ]
+}

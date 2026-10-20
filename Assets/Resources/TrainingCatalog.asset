@@ -17,5 +17,5 @@ MonoBehaviour:
   scenarios:
   - title: 병원 제염 교육
     description: 오염 측정 / 식염수 세척 / 집게 처치 및 폐기 / 재측정
-    tutorialScene: Assets/Scenes/MainScean_Controller.unity
-    evaluationScene: Assets/Scenes/MainScean_Evaluation.unity
+    tutorialScene: Assets/Scenes/Emergency_Decon_Tutorial.unity
+    evaluationScene: Assets/Scenes/Emergency_Decon_Evaluation.unity

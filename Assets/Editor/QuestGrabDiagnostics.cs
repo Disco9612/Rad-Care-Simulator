@@ -21,7 +21,7 @@ public static class QuestGrabDiagnostics
     private static void Capture()
     {
         if (EditorApplication.isCompiling || EditorApplication.timeSinceStartup < nextCapture
-            || SceneManager.GetActiveScene().name != "MainScean_Controller")
+            || SceneManager.GetActiveScene().name != "Emergency_Decon_Tutorial")
         {
             return;
         }

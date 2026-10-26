@@ -1,0 +1,1 @@
+Before/after measurement request and report confirmation bound to Assistant_Nurse. Six-second simulated measurement; three readings per report.

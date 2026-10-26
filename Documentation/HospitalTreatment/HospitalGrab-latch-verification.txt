@@ -1,0 +1,10 @@
+2026-10-23 - Unity 6000.3.0f1 / Hospital_Tutorial
+PASS: script compilation and 68 progression assertions.
+PASS: Play Mode integration completed all 27 actions and saved the JSON record.
+PASS: physical dressing grabbed through HospitalInput.TryGrab; detached UI stayed hidden/stationary.
+PASS: carried objects remained held outside the designated socket.
+PASS: matching sockets rejected 0.1-second contact and accepted accumulated 0.26-second contact.
+PASS: irrigator could not return before cleanup; returned at its original cart position during cleanup.
+Runtime input now grabs on trigger/grip press, with no button-release drop path.
+Actual Quest controller hardware input has not been verified.
+Editor launched with -noaudio to avoid the previous audio-device initialization crash; sound was not tested.

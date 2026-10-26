@@ -1,0 +1,28 @@
+{
+  "materials": [
+    {
+      "id": "MAT_cotton",
+      "texture": "MAT_cotton.png",
+      "roughness": 0.9700000286102295,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_used",
+      "texture": "MAT_used.png",
+      "roughness": 0.9800000190734863,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_used_swabs_crumpled_swab_a",
+      "material": "MAT_used"
+    },
+    {
+      "part": "radcare_used_swabs_crumpled_swab_b",
+      "material": "MAT_cotton"
+    }
+  ]
+}

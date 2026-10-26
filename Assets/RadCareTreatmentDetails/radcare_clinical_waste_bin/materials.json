@@ -1,0 +1,82 @@
+{
+  "materials": [
+    {
+      "id": "MAT_dark",
+      "texture": "MAT_dark.png",
+      "roughness": 0.6800000071525574,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_red",
+      "texture": "MAT_red.png",
+      "roughness": 0.550000011920929,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_steel",
+      "texture": "MAT_steel.png",
+      "roughness": 0.3400000035762787,
+      "metallic": 0.800000011920929,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_white",
+      "texture": "MAT_white.png",
+      "roughness": 0.6499999761581421,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_clinical_waste_bin_hollow_container_shell",
+      "material": "MAT_red"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_interior_floor",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_rolled_open_rim",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_raised_lid",
+      "material": "MAT_red"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_hinge",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_foot_pedal",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_pedal_link",
+      "material": "MAT_steel"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_front_label_plate",
+      "material": "MAT_white"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_label_band",
+      "material": "MAT_red"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_label_mark_vertical",
+      "material": "MAT_red"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_rubber_foot_l",
+      "material": "MAT_dark"
+    },
+    {
+      "part": "radcare_clinical_waste_bin_rubber_foot_r",
+      "material": "MAT_dark"
+    }
+  ]
+}

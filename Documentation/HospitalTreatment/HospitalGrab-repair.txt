@@ -1,0 +1,1 @@
+Physical grab surfaces installed; movable models contain no instruction UI.

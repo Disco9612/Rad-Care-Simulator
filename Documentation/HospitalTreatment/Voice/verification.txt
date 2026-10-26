@@ -1,0 +1,9 @@
+2026-10-26 Hospital Tutorial narration and fixation tape
+
+33 Korean WAV clips are bound in the scene. The guide remains Microsoft Heami Desktop. Assistant speech uses Microsoft Edge ko-KR-InJoonNeural and patient speech uses ko-KR-HyunsuMultilingualNeural: two separately synthesized male voices. Six role clips are 24 kHz mono WAV with nonzero signal. The guide's tape instruction was rerecorded. Role playback pitch is 1.0 for all voices. Playback is offline at runtime.
+
+The last fixation step uses a separate precut fabric tape mesh with URP Lit material, woven texture, physical grab collider and glow. Carry it from the cart to the dressing. The dressing destination glows while it is held. Placement requires the tape model within 4.5 cm for 0.25 s; clicking the prior target does not complete the step. The tape stays on the dressing after placement.
+
+Unity Play-mode smoke completed all 25 steps with 28 targets and saved a record. It checked the tape could not advance by Act/UI, rejected placement from 8 cm away, required dwell at the destination, and completed by physical placement. The 33 audio clips were loaded. See ../last-smoke.json. Headset interaction and listening have not been checked by a human.
+
+Edit the dialogue in manifest.json and regenerate only the male role lines with `python -X utf8 Documentation/HospitalTreatment/Voice/generate-male-voices.py`; guide lines can be regenerated with generate-voice.ps1. Rebind clips by creating Temp/HospitalNarration.request with `install` in the Unity editor.

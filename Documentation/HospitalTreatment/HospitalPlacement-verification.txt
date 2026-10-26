@@ -1,0 +1,4 @@
+PASS: 28 fitted meshes (120376 triangles), finite/nonempty geometry and placement references.
+PASS: disposal target follows user's moved bin rim; world rim center=(1.47, 0.54, 1.10).
+PASS: receiver supported within 1 cm, below wound and within irrigation reach.
+Visual review: start, top, side, close-up and bins. Static fitted cloth; not cloth physics. Quest hardware input not exercised.

@@ -1,0 +1,28 @@
+{
+  "materials": [
+    {
+      "id": "MAT_hem",
+      "texture": "MAT_hem.png",
+      "roughness": 0.8600000143051147,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal",
+      "texture": "MAT_teal.png",
+      "roughness": 0.9100000262260437,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_waterproof_drape_fenestrated_waterproof_fabric",
+      "material": "MAT_teal"
+    },
+    {
+      "part": "radcare_waterproof_drape_reinforced_opening",
+      "material": "MAT_hem"
+    }
+  ]
+}

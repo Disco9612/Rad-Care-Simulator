@@ -1,0 +1,299 @@
+[
+  {
+    "key": "step_0",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 11.8,
+    "rms": 2888.3,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_1",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 5.09,
+    "rms": 2855.5,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_2",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.43,
+    "rms": 3080.1,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_3",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 2.46,
+    "rms": 2685.4,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_4",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.51,
+    "rms": 2896.2,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_5",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.88,
+    "rms": 2509.1,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_6",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 6.46,
+    "rms": 3197.7,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_7",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.61,
+    "rms": 2460.3,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_8",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.52,
+    "rms": 2691.6,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_9",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 4.51,
+    "rms": 2758.5,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_10",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 4.75,
+    "rms": 2874.0,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_11",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 4.44,
+    "rms": 2918.4,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_12",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.42,
+    "rms": 2672.8,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_13",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 7.01,
+    "rms": 2865.4,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_14",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 7.55,
+    "rms": 3074.6,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_15",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 6.75,
+    "rms": 2656.3,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_16",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 7.51,
+    "rms": 3108.7,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_17",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 5.04,
+    "rms": 2983.5,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_18",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.07,
+    "rms": 2419.8,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_19",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.04,
+    "rms": 2913.6,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_20",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 3.87,
+    "rms": 2487.4,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_21",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 7.36,
+    "rms": 2880.5,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_22",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 6.32,
+    "rms": 3155.8,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_23",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 4.19,
+    "rms": 2853.1,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "step_24",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 5.94,
+    "rms": 3029.9,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "assistant_wait",
+    "role": "nurse",
+    "voice": "ko-KR-InJoonNeural",
+    "seconds": 5.9,
+    "rms": 3028.4,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "assistant_before",
+    "role": "nurse",
+    "voice": "ko-KR-InJoonNeural",
+    "seconds": 14.52,
+    "rms": 2836.2,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "assistant_after",
+    "role": "nurse",
+    "voice": "ko-KR-InJoonNeural",
+    "seconds": 15.17,
+    "rms": 2915.9,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "pain_initial",
+    "role": "patient",
+    "voice": "ko-KR-HyunsuMultilingualNeural",
+    "seconds": 4.46,
+    "rms": 3783.6,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "pain_alert",
+    "role": "patient",
+    "voice": "ko-KR-HyunsuMultilingualNeural",
+    "seconds": 4.25,
+    "rms": 3140.1,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "pain_relief",
+    "role": "patient",
+    "voice": "ko-KR-HyunsuMultilingualNeural",
+    "seconds": 3.12,
+    "rms": 3852.1,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "pain_monitor",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 6.25,
+    "rms": 2854.5,
+    "sample_rate": 24000,
+    "channels": 1
+  },
+  {
+    "key": "complete",
+    "role": "guide",
+    "voice": "Microsoft Heami Desktop",
+    "seconds": 9.54,
+    "rms": 2805.3,
+    "sample_rate": 24000,
+    "channels": 1
+  }
+]

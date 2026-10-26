@@ -1,0 +1,39 @@
+{
+  "materials": [
+    {
+      "id": "MAT_pink",
+      "texture": "MAT_pink.png",
+      "roughness": 0.8199999928474426,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_rim",
+      "texture": "MAT_rim.png",
+      "roughness": 0.8700000047683716,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_skin",
+      "texture": "MAT_skin.png",
+      "roughness": 0.8500000238418579,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_wound_pad_flexible_skin_training_pad",
+      "material": "MAT_skin"
+    },
+    {
+      "part": "radcare_wound_pad_soft_raised_margin",
+      "material": "MAT_rim"
+    },
+    {
+      "part": "radcare_wound_pad_shallow_simulated_wound",
+      "material": "MAT_pink"
+    }
+  ]
+}

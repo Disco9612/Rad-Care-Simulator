@@ -1,0 +1,1 @@
+Upright projected screen UVs; physical screen selection within 75 cm controller range and 1.2 m head range. Bin rim 85 cm.

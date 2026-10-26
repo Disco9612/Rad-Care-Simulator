@@ -1,0 +1,1 @@
+Rim: 0.85 m; floor: 5.960464E-08 m; both disposal targets aligned to rim.

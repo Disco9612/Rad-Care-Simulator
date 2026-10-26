@@ -1,0 +1,7 @@
+Hospital treatment evaluation, 2026-10-26
+
+MainLobby TrainingCatalog contains 병원 상처 처치 with Hospital_Tutorial and Hospital_Evaluation modes. Both scenes are enabled in EditorBuildSettings.
+
+Hospital_Evaluation is a copy of the current hospital room and physical tools. HospitalEvaluation records ordinary and critical errors, step completions, elapsed time, score and pass/fail in Application.persistentDataPath/HospitalTreatmentEvaluations. Passing requires completion, at least 80 points and no critical errors. Ordinary errors subtract 3 points, critical errors 12, and time beyond 4:30 subtracts 2 per 30 seconds. The evaluation HUD shows progress and error counts without the next-step prompt. Tutorial glow and irrigation contact guide are disabled; patient and assistant role voices remain, while guide narration is silent.
+
+Editor audit: scene has 28 targets, evaluation component, 33 voice clips, both catalog scene paths and build entries. Evaluation Play smoke: wrong action and wrong tool recorded as two errors; correct action advanced; incomplete report saved. Tutorial Play smoke after shared input changes: all 25 steps completed and record saved. No headset-based manual validation was performed.

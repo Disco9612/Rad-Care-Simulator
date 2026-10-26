@@ -1,0 +1,1 @@
+PASS: 68 assertions; sequential gates, wash duration, invalid wash, completion, overtime and scene bindings.

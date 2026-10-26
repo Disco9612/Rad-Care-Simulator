@@ -1,0 +1,80 @@
+{
+  "materials": [
+    {
+      "id": "MAT_cotton",
+      "texture": "MAT_cotton.png",
+      "roughness": 0.9700000286102295,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_tape",
+      "texture": "MAT_tape.png",
+      "roughness": 0.9399999976158142,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "radcare_fixation_tape_conforming_adhesive_strip",
+      "material": "MAT_tape"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_0",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_1",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_2",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_3",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_4",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_5",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_6",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_7",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_8",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_9",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_10",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_11",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_12",
+      "material": "MAT_cotton"
+    },
+    {
+      "part": "radcare_fixation_tape_perforation_13",
+      "material": "MAT_cotton"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Nurse scrub fit revision, 2026-10-26
+Applied to Hospital_Tutorial. Balanced garment envelope removes chest/nipple/waist anatomical imprint while restoring visible forearms. Torso envelope half-width reduced from 0.207m to 0.176m below chest; sleeve expansion reduced to 5%. Neck edge and shoulders smoothed; badge refitted to clothing.
+Unity preview: PlacementPreviews/nurse-balanced-scrubs.png
+Mesh assets: Models/NurseScrubs/ClinicalScrubsBalanced_body.asset and ClinicalScrubsBalanced_outfit.asset
+Original renderer identities and interaction references retained. Mask retained.
+27-action Play-mode smoke passed earlier in this revision before the final width correction; final correction checked visually in Unity and saved. No headset wear test.
+Source: C:/Users/ts/Documents/ChatGPT/RadCareProject/NurseScrubRevision (Blender source and generator).

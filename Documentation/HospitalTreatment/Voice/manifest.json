@@ -1,0 +1,195 @@
+{
+  "voice": "Microsoft Heami Desktop",
+  "language": "ko-KR",
+  "synthetic": true,
+  "clips": [
+    {
+      "key": "step_0",
+      "role": "guide",
+      "text": "병원 처치 교육을 시작합니다. 안내되는 환자 정보와 측정값은 가상의 교육 사례입니다. 모니터에서 교육 시작을 선택하세요."
+    },
+    {
+      "key": "step_1",
+      "role": "guide",
+      "text": "전자차트에서 환자 아이디와 현장 처치 이력을 확인하세요."
+    },
+    {
+      "key": "step_2",
+      "role": "guide",
+      "text": "환자에게 현재 통증을 질문하세요."
+    },
+    {
+      "key": "step_3",
+      "role": "guide",
+      "text": "기존 드레싱을 집으세요."
+    },
+    {
+      "key": "step_4",
+      "role": "guide",
+      "text": "기존 드레싱을 지정 폐기함에 놓으세요."
+    },
+    {
+      "key": "step_5",
+      "role": "guide",
+      "text": "처치등의 상처 방향 조절을 선택하세요."
+    },
+    {
+      "key": "step_6",
+      "role": "guide",
+      "text": "보조자에게 상처와 주변 피부와 대조 부위 측정을 요청하고 보고를 확인하세요."
+    },
+    {
+      "key": "step_7",
+      "role": "guide",
+      "text": "주변 피부 측정 지점을 선택하세요."
+    },
+    {
+      "key": "step_8",
+      "role": "guide",
+      "text": "대조 부위 측정 지점을 선택하세요."
+    },
+    {
+      "key": "step_9",
+      "role": "guide",
+      "text": "세 부위의 처치 전 측정값을 차트에 기록하세요."
+    },
+    {
+      "key": "step_10",
+      "role": "guide",
+      "text": "방수포를 집어 상처 주변의 발광하는 위치에 놓으세요."
+    },
+    {
+      "key": "step_11",
+      "role": "guide",
+      "text": "체액 받이를 집어 상처 아래의 받이 지점에 놓으세요."
+    },
+    {
+      "key": "step_12",
+      "role": "guide",
+      "text": "준비된 멸균 세척 도구를 집으세요."
+    },
+    {
+      "key": "step_13",
+      "role": "guide",
+      "text": "주사기 분출구를 발광 상처 부위에 대고 트리거를 누르세요. 유효 세척 십 초."
+    },
+    {
+      "key": "step_14",
+      "role": "guide",
+      "text": "주사기를 발광하는 카트의 원래 위치에 내려놓은 뒤, 모니터에서 환자 상태를 확인하세요."
+    },
+    {
+      "key": "step_15",
+      "role": "guide",
+      "text": "모니터 확인을 마쳤습니다. 카트의 주사기를 다시 집어 세척을 이어가세요."
+    },
+    {
+      "key": "step_16",
+      "role": "guide",
+      "text": "세척 도구를 원래 카트 위치에 놓고, 오염된 소모품을 집어 지정 폐기함 안에 넣으세요."
+    },
+    {
+      "key": "step_17",
+      "role": "guide",
+      "text": "보조자에게 세척 후 재측정을 요청하고 보고를 확인하세요."
+    },
+    {
+      "key": "step_18",
+      "role": "guide",
+      "text": "주변 피부를 다시 측정하세요."
+    },
+    {
+      "key": "step_19",
+      "role": "guide",
+      "text": "대조 부위를 다시 측정하세요."
+    },
+    {
+      "key": "step_20",
+      "role": "guide",
+      "text": "처치 전후 측정값을 비교와 기록하세요."
+    },
+    {
+      "key": "step_21",
+      "role": "guide",
+      "text": "재평가 기록을 마쳤습니다. 모의 지시에 따라 새 드레싱을 집어 상처를 보호하세요."
+    },
+    {
+      "key": "step_22",
+      "role": "guide",
+      "text": "카트의 고정 테이프를 집어 발광하는 드레싱 위에 가져다 대고 잠시 유지하세요."
+    },
+    {
+      "key": "step_23",
+      "role": "guide",
+      "text": "환자에게 이후 관찰와 보고 계획을 설명하세요."
+    },
+    {
+      "key": "step_24",
+      "role": "guide",
+      "text": "부위와 전후 결과와 환자 반응와 후속 계획을 확인하고 기록을 저장하세요."
+    },
+    {
+      "key": "assistant_wait",
+      "role": "nurse",
+      "text": "네, 상처와 주변 피부, 대조 부위를 측정하겠습니다.",
+      "voice": "ko-KR-InJoonNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "assistant_before",
+      "role": "nurse",
+      "text": "측정을 마쳤습니다. 상처 백이십, 주변 피부 구십, 대조 부위 삼십입니다. 모두 모의 측정값입니다. 결과를 확인해 주세요.",
+      "voice": "ko-KR-InJoonNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "assistant_after",
+      "role": "nurse",
+      "text": "재측정을 마쳤습니다. 상처 삼십오, 주변 피부 이십팔, 대조 부위 십이입니다. 모두 모의 측정값입니다. 결과를 확인해 주세요.",
+      "voice": "ko-KR-InJoonNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "pain_initial",
+      "role": "patient",
+      "text": "팔이 아파요. 십 점 만점에 오 점 정도예요.",
+      "voice": "ko-KR-HyunsuMultilingualNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "pain_alert",
+      "role": "patient",
+      "text": "아, 더 아파요. 잠깐 멈춰 주세요.",
+      "voice": "ko-KR-HyunsuMultilingualNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "pain_relief",
+      "role": "patient",
+      "text": "지금은 조금 괜찮아졌어요.",
+      "voice": "ko-KR-HyunsuMultilingualNeural",
+      "provider": "Microsoft Edge online TTS",
+      "synthetic": true
+    },
+    {
+      "key": "pain_monitor",
+      "role": "guide",
+      "text": "주사기를 내려놓았습니다. 모니터로 이동해 환자 상태를 확인하세요."
+    },
+    {
+      "key": "complete",
+      "role": "guide",
+      "text": "처치와 차트 기록을 완료했습니다. 수고하셨습니다. 왼쪽 메뉴 버튼을 길게 누르면 로비로 돌아갑니다."
+    }
+  ],
+  "roleVoices": {
+    "guide": "Microsoft Heami Desktop",
+    "nurse": "ko-KR-InJoonNeural",
+    "patient": "ko-KR-HyunsuMultilingualNeural"
+  }
+}

@@ -1,0 +1,89 @@
+{
+    "scene": "Assets/Scenes/Hospital_Tutorial.unity",
+    "assets": [
+        {
+            "name": "radcare_used_dressing",
+            "triangles": 18000,
+            "meshParts": 4,
+            "size": {
+                "x": 0.09000003337860108,
+                "y": 0.008999943733215332,
+                "z": 0.12000000476837158
+            },
+            "urp": true,
+            "physicalGrab": true
+        },
+        {
+            "name": "radcare_sterile_dressing",
+            "triangles": 18000,
+            "meshParts": 4,
+            "size": {
+                "x": 0.08999991416931153,
+                "y": 0.005999922752380371,
+                "z": 0.12000000476837158
+            },
+            "urp": true,
+            "physicalGrab": true
+        },
+        {
+            "name": "radcare_waterproof_drape",
+            "triangles": 2304,
+            "meshParts": 2,
+            "size": {
+                "x": 0.31999993324279787,
+                "y": 0.012000083923339844,
+                "z": 0.3400000333786011
+            },
+            "urp": true,
+            "physicalGrab": true
+        },
+        {
+            "name": "radcare_used_swabs",
+            "triangles": 3488,
+            "meshParts": 2,
+            "size": {
+                "x": 0.09999990463256836,
+                "y": 0.02199995517730713,
+                "z": 0.07500004768371582
+            },
+            "urp": true,
+            "physicalGrab": false
+        },
+        {
+            "name": "radcare_fixation_tape",
+            "triangles": 1912,
+            "meshParts": 15,
+            "size": {
+                "x": 0.12999999523162843,
+                "y": 0.003999948501586914,
+                "z": 0.025000035762786866
+            },
+            "urp": true,
+            "physicalGrab": false
+        },
+        {
+            "name": "radcare_clinical_waste_bin",
+            "triangles": 3288,
+            "meshParts": 12,
+            "size": {
+                "x": 0.3600001335144043,
+                "y": 0.6999998688697815,
+                "z": 0.39999985694885256
+            },
+            "urp": true,
+            "physicalGrab": false
+        },
+        {
+            "name": "radcare_wound_pad",
+            "triangles": 888,
+            "meshParts": 3,
+            "size": {
+                "x": 0.06499999761581421,
+                "y": 0.006000041961669922,
+                "z": 0.09000003337860108
+            },
+            "urp": true,
+            "physicalGrab": false
+        }
+    ]
+}

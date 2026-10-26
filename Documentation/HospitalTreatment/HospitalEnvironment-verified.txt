@@ -1,0 +1,14 @@
+Hospital environment verification
+Scene: Assets/Scenes/Hospital_Tutorial.unity
+Implementation and Play-mode check: 2026-10-23
+Saved scene and treatment record rechecked: 2026-10-26
+
+Added Hospital_Environment_Upgrade: enclosing walls, ceiling grid, LED panels, ventilation grille, detector, clinical door, observation window and corridor, handwash station, wall storage, signage and wall/floor finishes.
+Materials: 8 shared URP/Lit materials. Geometry authored directly in Unity; Asset Studio was not needed.
+Installation comparison: 2530 existing transforms unchanged. 98 new renderers; three shadowless local lights.
+Visual inspection: hospital-interior.png, hospital-entry.png, hospital-player.png. Sign text resized to fit panels.
+Play-mode smoke result observed after installation: ready=true, complete=true, targets=27, stage=27.
+Persisted completed record: SIM-P001-20261023-082435-737.json, ending with SaveChart.
+The temporary smoke result was cleared between sessions; the persisted treatment record was rechecked on 2026-10-26.
+Quest headset wear test and standalone frame-rate profiling were not performed.
+Existing Unity scene serialization includes trailing whitespace; no formatting-only scene rewrite was made.

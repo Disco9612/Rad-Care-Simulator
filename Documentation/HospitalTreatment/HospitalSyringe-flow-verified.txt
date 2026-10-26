@@ -1,0 +1,6 @@
+2026-10-26 flow revision
+First wash -> syringe returned to original cart location (0.25-second dwell) -> physical monitor status confirmation -> pick syringe up again -> second wash.
+While the syringe is held, pain-response monitor confirmation is rejected. Regrab is blocked until monitor confirmation. Return cart glows during the pause.
+After the post-treatment result is recorded, proceed directly to ApplyDressing. ReviewOrder and ProtectChoice are removed from the active procedure; enum values remain unchanged for serialized scene compatibility. The mock order is recorded automatically with RecordAfter.
+Play-mode regression passed: rejects confirmation while holding syringe, rejects return away from cart and without dwell, accepts return and monitor confirmation, requires regrab for second wash, proceeds directly to dressing, completes record saving. 25 procedure steps; existing 27 scene targets retained with unused actions inactive.
+No Quest wear test performed.

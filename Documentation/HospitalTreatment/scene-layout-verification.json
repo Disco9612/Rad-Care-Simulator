@@ -1,0 +1,84 @@
+{
+    "status": "passed",
+    "scene": "Assets/Scenes/Hospital_Tutorial.unity",
+    "backup": "Temp/HospitalLayoutBackup/Hospital_Tutorial-20261022-115937.unity",
+    "prefabInstances": 14,
+    "missingScripts": 0,
+    "learnerPosition": {
+        "x": -1.1200000047683716,
+        "y": 0.0,
+        "z": -0.10000000149011612
+    },
+    "placements": [
+        {
+            "name": "Treatment_Room",
+            "center": {
+                "x": 0.0,
+                "y": 1.2799996137619019,
+                "z": 0.0
+            },
+            "size": {
+                "x": 4.8000006675720219,
+                "y": 2.8000004291534426,
+                "z": 4.800000190734863
+            }
+        },
+        {
+            "name": "Patient_Bed",
+            "center": {
+                "x": 0.15000003576278687,
+                "y": 0.5700000524520874,
+                "z": -0.20000028610229493
+            },
+            "size": {
+                "x": 1.0400002002716065,
+                "y": 1.1400001049041749,
+                "z": 2.184999942779541
+            }
+        },
+        {
+            "name": "Patient_Supine",
+            "center": {
+                "x": 0.15000000596046449,
+                "y": 1.0321608781814576,
+                "z": -0.19999992847442628
+            },
+            "size": {
+                "x": 0.536595344543457,
+                "y": 0.46732163429260256,
+                "z": 1.7199997901916505
+            }
+        },
+        {
+            "name": "Irrigation_Cart",
+            "center": {
+                "x": -1.25,
+                "y": 0.42500001192092898,
+                "z": -0.9800000786781311
+            },
+            "size": {
+                "x": 0.5999999046325684,
+                "y": 0.8500000238418579,
+                "z": 0.45000016689300539
+            }
+        },
+        {
+            "name": "Clean_Dressing_Cart",
+            "center": {
+                "x": -1.25,
+                "y": 0.42500001192092898,
+                "z": 0.7199999094009399
+            },
+            "size": {
+                "x": 0.5999999046325684,
+                "y": 0.8500000238418579,
+                "z": 0.4500000476837158
+            }
+        }
+    ],
+    "limitations": [
+        "Asset layout only; no new clinical progression or tool-grab behavior.",
+        "Previous scenario managers and HUD preserved but disabled.",
+        "Only room floor, walls, cabinet and bin have new static colliders; object interactions and headset traversal require testing."
+    ]
+}

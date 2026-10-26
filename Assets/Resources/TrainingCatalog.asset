@@ -15,7 +15,13 @@ MonoBehaviour:
   lobbyScene: Assets/Scenes/MainLobby.unity
   font: {fileID: 11400000, guid: 59685e71178ed1f4b8e7ece4761b26dd, type: 2}
   scenarios:
-  - title: 병원 제염 교육
-    description: 오염 측정 / 식염수 세척 / 집게 처치 및 폐기 / 재측정
+  - title: "\uBCD1\uC6D0 \uC81C\uC5FC \uAD50\uC721"
+    description: "\uC624\uC5FC \uCE21\uC815 / \uC2DD\uC5FC\uC218 \uC138\uCC99 / \uC9D1\uAC8C
+      \uCC98\uCE58 \uBC0F \uD3D0\uAE30 / \uC7AC\uCE21\uC815"
     tutorialScene: Assets/Scenes/Emergency_Decon_Tutorial.unity
     evaluationScene: Assets/Scenes/Emergency_Decon_Evaluation.unity
+  - title: "\uBCD1\uC6D0 \uC0C1\uCC98 \uCC98\uCE58"
+    description: "\uD658\uC790 \uC778\uACC4 \xB7 \uC0C1\uCC98 \uD3C9\uAC00 \xB7 \uC138\uCC99
+      \xB7 \uC7AC\uD3C9\uAC00 \xB7 \uB4DC\uB808\uC2F1 \uBC0F \uAE30\uB85D"
+    tutorialScene: Assets/Scenes/Hospital_Tutorial.unity
+    evaluationScene: Assets/Scenes/Hospital_Evaluation.unity

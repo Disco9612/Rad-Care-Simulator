@@ -77,7 +77,14 @@ namespace RadCare.HospitalTreatment.Editor
                     if(chart.Display==null||chart.Revision==0)throw new Exception("Chart display not rendered");
                     int index=s.Procedure.Index;var action=s.Procedure.Current.Action;
                     if(action==HospitalAction.RespondPain&&!chart.StateLabel.Contains("통증"))throw new Exception("Chart missed pain alert");
-                    if(s.Procedure.IsWashing) {
+                    if(action==HospitalAction.ReturnSyringe) {
+                        var held=s.input.Held;
+                        if(held==null||held.kind!=HospitalInteraction.Irrigator)throw new Exception("Syringe not held at return step");
+                        if(s.CanUse(s.targets.First(t=>t.action==HospitalAction.ClearWaste&&t.kind==HospitalInteraction.Carry)))throw new Exception("Waste allowed before syringe return");
+                        held.movable.position=held.homePosition;
+                        if(s.input.TryCompletePlacement(.3f,true))throw new Exception("Return accepted with trigger held");
+                        if(!s.input.TryCompletePlacement(.3f)||s.input.Held!=null)throw new Exception("Physical return did not finish");
+                    } else if(s.Procedure.IsWashing) {
                         var tool=s.targets.First(t=>t.kind==HospitalInteraction.Irrigator);
                         if(action==HospitalAction.WashSecond){if(s.input.Held!=null)throw new Exception("Syringe still held after monitor check");if(!s.input.TryGrab(tool))throw new Exception("Cannot pick syringe up again");}
                         tool.movable.position=Vector3.up*10;s.Irrigate(tool,true,20);
@@ -105,10 +112,7 @@ namespace RadCare.HospitalTreatment.Editor
                             var clickTarget=s.targets.First(t=>t.action==HospitalAction.ClearWaste&&t.kind==HospitalInteraction.Carry);
                             s.Act(clickTarget);
                             if(s.Procedure.Index!=index)throw new Exception("Cleanup advanced through UI");
-                            var held=s.input.Held;
-                            if(held==null)throw new Exception("Irrigator was dropped before cleanup");
-                            held.movable.position=held.homePosition;
-                            if(!s.input.TryCompletePlacement(.3f)||s.input.Held!=null)throw new Exception("Tool return failed");
+                            if(s.input.Held!=null)throw new Exception("Syringe was not returned before cleanup");
                         }
                         if(action==HospitalAction.RespondPain) {
                             s.Act(s.targets.First(t=>t.action==action));
@@ -495,8 +499,8 @@ namespace RadCare.HospitalTreatment.Editor
             var blocked=new HospitalProcedure();check(!blocked.Irrigate(100,true)&&blocked.Index==0,"Irrigation outside wash stage");
             var scenario=UnityEngine.Object.FindAnyObjectByType<HospitalScenario>();
             check(scenario!=null&&scenario.targets.Length>=26,"Scene bindings missing");
-            check(HospitalProcedure.Steps.Where(s=>s.Action!=HospitalAction.WashFirst&&s.Action!=HospitalAction.WashSecond).All(s=>scenario.targets.Any(t=>t.action==s.Action)),"An action has no scene target");
-            check(scenario.targets.All(t=>t!=null&&t.GetComponent<Collider>()!=null),"Target missing collider");
+            check(HospitalProcedure.Steps.Where(s=>s.Action!=HospitalAction.WashFirst&&s.Action!=HospitalAction.WashSecond&&s.Action!=HospitalAction.ReturnSyringe).All(s=>scenario.targets.Any(t=>t.action==s.Action)),"An action has no scene target");
+            check(scenario.targets.All(t=>t!=null&&(t.GetComponent<Collider>()!=null||t.grabCollider!=null)),"Target missing collider");
             File.WriteAllText("Temp/HospitalScenario-tests.txt","PASS: "+assertions+" assertions; sequential gates, wash duration, invalid wash, completion, overtime and scene bindings.");
         }
     }

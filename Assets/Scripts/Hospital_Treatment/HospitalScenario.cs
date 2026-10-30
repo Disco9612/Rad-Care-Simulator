@@ -85,17 +85,33 @@ namespace RadCare.HospitalTreatment
             }
         }
         public bool CanUse(HospitalInteractable target) {
-            if(!Ready||target==null||target.retired||Procedure.Complete)return false;
+            if(!Ready||target==null||target.retired||Procedure.Complete||Evaluation?.IsRestarting==true)return false;
             if(target.kind==HospitalInteraction.WrongChoice)return false;
             if(target.action==HospitalAction.RespondPain&&input.Held!=null)return false;
-            if(target.kind==HospitalInteraction.Irrigator)return Procedure.Current.Action==HospitalAction.SelectSterile||Procedure.IsWashing;
+            if(target.kind==HospitalInteraction.Irrigator)return Procedure.Current.Action==HospitalAction.SelectSterile||Procedure.IsWashing||Procedure.Current.Action==HospitalAction.ReturnSyringe;
             if(target.itemId=="old"&&target.kind==HospitalInteraction.Carry&&Procedure.Current.Action==HospitalAction.DisposeDressing)return true;
             return target.action==Procedure.Current.Action;
         }
-        public bool CanSelect(HospitalInteractable target) => Evaluation!=null
-            ? Ready&&target!=null&&!target.retired&&target.kind!=HospitalInteraction.Socket
-            : CanUse(target);
+        public bool CanSelect(HospitalInteractable target) {
+            if(!Ready||target==null||target.retired||Procedure.Complete||Evaluation?.IsRestarting==true)return false;
+            if(Evaluation!=null&&target.kind==HospitalInteraction.Socket)return false;
+            // Evaluation accepts attempts to grab any available tool so incorrect choices can be scored.
+            // Confirmation labels still belong only to the current action.
+            return (Evaluation!=null&&target.IsMovable&&Procedure.Started)||CanUse(target);
+        }
+        public void RestartCurrentStep() {
+            if(!Ready||Procedure.Complete)return;
+            input.ResetForStepRetry();
+            Procedure.RestartCurrentStep();
+            AssistantSeconds=0;AssistantReportReady=false;
+            paused=true;IrrigationAligned=false;Irrigating=false;
+            if(stream!=null)stream.enabled=false;
+            Feedback="잘못된 행동으로 현재 단계를 다시 시작합니다.";
+            GetComponent<HospitalNarration>()?.ResetForStepRetry();
+            Refresh();
+        }
         public void Act(HospitalInteractable target) {
+            if(!Ready||Procedure.Complete||Evaluation?.IsRestarting==true)return;
             if(Evaluation!=null&&target!=null&&target.kind==HospitalInteraction.WrongChoice){Evaluation.RecordMistake("잘못된 치료 선택",true);Feedback="선택을 다시 검토하세요.";return;}
             if(!CanUse(target)){Evaluation?.RecordMistake("순서에 맞지 않는 대상 선택",false);Feedback="현재 안내된 행동을 먼저 완료하세요.";return;}
             if(target.action==HospitalAction.SecureDressing){Feedback="테이프를 직접 집어 드레싱 위에 붙이세요.";return;}
@@ -112,6 +128,11 @@ namespace RadCare.HospitalTreatment
             else Feedback="발광하는 목표 오브젝트에 잠시 가져가면 자동으로 놓습니다.";
             Refresh();
         }
+        public void ReportToolReturned(HospitalInteractable tool) {
+            if(!Ready||Procedure.Complete||Evaluation?.IsRestarting==true||input.Held!=null)return;
+            if(tool!=null&&tool.kind==HospitalInteraction.Irrigator&&Procedure.Current.Action==HospitalAction.ReturnSyringe
+                &&Vector3.Distance(tool.movable.position,tool.homePosition)<.001f)Accept(HospitalAction.ReturnSyringe);
+        }
         public bool Place(HospitalInteractable item,HospitalInteractable socket) {
             if(!CanUse(socket)||socket.kind!=HospitalInteraction.Socket||item.itemId!=socket.itemId)return false;
             item.movable.SetPositionAndRotation(socket.transform.position,socket.transform.rotation);
@@ -125,6 +146,7 @@ namespace RadCare.HospitalTreatment
             Accept(socket.action);return true;
         }
         public void Irrigate(HospitalInteractable item,bool pressed,float deltaSeconds=-1) {
+            if(Evaluation?.IsRestarting==true){Irrigating=false;IrrigationAligned=false;stream.enabled=false;return;}
             // Selecting the pain response also uses the trigger. Remember the intervening release.
             if(!Procedure.Complete&&Procedure.Current.Action==HospitalAction.RespondPain) {if(!pressed)paused=true;}
             else paused=!pressed;
@@ -134,7 +156,7 @@ namespace RadCare.HospitalTreatment
             stream.enabled=false;
             if(valid) {
                 if(Procedure.Irrigate(deltaSeconds<0?Time.deltaTime:deltaSeconds,true)) {
-                    Feedback=Procedure.Current.Action==HospitalAction.RespondPain?"환자: ‘통증이 심해졌어요.’ 주사기를 카트에 내려놓고 모니터에서 상태를 확인하세요.":"세척 완료. 오염 소모품을 정리하고 재평가하세요.";
+                    Feedback=Procedure.Current.Action==HospitalAction.RespondPain?"환자: ‘통증이 심해졌어요.’ 주사기를 카트에 내려놓고 모니터에서 상태를 확인하세요.":"세척 완료. 트리거를 놓고 주사기를 카트의 원래 자리에 내려놓으세요.";
                     if(Procedure.Current.Action==HospitalAction.RespondPain)pain="초기 5/10 → 세척 중 7/10 (모의 응답)";
                     Refresh();
                 }

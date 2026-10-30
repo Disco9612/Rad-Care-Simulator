@@ -18,7 +18,7 @@ namespace RadCare.HospitalTreatment {
             if(block==null)block=new MaterialPropertyBlock();
             active.Clear();
             if(scenario.Ready&&!scenario.Procedure.Complete) {
-                bool returning=(scenario.Procedure.Current.Action==HospitalAction.ClearWaste||scenario.Procedure.Current.Action==HospitalAction.RespondPain)&&scenario.input.Held!=null&&scenario.input.Held.kind==HospitalInteraction.Irrigator;
+                bool returning=(scenario.Procedure.Current.Action==HospitalAction.ReturnSyringe||scenario.Procedure.Current.Action==HospitalAction.RespondPain)&&scenario.input.Held!=null&&scenario.input.Held.kind==HospitalInteraction.Irrigator;
                 if(returning) {foreach(var r in returnCart)if(r!=null)active.Add(r);}
                 else foreach(var b in bindings) {
                     if(b.target==null||b.target.kind==HospitalInteraction.WrongChoice||!scenario.CanUse(b.target)||b.target.IsHeld)continue;

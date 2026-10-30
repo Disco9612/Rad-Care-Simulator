@@ -22,10 +22,13 @@ namespace RadCare.HospitalTreatment
         bool useArmed;
         float placementSeconds;
         HospitalInteractable pendingSocket;
-        HandGrabInteractor[] rightPalms;
+        HandGrabInteractor[] palms;
+        bool heldByLeft;
+        sealed class GrabState { public bool ready,pending; }
+        readonly GrabState rightGrab=new GrabState(),leftGrab=new GrabState();
         public const float NearGrabDistance=.07f;
         void Start() {
-            rightPalms=rig.GetComponentsInChildren<HandGrabInteractor>(true).Where(h=>h.Hand!=null&&h.Hand.Handedness==Handedness.Right).ToArray();
+            palms=rig.GetComponentsInChildren<HandGrabInteractor>(true).Where(h=>h.Hand!=null).ToArray();
             // Disable legacy keyboard shortcuts only during this scenario, without changing their sources.
             navigation=TrainingNavigation.Instance;
             if(navigation!=null){navigationWasEnabled=navigation.enabled;navigation.enabled=false;}
@@ -38,16 +41,23 @@ namespace RadCare.HospitalTreatment
             if(!scenario.Ready)return;
             Transform hand=rig.rightHandAnchor,head=rig.centerEyeAnchor;
             hud.SetPositionAndRotation(head.TransformPoint(new Vector3(0,.42f,1.35f)),head.rotation);
-            if(!Application.isFocused||!OVRManager.hasInputFocus||!OVRInput.IsControllerConnected(OVRInput.Controller.RTouch)) {
+            if(scenario.Evaluation?.IsRestarting==true){pointer.enabled=false;hint.text=scenario.Evaluation.RetryMessage;return;}
+            bool rightConnected=OVRInput.IsControllerConnected(OVRInput.Controller.RTouch);
+            bool leftConnected=OVRInput.IsControllerConnected(OVRInput.Controller.LTouch);
+            if(!Application.isFocused||!OVRManager.hasInputFocus||(!rightConnected&&!leftConnected)) {
                 scenario.Irrigate(null,false);pointer.enabled=false;
                 placementSeconds=0;pendingSocket=null;useArmed=false;
                 controlsArmed=false;menuArmed=false;menuSeconds=0;turnArmed=false;
+                ResetGrabStates();
                 hint.text="Quest 컨트롤러 연결과 추적 상태를 확인하세요.";return;
             }
             bool trigger=OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.RTouch);
             bool grip=OVRInput.Get(OVRInput.Button.PrimaryHandTrigger,OVRInput.Controller.RTouch);
+            bool leftTrigger=leftConnected&&OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.LTouch);
+            bool leftGrip=leftConnected&&OVRInput.Get(OVRInput.Button.PrimaryHandTrigger,OVRInput.Controller.LTouch);
             if(!controlsArmed) {
-                controlsArmed=!trigger&&!grip;
+                controlsArmed=!trigger&&!grip&&!leftTrigger&&!leftGrip;
+                if(controlsArmed){rightGrab.ready=true;leftGrab.ready=true;}
                 hint.text="트리거와 그립을 놓으면 조작을 시작합니다.";return;
             }
             bool menu=OVRInput.IsControllerConnected(OVRInput.Controller.LTouch)&&OVRInput.Get(OVRInput.Button.Start,OVRInput.Controller.LTouch);
@@ -74,21 +84,54 @@ namespace RadCare.HospitalTreatment
             if(close!=null)target=close;
             pointer.enabled=true;pointer.SetPosition(0,ray.origin);pointer.SetPosition(1,close!=null?close.grabCollider.ClosestPoint(palm):ray.GetPoint(nearest));
             hint.text=scenario.Evaluation!=null
-                ? "평가 진행 중 · 장비와 차트를 직접 확인하세요.\n트리거/그립: 집기 · 트리거: 선택/세척 · 왼쪽 메뉴 1.5초: 로비"
+                ? (scenario.Evaluation.RetryMessage??(target!=null?target.label:"평가 진행 중 · 장비와 차트를 직접 확인하세요."))+"\n양손 트리거/그립: 집기 · 트리거: 선택/세척 · 왼쪽 메뉴 1.5초: 로비"
                 : (target!=null?target.label:"안내된 대상의 표시를 조준하세요.")+"\n트리거 또는 그립 한 번: 집기 유지 · 지정 위치: 자동 놓기\n트리거: 선택/세척 · 왼쪽 스틱: 이동 · 오른쪽 스틱: 회전 · 왼쪽 메뉴 1.5초: 로비";
             ShowNavigationFeedback(menu);
             bool click=OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.RTouch);
-            bool grab=OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger,OVRInput.Controller.RTouch);
-            if(Held==null&&(grab||click)&&TryGrab(target))click=false;
+            bool heldBefore=Held!=null;
+            if(ProcessHandGrab(ray,palm,trigger,grip,false))click=false;
+            if(scenario.Evaluation?.IsRestarting==true)return;
+            if(leftConnected)ProcessHandGrab(new Ray(rig.leftHandAnchor.position,rig.leftHandAnchor.forward),GetPalmPosition(true),leftTrigger,leftGrip,true);
+            if(scenario.Evaluation?.IsRestarting==true)return;
             if(Held!=null) {
-                Held.SetGripPose(palm,hand.rotation);
-                if(!trigger)useArmed=true;
-                if(click&&useArmed&&Held.kind==HospitalInteraction.Irrigator&&scenario.Procedure.IsWashing&&!scenario.IsIrrigationAligned(Held))
-                    scenario.Evaluation?.RecordMistake("세척 도구 위치 불량",false);
-                scenario.Irrigate(Held,useArmed&&trigger);
-                TryCompletePlacement(Time.deltaTime);
+                var owner=heldByLeft?rig.leftHandAnchor:hand;
+                Held.SetGripPose(GetPalmPosition(heldByLeft),owner.rotation);
+                bool useTrigger=heldByLeft?leftTrigger:trigger;
+                bool useClick=heldBefore&&(heldByLeft?OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.LTouch):click);
+                // A held syringe owns the trigger; the same press must not also click a label behind it.
+                if(UpdateHeldUse(useTrigger,useClick))click=false;
+                if(scenario.Evaluation?.IsRestarting==true)return;
+                TryCompletePlacement(Time.deltaTime,useTrigger);
             }else scenario.Irrigate(null,false);
-            if(click&&target!=null&&(target.kind==HospitalInteraction.Action||target.kind==HospitalInteraction.WrongChoice))scenario.Act(target);
+            if(click&&target!=null&&(target.kind==HospitalInteraction.Action||target.kind==HospitalInteraction.WrongChoice)){rightGrab.pending=false;scenario.Act(target);}
+        }
+        // Resolve physical attempts before checking the expected tool. Keep a press pending when
+        // the hand has not reached an item yet, as with a normal controller grab.
+        public bool ProcessHandGrab(Ray ray,Vector3 palm,bool trigger,bool grip,bool left) {
+            var state=left?leftGrab:rightGrab;
+            if(!scenario.Ready||scenario.Procedure.Complete||scenario.Evaluation?.IsRestarting==true)return false;
+            if(!trigger&&!grip){state.ready=true;state.pending=false;return false;}
+            if(Held!=null){state.ready=false;state.pending=false;return false;}
+            if(state.ready){state.ready=false;state.pending=true;}
+            if(!state.pending)return false;
+            var target=FindNearTarget(palm)??FindRayTarget(ray,out _);
+            if(target==null||!target.IsMovable)return false;
+            state.pending=false;
+            if(TryGrab(target))heldByLeft=left;
+            return true;
+        }
+        void ResetGrabStates(){rightGrab.ready=false;rightGrab.pending=false;leftGrab.ready=false;leftGrab.pending=false;}
+        public bool UpdateHeldUse(bool pressed,bool pressedThisFrame,float deltaSeconds=-1) {
+            if(Held==null){scenario.Irrigate(null,false);return false;}
+            bool consumesTrigger=Held.kind==HospitalInteraction.Irrigator;
+            if(!pressed)useArmed=true;
+            if(consumesTrigger&&pressedThisFrame&&useArmed&&scenario.Evaluation!=null&&!scenario.Procedure.IsWashing) {
+                scenario.Evaluation.RecordMistake("현재 단계에서 세척 도구 사용",scenario.Procedure.Current.Action==HospitalAction.RespondPain,Held);
+                if(scenario.Evaluation.IsRestarting)return true;
+            }
+            // During washing, imperfect contact only pauses progress. Keep the tool in hand to adjust it.
+            scenario.Irrigate(Held,useArmed&&pressed,deltaSeconds);
+            return consumesTrigger;
         }
         public HospitalInteractable FindRayTarget(Ray ray,out float nearest) {
             HospitalInteractable target=null;nearest=3.5f;
@@ -117,9 +160,9 @@ namespace RadCare.HospitalTreatment
             if(chart!=null){var onScreen=chart.PickScreen(ray,out float screenDistance);if(onScreen!=null&&screenDistance<nearest){target=onScreen;nearest=screenDistance;}}
             return target;
         }
-        public Vector3 GetPalmPosition() {
-            if(rightPalms!=null)foreach(var palm in rightPalms)if(palm!=null&&palm.isActiveAndEnabled&&palm.Hand.IsTrackedDataValid&&palm.PalmPoint!=null)return palm.PalmPoint.position;
-            return rig.rightHandAnchor.TransformPoint(new Vector3(0,-.02f,.025f));
+        public Vector3 GetPalmPosition(bool left=false) {
+            if(palms!=null)foreach(var palm in palms)if(palm!=null&&palm.isActiveAndEnabled&&palm.Hand.Handedness==(left?Handedness.Left:Handedness.Right)&&palm.Hand.IsTrackedDataValid&&palm.PalmPoint!=null)return palm.PalmPoint.position;
+            return (left?rig.leftHandAnchor:rig.rightHandAnchor).TransformPoint(new Vector3(0,-.02f,.025f));
         }
         public HospitalInteractable FindNearTarget(Vector3 palm) {
             HospitalInteractable best=null;float distance=NearGrabDistance;
@@ -131,12 +174,14 @@ namespace RadCare.HospitalTreatment
             return best;
         }
         public bool TryGrab(HospitalInteractable target) {
-            if(Held!=null||target==null||!target.IsMovable)return false;
-            if(!scenario.CanUse(target)){scenario.Evaluation?.RecordMistake("순서에 맞지 않는 도구 선택",false);return false;}
+            if(Held!=null||target==null||!target.IsMovable||!scenario.CanSelect(target))return false;
+            var evaluation=scenario.Evaluation;
+            if(evaluation!=null){if(!evaluation.ReportToolGrab(target))return false;}
+            else if(!scenario.CanUse(target))return false;
             Held=target;useArmed=false;placementSeconds=0;pendingSocket=null;scenario.Picked(target);return true;
         }
-        public bool TryCompletePlacement(float seconds) {
-            if(Held==null||scenario.Procedure.Complete)return false;
+        public bool TryCompletePlacement(float seconds,bool triggerPressed=false) {
+            if(Held==null||scenario.Procedure.Complete||scenario.Evaluation?.IsRestarting==true)return false;
             HospitalInteractable socket=null;float distance=.24f;
             foreach(var s in scenario.targets) {
                 float d=Vector3.Distance(s.transform.position,Held.movable.position);
@@ -147,21 +192,30 @@ namespace RadCare.HospitalTreatment
                 }
                 if(s.kind==HospitalInteraction.Socket&&scenario.CanUse(s)&&s.itemId==Held.itemId&&d<distance&&inOpening){socket=s;distance=d;}
             }
-            bool returnTool=Held.kind==HospitalInteraction.Irrigator&&(scenario.Procedure.Current.Action==HospitalAction.ClearWaste||scenario.Procedure.Current.Action==HospitalAction.RespondPain)
-                &&Vector3.Distance(Held.movable.position,Held.homePosition)<.24f;
+            bool returnTool=Held.kind==HospitalInteraction.Irrigator&&(scenario.Procedure.Current.Action==HospitalAction.ReturnSyringe||scenario.Procedure.Current.Action==HospitalAction.RespondPain)
+                &&!triggerPressed&&Vector3.Distance(Held.movable.position,Held.homePosition)<.10f;
             if(socket==null&&!returnTool){placementSeconds=0;pendingSocket=null;return false;}
             if(pendingSocket!=socket){placementSeconds=0;pendingSocket=socket;}
             placementSeconds+=Mathf.Max(0,seconds);
             if(placementSeconds<.25f)return false;
+            var item=Held;
             if(returnTool)Held.ReturnHome();
             else if(!scenario.Place(Held,socket))return false;
-            Held=null;placementSeconds=0;pendingSocket=null;scenario.Irrigate(null,false);scenario.Refresh();return true;
+            Held=null;placementSeconds=0;pendingSocket=null;scenario.Irrigate(null,false);
+            if(returnTool)scenario.ReportToolReturned(item);
+            scenario.Refresh();return true;
         }
         void ShowNavigationFeedback(bool menu) {
             if(navigation!=null&&!string.IsNullOrEmpty(navigation.Error))hint.text=navigation.Error;
             else if(menu&&menuArmed)hint.text=$"로비로 돌아가기… {Mathf.Clamp01(menuSeconds/1.5f)*100:0}%";
         }
         void ReleaseToHome() {if(Held!=null){Held.ReturnHome();Held=null;if(scenario.Ready)scenario.Refresh();}}
+        public void ResetForStepRetry() {
+            if(Held!=null){Held.ReturnHome();Held=null;}
+            placementSeconds=0;pendingSocket=null;useArmed=false;controlsArmed=false;
+            ResetGrabStates();
+            if(pointer!=null)pointer.enabled=false;
+        }
         void OnDisable() {ReleaseToHome();if(scenario!=null&&scenario.stream!=null)scenario.stream.enabled=false;if(pointer!=null)pointer.enabled=false;}
         void OnDestroy() {
             if(navigation!=null)navigation.enabled=navigationWasEnabled;

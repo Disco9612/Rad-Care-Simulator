@@ -89,6 +89,7 @@ namespace RadCare.HospitalTreatment {
    StateLabel=done?"처치 완료 · 기록 저장":pain?"통증 호소 · 세척 중단":scenario.Procedure.IsWashing?(scenario.Irrigating?"상처 세척 진행 중":"상처 세척 · 접촉 대기"):HospitalProcedure.Stages[scenario.Procedure.Current.Stage];
    string content=scenario.chartText.text;
    if(scenario.Procedure.IsWashing)content+=$"\n\n유효 세척  {scenario.Procedure.WashSeconds:0.0} / 10초";
+   if(!done&&scenario.Procedure.Current.Action==HospitalAction.ReturnSyringe){StateLabel="주사기 반환 대기";content+="\n\n세척 완료 · 트리거를 놓고 주사기를 카트의 원래 자리에 놓으세요.";}
    string action="";
    foreach(var t in scenario.targets)if(UsesMonitor(t)&&t.kind!=HospitalInteraction.WrongChoice&&scenario.CanUse(t)){action=t.label+" · 아래 확인 버튼을 선택하세요";break;}
    if(!done&&scenario.Procedure.Current.Action==HospitalAction.ProtectChoice)action="왼쪽: 추가 세척  |  오른쪽: 보호 드레싱·관찰";

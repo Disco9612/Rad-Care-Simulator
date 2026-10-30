@@ -6,7 +6,7 @@ namespace RadCare.HospitalTreatment
     public enum HospitalAction { Start, Chart, AskPain, RemoveDressing, DisposeDressing, AdjustLight,
         MeasureWound, MeasureSkin, MeasureReference, RecordBefore, PlaceDrape, PlaceReceiver, SelectSterile,
         WashFirst, RespondPain, WashSecond, ClearWaste, RecordAfter, ReviewOrder, ProtectChoice,
-        ApplyDressing, SecureDressing, ExplainPlan, SaveChart }
+        ApplyDressing, SecureDressing, ExplainPlan, SaveChart, ReturnSyringe }
 
     // Pure progression model: no input or scene dependency. Rejected actions never advance time or steps.
     public sealed class HospitalProcedure
@@ -37,7 +37,8 @@ namespace RadCare.HospitalTreatment
             new Step(3,HospitalAction.WashFirst,"주사기 분출구를 발광 상처 부위에 대고 트리거를 누르세요. 유효 세척 10초."),
             new Step(3,HospitalAction.RespondPain,"주사기를 발광하는 카트의 원래 위치에 내려놓은 뒤, 모니터에서 환자 상태를 확인하세요."),
             new Step(3,HospitalAction.WashSecond,"카트의 주사기를 다시 집고 분출구를 발광 상처 부위에 대어 세척을 재개하세요. 유효 세척 10초."),
-            new Step(4,HospitalAction.ClearWaste,"세척 도구를 원래 카트 위치에 놓고, 오염된 소모품을 집어 지정 폐기함 안에 넣으세요."),
+            new Step(4,HospitalAction.ReturnSyringe,"세척을 멈추고 주사기를 카트의 원래 자리에 놓으세요."),
+            new Step(4,HospitalAction.ClearWaste,"오염된 소모품을 집어 지정 폐기함 안에 넣으세요."),
             new Step(4,HospitalAction.MeasureWound,"보조자에게 세척 후 재측정을 요청하고 보고를 확인하세요."),
             new Step(4,HospitalAction.MeasureSkin,"주변 피부를 다시 측정하세요."),
             new Step(4,HospitalAction.MeasureReference,"대조 부위를 다시 측정하세요."),
@@ -56,7 +57,16 @@ namespace RadCare.HospitalTreatment
         public float WashSeconds { get; private set; }
         public readonly List<Entry> Entries=new List<Entry>();
         public bool IsWashing => !Complete && (Current.Action==HospitalAction.WashFirst || Current.Action==HospitalAction.WashSecond);
+        // Existing cleanup speech covers returning the syringe and then collecting waste.
+        // Keep saved step_N audio bindings stable when inserting the physical return step.
+        public static string NarrationKey(int index) {
+            int voiceIndex=0;
+            for(int i=0;i<index;i++)if(Steps[i].Action!=HospitalAction.ReturnSyringe)voiceIndex++;
+            return "step_"+voiceIndex;
+        }
         public void Tick(float seconds) { if(Started&&!Complete&&seconds>0)Elapsed+=seconds; }
+        // A retry repeats the current action; completed actions and evaluation time remain recorded.
+        public void RestartCurrentStep() { if(!Complete)WashSeconds=0; }
         public bool Try(HospitalAction action) {
             if(Complete||Current.Action!=action||IsWashing)return false;
             Advance();return true;

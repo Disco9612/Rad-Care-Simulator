@@ -16,13 +16,29 @@ namespace RadCare.HospitalTreatment
         public string CurrentKey { get; private set; }
         public int SequenceCount { get; private set; }
         Coroutine sequence;
+        AudioSource evaluationFeedback;
+        AudioClip equipmentFeedback;
+        public int EquipmentFeedbackCount { get; private set; }
+        public bool EquipmentFeedbackPlaying => evaluationFeedback!=null&&evaluationFeedback.isPlaying;
+
+        public void PlayEquipmentFeedback() {
+            if(EquipmentFeedbackPlaying)return;
+            if(equipmentFeedback==null)equipmentFeedback=Resources.Load<AudioClip>("HospitalTreatment/equipment_not_for_step");
+            if(equipmentFeedback==null){Debug.LogWarning("Hospital equipment feedback audio missing",this);return;}
+            if(evaluationFeedback==null){
+                evaluationFeedback=gameObject.AddComponent<AudioSource>();
+                evaluationFeedback.playOnAwake=false;evaluationFeedback.loop=false;evaluationFeedback.spatialBlend=0;evaluationFeedback.priority=16;
+            }
+            evaluationFeedback.clip=equipmentFeedback;evaluationFeedback.volume=volume;evaluationFeedback.Play();
+            EquipmentFeedbackCount++;
+        }
 
         void Update() { RefreshNarration(); }
         public void RefreshNarration()
         {
-            if(scenario==null||!scenario.Ready||source==null)return;
+            if(scenario==null||!scenario.Ready||source==null||scenario.Evaluation?.IsRestarting==true||EquipmentFeedbackPlaying)return;
             var procedure=scenario.Procedure;
-            string key=procedure.Complete?"complete":"step_"+procedure.Index;
+            string key=procedure.Complete?"complete":HospitalProcedure.NarrationKey(procedure.Index);
             if(!procedure.Complete&&HospitalScenario.IsMeasurement(procedure.Current.Action)) {
                 if(scenario.AssistantSeconds>0)key="assistant_wait_"+procedure.Current.Stage;
                 else if(scenario.AssistantReportReady)key=procedure.Current.Stage==1?"assistant_before":"assistant_after";
@@ -54,6 +70,7 @@ namespace RadCare.HospitalTreatment
             }
             sequence=null;
         }
-        void OnDisable(){if(sequence!=null)StopCoroutine(sequence);sequence=null;if(source!=null)source.Stop();CurrentKey=null;}
+        public void ResetForStepRetry(){if(sequence!=null)StopCoroutine(sequence);sequence=null;if(source!=null)source.Stop();CurrentKey=null;}
+        void OnDisable(){ResetForStepRetry();if(evaluationFeedback!=null)evaluationFeedback.Stop();}
     }
 }

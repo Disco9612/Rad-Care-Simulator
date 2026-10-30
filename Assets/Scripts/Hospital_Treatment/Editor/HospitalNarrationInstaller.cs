@@ -38,7 +38,7 @@ namespace RadCare.HospitalTreatment.Editor
                 if(clip==null||clip.length<.2f)throw new Exception("Invalid speech clip: "+line.key);
                 return new HospitalNarration.Cue{key=line.key,clip=clip,patient=line.role=="patient"};
             }).ToArray();
-            for(int i=0;i<HospitalProcedure.Steps.Length;i++)if(!narration.cues.Any(c=>c.key=="step_"+i))throw new Exception("Missing step voice "+i);
+            for(int i=0;i<HospitalProcedure.Steps.Length;i++)if(!narration.cues.Any(c=>c.key==HospitalProcedure.NarrationKey(i)))throw new Exception("Missing step voice "+i);
             EditorUtility.SetDirty(narration);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
             File.WriteAllText("Temp/HospitalNarration-installed.txt",$"{narration.cues.Length} Korean speech clips bound; {HospitalProcedure.Steps.Length} steps covered; offline AudioSource playback.");
         }

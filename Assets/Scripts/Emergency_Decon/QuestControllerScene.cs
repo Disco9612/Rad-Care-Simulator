@@ -14,8 +14,10 @@ public class QuestControllerScene : MonoBehaviour
     [SerializeField] private float deadZone = 0.15f;
     [SerializeField] private LayerMask obstacleLayer = 1 << 9;
     [SerializeField] private float collisionRadius = 0.2f;
+    [SerializeField] private bool leftStickSnapTurn;
 
     private OVRCameraRig cameraRig;
+    private bool turnArmed;
 
     private void Awake()
     {
@@ -94,12 +96,31 @@ public class QuestControllerScene : MonoBehaviour
 
     private void Update()
     {
-        if (!OVRManager.hasInputFocus || !OVRInput.IsControllerConnected(OVRInput.Controller.LTouch))
+        if (!OVRManager.hasInputFocus)
         {
+            turnArmed = false;
             return;
         }
 
-        Vector2 stick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, OVRInput.Controller.LTouch);
+        bool leftConnected = OVRInput.IsControllerConnected(OVRInput.Controller.LTouch);
+        if (leftStickSnapTurn)
+        {
+            if (!leftConnected) turnArmed = false;
+            else
+            {
+                float turn = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, OVRInput.Controller.LTouch).x;
+                if (Mathf.Abs(turn) < 0.25f) turnArmed = true;
+                else if (turnArmed && Mathf.Abs(turn) > 0.7f)
+                {
+                    transform.RotateAround(cameraRig.centerEyeAnchor.position, Vector3.up, Mathf.Sign(turn) * 30f);
+                    turnArmed = false;
+                }
+            }
+        }
+        // The configured scenes use the left stick to turn and the right stick to move.
+        OVRInput.Controller moveController = leftStickSnapTurn ? OVRInput.Controller.RTouch : OVRInput.Controller.LTouch;
+        if (!OVRInput.IsControllerConnected(moveController)) return;
+        Vector2 stick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, moveController);
         if (stick.magnitude <= deadZone)
         {
             return;

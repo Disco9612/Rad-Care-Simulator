@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
     public bool IsTreatmentComplete { get; private set; }
     public bool IsWashingComplete { get; private set; }
     public bool IsWasteDisposed { get; private set; }
-    public bool CanScan => currentStep == ScenarioStep.SurveyMeterInteraction
-        || currentStep == ScenarioStep.SurveyMeterWarningInteraction;
+    // Measurement has finished in the warning/return step; contact must not restart its audio.
+    public bool CanScan => currentStep == ScenarioStep.SurveyMeterInteraction;
     public bool CanDetectContamination => CanScan && !IsTreatmentComplete;
     public bool CanVerifyTreatment => currentStep == ScenarioStep.SurveyMeterInteraction && IsTreatmentComplete;
     public bool CanWash => currentStep == ScenarioStep.SalineInteraction && !IsWashingComplete;

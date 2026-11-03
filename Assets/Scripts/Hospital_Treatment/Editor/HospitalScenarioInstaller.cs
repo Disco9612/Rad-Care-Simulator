@@ -136,7 +136,7 @@ namespace RadCare.HospitalTreatment.Editor
                         var t=s.targets.First(t=>t.action==action&&t.kind!=HospitalInteraction.WrongChoice&&(t.kind!=HospitalInteraction.Carry||action==HospitalAction.RemoveDressing));
                         if(t.kind==HospitalInteraction.Socket) {
                             if(action==HospitalAction.SecureDressing){s.Act(t);if(s.Procedure.Index!=index)throw new Exception("Tape accepted UI click");}
-                            if(action==HospitalAction.SecureDressing){var original=s.GetComponentsInChildren<Transform>(true).First(x=>x.name=="Fixation_Tape");if(Vector3.Distance(t.transform.position,original.position)>.002f)throw new Exception("Tape floats above original fitted position");}
+                            if(action==HospitalAction.SecureDressing){if(Vector3.Distance(t.transform.position,new Vector3(-.07084f,1.0497f,-.40695766f))>.0001f||Quaternion.Angle(t.transform.rotation,new Quaternion(-.29243028f,0,0,.9562869f))>.01f)throw new Exception("Tape placement differs from approved dressing pose");}
                             var item=s.targets.First(x=>x.itemId==t.itemId&&x.kind==HospitalInteraction.Carry);
                             if(s.input.Held==null){Physics.SyncTransforms();if(s.input.FindNearTarget(item.grabCollider.bounds.center)!=item)throw new Exception("Inside-collider near grab failed "+action);if(!s.input.TryGrab(item))throw new Exception("Cannot pick up "+action);}
                             item.movable.position=t.transform.position+Vector3.up*2;

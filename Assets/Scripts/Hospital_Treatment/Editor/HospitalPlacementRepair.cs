@@ -68,7 +68,7 @@ namespace RadCare.HospitalTreatment.Editor {
    MoveCarry(s,"Waterproof_Drape",new Vector3(-1.32f,.768f,.72f));
    MoveCarry(s,"Fresh_Dressing",new Vector3(-1.07f,.765f,.74f));
    // Used swabs stay beside the basin, not underneath it.
-   MoveCarry(s,"Used_Consumables",new Vector3(-1.43f,.773f,-.88f));
+   MoveCarry(s,"Used_Consumables",new Vector3(-1.43f,.773f,-.72f));
    var receiverSocket=Target(s,HospitalAction.PlaceReceiver,HospitalInteraction.Socket);receiverSocket.transform.position=new Vector3(-.50f,.822f,-.405f);receiverSocket.transform.rotation=Quaternion.Euler(0,90,0);
    var support=new GameObject("Bedside_Receiver_Support");support.transform.SetParent(Find("Hospital_Treatment_Scenario"),false);
    var mat=Find("Patient_Bed").GetComponentsInChildren<MeshRenderer>().First(r=>r.name.Contains("rail_bar")).sharedMaterial;

@@ -37,8 +37,8 @@ public class EvaluationGameManager : MonoBehaviour
     public bool IsTreatmentComplete { get; private set; }
     public bool IsWashingComplete { get; private set; }
     public bool IsWasteDisposed { get; private set; }
-    public bool CanScan => !IsRestarting && (currentStep == EvaluationStep.SurveyMeterInteraction
-        || currentStep == EvaluationStep.SurveyMeterWarningInteraction);
+    // Keep the return interaction available without restarting measurement audio.
+    public bool CanScan => !IsRestarting && currentStep == EvaluationStep.SurveyMeterInteraction;
     public bool CanDetectContamination => CanScan && !IsTreatmentComplete;
     public bool CanVerifyTreatment => !IsRestarting && currentStep == EvaluationStep.SurveyMeterInteraction && IsTreatmentComplete;
     public bool CanWash => !IsRestarting && currentStep == EvaluationStep.SalineInteraction && !IsWashingComplete;

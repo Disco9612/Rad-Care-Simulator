@@ -15,7 +15,7 @@ MonoBehaviour:
   lobbyScene: Assets/Scenes/MainLobby.unity
   font: {fileID: 11400000, guid: 59685e71178ed1f4b8e7ece4761b26dd, type: 2}
   scenarios:
-  - title: "\uBCD1\uC6D0 \uC81C\uC5FC \uAD50\uC721"
+  - title: "\uAE34\uAE09 \uC81C\uC5FC \uAD50\uC721"
     description: "\uC624\uC5FC \uCE21\uC815 / \uC2DD\uC5FC\uC218 \uC138\uCC99 / \uC9D1\uAC8C
       \uCC98\uCE58 \uBC0F \uD3D0\uAE30 / \uC7AC\uCE21\uC815"
     tutorialScene: Assets/Scenes/Emergency_Decon_Tutorial.unity

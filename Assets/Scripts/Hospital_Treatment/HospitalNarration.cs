@@ -39,6 +39,7 @@ namespace RadCare.HospitalTreatment
             if(scenario==null||!scenario.Ready||source==null||scenario.Evaluation?.IsRestarting==true||EquipmentFeedbackPlaying)return;
             var procedure=scenario.Procedure;
             string key=procedure.Complete?"complete":HospitalProcedure.NarrationKey(procedure.Index);
+            if(!procedure.Complete&&procedure.Current.Action==HospitalAction.ReturnSyringe)key="second_wash_complete";
             if(!procedure.Complete&&HospitalScenario.IsMeasurement(procedure.Current.Action)) {
                 if(scenario.AssistantSeconds>0)key="assistant_wait_"+procedure.Current.Stage;
                 else if(scenario.AssistantReportReady)key=procedure.Current.Stage==1?"assistant_before":"assistant_after";
@@ -63,8 +64,9 @@ namespace RadCare.HospitalTreatment
             foreach(string key in keys) {
                 if(string.IsNullOrEmpty(key))continue;
                 var cue=cues?.FirstOrDefault(c=>c.key==key);
-                if(cue?.clip==null){Debug.LogWarning("Hospital narration cue missing: "+key,this);continue;}
-                source.clip=cue.clip;source.volume=volume;source.pitch=1;source.Play();
+                var clip=key=="second_wash_complete"?Resources.Load<AudioClip>("HospitalTreatment/second_wash_complete"):cue?.clip;
+                if(clip==null){Debug.LogWarning("Hospital narration cue missing: "+key,this);continue;}
+                source.clip=clip;source.volume=volume;source.pitch=1;source.Play();
                 while(source.isPlaying)yield return null;
                 yield return new WaitForSeconds(.15f);
             }

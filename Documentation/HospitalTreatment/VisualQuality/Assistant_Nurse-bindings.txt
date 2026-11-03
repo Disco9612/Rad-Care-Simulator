@@ -1,0 +1,6 @@
+MAT_skin : Assets/RadCareExpansion/radcare_assistant_nurse/MAT_skin.mat
+MAT_brows : Assets/RadCareExpansion/radcare_assistant_nurse/MAT_brows.mat
+MAT_eyes : Assets/RadCareExpansion/radcare_assistant_nurse/MAT_eyes.mat
+MAT_hair : Assets/RadCareExpansion/radcare_assistant_nurse/MAT_hair.mat
+Nurse_Scrub_Teal : Assets/Scripts/Hospital_Treatment/Materials/Nurse/Nurse_Scrub_Teal.mat
+Medical_White : Assets/Scripts/Hospital_Treatment/Materials/Nurse/Medical_White.mat

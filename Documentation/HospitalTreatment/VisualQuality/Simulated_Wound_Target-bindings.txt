@@ -1,0 +1,3 @@
+MAT_skin_bd25e97059bda634689cbbb99c1d75df : Assets/Scripts/Hospital_Treatment/Materials/Guidance/MAT_skin_bd25e97059bda634689cbbb99c1d75df.mat
+MAT_pink_863baeb5319663b449a3f4ec362571ca : Assets/Scripts/Hospital_Treatment/Materials/Guidance/MAT_pink_863baeb5319663b449a3f4ec362571ca.mat
+MAT_rim_2a5c0d937d96eb24a96500a133e16805 : Assets/Scripts/Hospital_Treatment/Materials/Guidance/MAT_rim_2a5c0d937d96eb24a96500a133e16805.mat

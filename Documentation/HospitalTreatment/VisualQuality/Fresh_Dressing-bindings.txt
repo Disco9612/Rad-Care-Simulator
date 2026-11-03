@@ -1,0 +1,2 @@
+MAT_cotton_f91b3b788333ee04991c1b6df301bf78 : Assets/Scripts/Hospital_Treatment/Materials/Guidance/MAT_cotton_f91b3b788333ee04991c1b6df301bf78.mat
+MAT_fiber_cd90f9427cb36a441b462a63b20f9a06 : Assets/Scripts/Hospital_Treatment/Materials/Guidance/MAT_fiber_cd90f9427cb36a441b462a63b20f9a06.mat

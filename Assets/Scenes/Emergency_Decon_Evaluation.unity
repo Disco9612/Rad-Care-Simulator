@@ -24162,6 +24162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 710b76636f11745f2ebea8cc2c53979c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EvaluationControllerScene
+  leftStickSnapTurn: 1
   moveSpeed: 1.5
   deadZone: 0.15
   obstacleLayer:

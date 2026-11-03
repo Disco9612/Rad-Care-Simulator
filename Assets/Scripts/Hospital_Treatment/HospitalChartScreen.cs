@@ -53,13 +53,18 @@ namespace RadCare.HospitalTreatment {
    displayRoot=new GameObject("Chart screen renderer");displayRoot.transform.position=new Vector3(10000,10000,10000);
    displayCamera=displayRoot.AddComponent<Camera>();displayCamera.enabled=false;displayCamera.orthographic=true;
    displayCamera.orthographicSize=384;displayCamera.aspect=4f/3;displayCamera.nearClipPlane=.1f;displayCamera.farClipPlane=10;
+   displayCamera.stereoTargetEye=StereoTargetEyeMask.None;
    displayCamera.clearFlags=CameraClearFlags.SolidColor;displayCamera.backgroundColor=new Color(.025f,.045f,.07f);displayCamera.cullingMask=1<<30;
    displayCamera.AdditionalCameraData().allowXRRendering=false;
    var panel=new GameObject("Chart Canvas",typeof(RectTransform),typeof(Canvas));panel.layer=30;panel.transform.SetParent(displayRoot.transform,false);
-   var canvas=panel.GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=displayCamera;canvas.planeDistance=1;
+   // This is an off-screen, mono display. ScreenSpaceCamera canvases can be
+   // repositioned by XR canvas updates between our on-demand render requests.
+   var canvas=panel.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=displayCamera;
+   var canvasRect=(RectTransform)panel.transform;canvasRect.sizeDelta=new Vector2(1024,768);canvasRect.localPosition=Vector3.forward;
    displayCamera.targetTexture=Display;
    title=Text(panel.transform,"State",new Vector2(0,305),new Vector2(950,100),44);
-   body=Text(panel.transform,"Record",new Vector2(0,-65),new Vector2(940,540),30);
+   // Keep the record above the action row (top -191.5), including longer step notices.
+   body=Text(panel.transform,"Record",new Vector2(0,20),new Vector2(940,410),30);
    body.alignment=TextAlignmentOptions.TopLeft;
    var bar=new GameObject("Status stripe",typeof(RectTransform),typeof(Image));bar.layer=30;bar.transform.SetParent(panel.transform,false);
    banner=bar.GetComponent<Image>();banner.raycastTarget=false;var rect=(RectTransform)bar.transform;rect.sizeDelta=new Vector2(960,8);rect.anchoredPosition=new Vector2(0,242);
@@ -79,7 +84,10 @@ namespace RadCare.HospitalTreatment {
   TMP_Text Text(Transform parent,string name,Vector2 position,Vector2 size,float fontSize){
    var go=new GameObject(name,typeof(RectTransform));go.layer=30;go.transform.SetParent(parent,false);
    var text=go.AddComponent<TextMeshProUGUI>();text.font=scenario.chartText.font;text.fontSize=fontSize;text.color=Color.white;text.raycastTarget=false;
-   text.alignment=TextAlignmentOptions.Center;text.rectTransform.sizeDelta=size;text.rectTransform.anchoredPosition=position;return text;
+   text.alignment=TextAlignmentOptions.Center;text.rectTransform.sizeDelta=size;text.rectTransform.anchoredPosition=position;
+   text.enableAutoSizing=true;text.fontSizeMin=20;text.fontSizeMax=fontSize;
+   text.overflowMode=TextOverflowModes.Truncate;
+   return text;
   }
   void LateUpdate(){if(Time.unscaledTime>=nextUpdate){nextUpdate=Time.unscaledTime+.1f;RefreshScreen();}ApplyTexture();}
   public void RefreshScreen(){
@@ -100,11 +108,19 @@ namespace RadCare.HospitalTreatment {
     alternateBackground.gameObject.SetActive(visible&&IsChoice);alternateText.gameObject.SetActive(visible&&IsChoice);
     confirmBackground.rectTransform.anchoredPosition=confirmText.rectTransform.anchoredPosition=ConfirmRect().center;
     alternateBackground.rectTransform.anchoredPosition=alternateText.rectTransform.anchoredPosition=ConfirmRect(true).center;
-    confirmText.text=IsChoice?"보호 드레싱 확인":"확인";confirmText.fontSize=IsChoice?30:40;alternateText.text="추가 세척 확인";
+    confirmText.text=IsChoice?"보호 드레싱 확인":"확인";confirmText.fontSizeMax=IsChoice?30:40;alternateText.text="추가 세척 확인";
     title.color=banner.color=pain?new Color(1,.45f,.25f):done?new Color(.3f,1,.65f):new Color(.35f,.85f,1);
-    Canvas.ForceUpdateCanvases();
-    RenderPipeline.SubmitRenderRequest(displayCamera,new UniversalRenderPipeline.SingleCameraRequest{destination=Display});Revision++;
    }
+   // Canvas/font geometry can settle after the text changes. Refresh the entire
+   // off-screen image at the existing 10 Hz cadence, even when its text is unchanged.
+   Canvas.ForceUpdateCanvases();
+   title.ForceMeshUpdate();body.ForceMeshUpdate();actionText.ForceMeshUpdate();
+   if(confirmText.gameObject.activeSelf)confirmText.ForceMeshUpdate();
+   if(alternateText.gameObject.activeSelf)alternateText.ForceMeshUpdate();
+   // Main/XR cameras cannot see this remote canvas. Their culling updates must
+   // not suppress its text during the dedicated camera's manual render.
+   foreach(var renderer in displayRoot.GetComponentsInChildren<CanvasRenderer>())renderer.cull=false;
+   RenderPipeline.SubmitRenderRequest(displayCamera,new UniversalRenderPipeline.SingleCameraRequest{destination=Display});Revision++;
    ApplyTexture();
   }
   void ApplyTexture(){if(Display==null)return;screen.GetPropertyBlock(block);block.SetTexture("_BaseMap",Display);block.SetTexture("_EmissionMap",Display);block.SetColor("_EmissionColor",Color.white);block.SetColor("_BaseColor",Color.white);screen.SetPropertyBlock(block);

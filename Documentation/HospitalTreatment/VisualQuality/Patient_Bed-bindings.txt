@@ -1,0 +1,10 @@
+MAT_teal : Assets/RadCareExpansion/radcare_patient_bed/MAT_teal.mat
+MAT_steel : Assets/RadCareExpansion/radcare_patient_bed/MAT_steel.mat
+MAT_wheel_axle_steel : Assets/RadCareExpansion/radcare_patient_bed/MAT_wheel_axle_steel.mat
+MAT_dark : Assets/RadCareExpansion/radcare_patient_bed/MAT_dark.mat
+MAT_wheel_hub_polymer : Assets/RadCareExpansion/radcare_patient_bed/MAT_wheel_hub_polymer.mat
+MAT_wheel_rim_satin : Assets/RadCareExpansion/radcare_patient_bed/MAT_wheel_rim_satin.mat
+MAT_wheel_tire_rubber : Assets/RadCareExpansion/radcare_patient_bed/MAT_wheel_tire_rubber.mat
+MAT_ivory : Assets/RadCareExpansion/radcare_patient_bed/MAT_ivory.mat
+MAT_fabric : Assets/RadCareExpansion/radcare_patient_bed/MAT_fabric.mat
+MAT_sheet : Assets/RadCareExpansion/radcare_patient_bed/MAT_sheet.mat

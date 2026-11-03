@@ -1,0 +1,27 @@
+Assets/3D Asset/Tent_Unreal/Material/Ml_case_01_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Case_01a_RMA.PNG
+Assets/3D Asset/Hospita supplies/Material/Steel_Stainlessl_Shiny_instruments.mat <- Assets/3D Asset/Hospita supplies/texture/Steel_Stainless_Shiny_Roughness.jpg
+Assets/3D Asset/Tent_Unreal/Material/Ml_SyringeSet_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_SyringeSet_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/SM_Hanger_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Hanger_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_FoldingTable_01_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Folding_Table_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_HazmatMask_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_HazmatMask_01a_RMA.PNG
+Assets/3D Asset/SurvayMeter2/emf_detector.mat <- Assets/3D Asset/SurvayMeter2/Texture/emf_detector_Roughness.png
+Assets/3D Asset/식염수/Saline_Bottle_M.mat : polymer smoothness 0.35
+Assets/3D Asset/Tent_Unreal/Material/SM_StandingSurgical_01b.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_StandingSurgical_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/TX_Tent_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Tent_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/TX_Tent_01b_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Tent_01b_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/ML_Folders_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Folders_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/M1_Bed_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_MedicalBed_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_MililtaryLaptop_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Military_Laptop_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/ML_BloodPressure_01_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_BloodPressure_01_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_FoldingChaire_01_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Folding_Chair_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_FloorPlastic_01_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_FloorPlastic_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/SM_HazMatSuit_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_HazMatSuit_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/ML_MedicalPortableWater_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_MedicalPortableWaterBasin_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/ML_Medical_Supplies_01A_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Medical_Supplies_01A_RMA.PNG
+Assets/3D Asset/환자/source/Patient.mat <- Assets/3D Asset/환자/textures/Patient_Packed0_Roughness.png
+Assets/3D Asset/Tent_Unreal/Material/Ml_DiposalBin_01a.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_DisposalBin_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_Medicine_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Medicine_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_Masks_Gloves_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Masks_Gloves_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/Ml_SyringeSet_01b_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_SyringeSet_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/SM_CurtainDivider_01a_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_CurtainDivider_01a_RMA.PNG
+Assets/3D Asset/Tent_Unreal/Material/SM_Tent_02b_M.mat <- Assets/3D Asset/Tent_Unreal/Texture/TX_Tent_01b_RMA.PNG

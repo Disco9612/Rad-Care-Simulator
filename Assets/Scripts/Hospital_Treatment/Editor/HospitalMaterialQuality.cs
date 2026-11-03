@@ -16,6 +16,12 @@ namespace RadCare.HospitalTreatment.Editor {
   static void Poll(){const string request="Temp/HospitalMaterialQuality.request";if(EditorApplication.isCompiling||EditorApplication.isUpdating||!File.Exists(request))return;string command=File.ReadAllText(request).Trim();File.Delete(request);try{if(command=="preview"){var preview=EditorSceneManager.OpenPreviewScene("Assets/Scenes/Hospital_Tutorial.unity");try{Render(preview,"after");}finally{EditorSceneManager.ClosePreviewScene(preview);}}else Apply();}catch(Exception e){File.WriteAllText("Temp/HospitalMaterialQuality-error.txt",e.ToString());Debug.LogException(e);}}
   static string Profile(string path){
    string n=System.Text.RegularExpressions.Regex.Replace(Path.GetFileNameWithoutExtension(path).ToLowerInvariant(),"_[0-9a-f]{32}$","");
+   if(n=="hospital_vinyl")return "Vinyl";
+   if(n=="warm_clinical_wall"||n=="clean_white"||n=="hospital_blue"||n=="soft_grey_trim")return "Wall";
+   if(n=="mat_skin"||path.Contains("radcare_wound_pad"))return "Skin";
+   if(n=="mat_outfit"||n.Contains("scrub")||n.Contains("nonwoven"))return "Fabric";
+   if(n=="mat_shoes"||n=="mat_wheel_gray")return "Rubber";
+   if(path.Contains("clinical_waste_bin")&&(n=="mat_dark"||n=="mat_red"))return "Polymer";
    if(n.Contains("screen")||n.Contains("lens")||n.Contains("shadow")||n.Contains("skin")||n.Contains("pink"))return null;
    if(n.Contains("steel")||n.Contains("metal")||n.Contains("satin")||n.Contains("stand_gray"))return "Metal";
    if(n.Contains("rubber")||n.Contains("tire"))return "Rubber";
@@ -31,9 +37,9 @@ namespace RadCare.HospitalTreatment.Editor {
   }
   static Texture2D Make(string kind,bool normal){
    const int size=512;var t=new Texture2D(size,size,TextureFormat.RGBA32,false,true);var colors=new Color[size*size];
-   float strength=kind=="Fabric"?.65f:kind=="Metal"?.045f:kind=="Rubber"?.25f:.12f;
+   float strength=kind=="Skin"?.06f:kind=="Wall"?.08f:kind=="Vinyl"?.14f:kind=="Fabric"?.65f:kind=="Metal"?.045f:kind=="Rubber"?.25f:.12f;
    float metal=kind=="Metal"?.85f:0;
-   float smooth=kind=="Metal"?.68f:kind=="Polymer"?.48f:kind=="Rubber"?.18f:.12f;
+   float smooth=kind=="Skin"?.28f:kind=="Wall"?.16f:kind=="Vinyl"?.34f:kind=="Metal"?.68f:kind=="Polymer"?.48f:kind=="Rubber"?.18f:.12f;
    for(int y=0;y<size;y++)for(int x=0;x<size;x++){
     float u=(float)x/size,v=(float)y/size,h=Height(kind,u,v);
     if(normal){var n=new Vector3((Height(kind,u-1f/size,v)-Height(kind,u+1f/size,v))*strength,(Height(kind,u,v-1f/size)-Height(kind,u,v+1f/size))*strength,1).normalized;colors[y*size+x]=new Color(n.x*.5f+.5f,n.y*.5f+.5f,n.z*.5f+.5f,1);}
@@ -44,28 +50,39 @@ namespace RadCare.HospitalTreatment.Editor {
    var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=normal?TextureImporterType.NormalMap:TextureImporterType.Default;importer.sRGBTexture=false;importer.mipmapEnabled=true;importer.wrapMode=TextureWrapMode.Repeat;importer.filterMode=FilterMode.Trilinear;importer.anisoLevel=2;importer.maxTextureSize=size;importer.textureCompression=TextureImporterCompression.Compressed;importer.alphaSource=TextureImporterAlphaSource.FromInput;
    var android=importer.GetPlatformTextureSettings("Android");android.overridden=true;android.maxTextureSize=size;android.format=TextureImporterFormat.ASTC_6x6;importer.SetPlatformTextureSettings(android);importer.SaveAndReimport();return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
   }
+  static Texture2D MakeFloorColor(){
+   const int size=512;var t=new Texture2D(size,size,TextureFormat.RGB24,false);var colors=new Color[size*size];var rng=new System.Random(734);
+   for(int i=0;i<colors.Length;i++){float v=.97f+(float)rng.NextDouble()*.03f;if(rng.NextDouble()<.035)v=.82f+(float)rng.NextDouble()*.08f;colors[i]=new Color(v,v,v);}
+   t.SetPixels(colors);t.Apply();string path=Folder+"/Vinyl_Albedo.png";File.WriteAllBytes(path,t.EncodeToPNG());UnityEngine.Object.DestroyImmediate(t);AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);
+   var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.sRGBTexture=true;importer.mipmapEnabled=true;importer.wrapMode=TextureWrapMode.Repeat;importer.filterMode=FilterMode.Trilinear;importer.anisoLevel=4;importer.maxTextureSize=size;
+   var android=importer.GetPlatformTextureSettings("Android");android.overridden=true;android.maxTextureSize=size;android.format=TextureImporterFormat.ASTC_6x6;importer.SetPlatformTextureSettings(android);importer.SaveAndReimport();return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+  }
   public static void Apply(){
    if(EditorApplication.isPlayingOrWillChangePlaymode)throw new Exception("Stop Play before material upgrade");
    Directory.CreateDirectory(Folder);Directory.CreateDirectory(Output);
    var scene=EditorSceneManager.OpenPreviewScene("Assets/Scenes/Hospital_Tutorial.unity");
    try{
     if(!File.Exists(Output+"/Fresh_Dressing-before.png"))Render(scene,"before");
-    var maps=new Dictionary<string,Texture2D[]>();foreach(var k in new[]{"Fabric","Metal","Polymer","Rubber"})maps[k]=new[]{Make(k,true),Make(k,false)};
-    var roots=new[]{"Assets/RadCareHospital","Assets/RadCareTreatmentDetails","Assets/RadCareExpansion/radcare_patient_bed","Assets/Scripts/Hospital_Treatment/Models/FixationTape","Assets/Scripts/Hospital_Treatment/Materials/Guidance"};
+    var maps=new Dictionary<string,Texture2D[]>();foreach(var k in new[]{"Fabric","Metal","Polymer","Rubber","Vinyl","Wall","Skin"})maps[k]=new[]{Make(k,true),Make(k,false)};
+    var roots=new[]{"Assets/RadCareHospital","Assets/RadCareTreatmentDetails","Assets/RadCareExpansion/radcare_patient_bed","Assets/Scripts/Hospital_Treatment/Models/FixationTape","Assets/Scripts/Hospital_Treatment/Materials/Guidance","Assets/Scripts/Hospital_Treatment/Environment","Assets/Scripts/Hospital_Treatment/Materials/Nurse","Assets/RadCareExpansion/radcare_kidney_basin","Assets/RadCareExpansion/radcare_patient","Assets/RadCareExpansion/radcare_assistant_nurse"};
+    var floorColor=MakeFloorColor();
     var report=new List<string>();
     foreach(var guid in AssetDatabase.FindAssets("t:Material",roots)){
      string path=AssetDatabase.GUIDToAssetPath(guid),profile=Profile(path);if(profile==null)continue;var m=AssetDatabase.LoadAssetAtPath<Material>(path);if(m.shader.name!="Universal Render Pipeline/Lit")continue;
      m.SetTexture("_BumpMap",maps[profile][0]);m.SetFloat("_BumpScale",1);m.EnableKeyword("_NORMALMAP");
-     m.SetTexture("_MetallicGlossMap",maps[profile][1]);m.SetFloat("_Smoothness",1);m.SetFloat("_SmoothnessTextureChannel",0);m.EnableKeyword("_METALLICSPECGLOSSMAP");m.enableInstancing=true;EditorUtility.SetDirty(m);report.Add(profile+" : "+path);
+     m.SetTexture("_MetallicGlossMap",maps[profile][1]);m.SetFloat("_Smoothness",1);m.SetFloat("_SmoothnessTextureChannel",0);m.EnableKeyword("_METALLICSPECGLOSSMAP");m.enableInstancing=true;
+     if(profile=="Vinyl"){m.SetTexture("_BaseMap",floorColor);m.SetTextureScale("_BaseMap",new Vector2(4,4));}
+     if(profile=="Wall")m.SetTextureScale("_BaseMap",new Vector2(4,4));
+     EditorUtility.SetDirty(m);report.Add(profile+" : "+path);
     }
-    AssetDatabase.SaveAssets();Render(scene,"after");File.WriteAllLines(Output+"/materials.txt",report);File.WriteAllText("Temp/HospitalMaterialQuality-result.txt",report.Count+" materials; 8 shared 512px maps; Android ASTC 6x6; no mesh, collider or scene transform changes.");
+    AssetDatabase.SaveAssets();Render(scene,"after");File.WriteAllLines(Output+"/materials.txt",report);File.WriteAllText("Temp/HospitalMaterialQuality-result.txt",report.Count+" materials; 15 shared 512px maps; Android ASTC 6x6; no mesh, collider or scene transform changes.");
    }finally{EditorSceneManager.ClosePreviewScene(scene);}
   }
   static void Render(Scene scene,string suffix){
    var objects=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Transform>(true)).ToArray();
-   foreach(var name in new[]{"Irrigation_Cart","Needleless_Irrigation_Syringe","Fresh_Dressing","Patient_Bed"}){
+   foreach(var name in new[]{"Irrigation_Cart","Needleless_Irrigation_Syringe","Fresh_Dressing","Patient_Bed","Assistant_Nurse","Patient_Supine","Irrigation_Receiver","Simulated_Wound_Target","Corridor floor","Entry left pier"}){
     foreach(var r in objects.SelectMany(t=>t.GetComponents<Renderer>()))r.gameObject.layer=0;
-    var target=objects.First(t=>t.name==name);var renderers=target.GetComponentsInChildren<MeshRenderer>(true).Where(r=>r.enabled).ToArray();if(renderers.Length==0)continue;var bounds=renderers[0].bounds;foreach(var r in renderers.Skip(1))bounds.Encapsulate(r.bounds);
+    var target=objects.FirstOrDefault(t=>t.name==name);if(target==null)continue;var renderers=target.GetComponentsInChildren<Renderer>(true).Where(r=>r.enabled).ToArray();if(renderers.Length==0)continue;var bounds=renderers[0].bounds;foreach(var r in renderers.Skip(1))bounds.Encapsulate(r.bounds);
     File.WriteAllLines(Output+"/"+name+"-bindings.txt",renderers.SelectMany(r=>r.sharedMaterials).Where(m=>m!=null).Distinct().Select(m=>m.name+" : "+AssetDatabase.GetAssetPath(m)));
     foreach(var r in renderers)r.gameObject.layer=29;
     var go=new GameObject("Material QA camera");SceneManager.MoveGameObjectToScene(go,scene);var c=go.AddComponent<Camera>();c.scene=scene;c.cullingMask=1<<29;c.enabled=false;c.nearClipPlane=.005f;c.farClipPlane=100;c.orthographic=true;c.orthographicSize=Mathf.Max(bounds.size.magnitude*.48f,.06f);c.backgroundColor=new Color(.09f,.11f,.14f);c.clearFlags=CameraClearFlags.SolidColor;c.GetUniversalAdditionalCameraData().allowXRRendering=false;

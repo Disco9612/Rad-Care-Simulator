@@ -14,6 +14,7 @@ public class TrainingNavigation : MonoBehaviour
     private TextMeshProUGUI returnLabel;
     private float returnHeld;
     private bool returnArmed;
+    private bool returnEnabled;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStatic()
@@ -56,12 +57,21 @@ public class TrainingNavigation : MonoBehaviour
         returnHeld = 0f;
         returnArmed = false;
         returnLabel = null;
+        returnEnabled = false;
         if (!catalog.ContainsScene(scene.path))
         {
             return;
         }
         OVRCameraRig rig = FindAnyObjectByType<OVRCameraRig>();
         if (rig == null)
+        {
+            return;
+        }
+        returnEnabled = true;
+        // These scenarios retain menu navigation without a head-locked return hint.
+        if (scene.name == "Emergency_Decon_Tutorial"
+            || scene.name == "Emergency_Decon_Tutorial_Hand"
+            || scene.name == "Emergency_Decon_Evaluation")
         {
             return;
         }
@@ -73,7 +83,7 @@ public class TrainingNavigation : MonoBehaviour
 
     private void Update()
     {
-        if (IsLoading || returnLabel == null)
+        if (IsLoading || !returnEnabled)
         {
             return;
         }
@@ -83,7 +93,7 @@ public class TrainingNavigation : MonoBehaviour
         {
             returnArmed = true;
             returnHeld = 0f;
-            returnLabel.text = string.IsNullOrEmpty(Error) ? "왼쪽 메뉴 버튼 1.5초 누르기: 로비" : Error;
+            if (returnLabel != null) returnLabel.text = string.IsNullOrEmpty(Error) ? "왼쪽 메뉴 버튼 1.5초 누르기: 로비" : Error;
             return;
         }
         if (!returnArmed)
@@ -91,7 +101,7 @@ public class TrainingNavigation : MonoBehaviour
             return;
         }
         returnHeld += Time.unscaledDeltaTime;
-        returnLabel.text = $"로비로 돌아가기... {Mathf.CeilToInt(Mathf.Clamp01(returnHeld / 1.5f) * 100f)}%";
+        if (returnLabel != null) returnLabel.text = $"로비로 돌아가기... {Mathf.CeilToInt(Mathf.Clamp01(returnHeld / 1.5f) * 100f)}%";
         if (returnHeld >= 1.5f)
         {
             returnArmed = false;

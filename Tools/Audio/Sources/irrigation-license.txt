@@ -1,0 +1,12 @@
+Irrigation audio provenance
+Original: Emptying syringe in water (slow), ezwa, 18 April 2007.
+https://commons.wikimedia.org/wiki/File:Emptying_syringe_in_water_slow.ogg
+Source: PDSounds record 144. Author released the recording into the public domain.
+Recorded action: water expelled slowly from a syringe into a plastic cup of water.
+This is a Foley recording, not a recording of patient treatment.
+Changes: mono PCM conversion, 220 Hz high-pass / 6500 Hz low-pass, quiet margin trimming,
+crossfaded repetition with mild gain variation, peak limited by scaling to 0.40.
+Rebuild: python Tools/Audio/build_recorded_irrigation.py
+Clinical action reference only (no media copied): Thompson Rivers University,
+Wound Irrigation and Packing transcript:
+https://barabus.tru.ca/media/nursing/transcripts/wound%20irrigation%20and%20packing.pdf

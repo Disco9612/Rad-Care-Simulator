@@ -86,7 +86,7 @@ namespace RadCare.HospitalTreatment.Editor {
    Box("Door kick plate",new Vector3(-.9f,.22f,2.292f),new Vector3(1.03f,.32f,.015f),metal);
    Tube("Door pull",new Vector3(-.48f,.92f,2.21f),new Vector3(-.48f,1.18f,2.21f),.015f,metal);
    Box("Treatment room sign",new Vector3(-.9f,2.48f,2.255f),new Vector3(1.05f,.23f,.02f),blue);
-   Label("Treatment room name","처치실 02  |  TREATMENT",new Vector3(-.9f,2.48f,2.24f),0,1,.2f,1.7f,Color.white);
+   Label("Treatment room name","02  TREATMENT ROOM",new Vector3(-.9f,2.48f,2.24f),0,1,.2f,1.7f,Color.white);
    foreach(float x in new[]{.08f,.95f,1.82f})Box("Observation mullion",new Vector3(x,1.65f,2.29f),new Vector3(.035f,1.25f,.065f),metal);
    foreach(float y in new[]{1.04f,2.27f})Box("Observation frame",new Vector3(.95f,y,2.29f),new Vector3(1.79f,.035f,.065f),metal);
    // Invisible solid pane keeps room bounds consistent without expensive transparent sorting in VR.
@@ -97,7 +97,7 @@ namespace RadCare.HospitalTreatment.Editor {
    foreach(float x in new[]{-2.34f,2.34f})Box("Corridor end",new Vector3(x,1.34f,3.3f),new Vector3(.12f,2.68f,1.8f),wall);
    Box("Corridor handrail",new Vector3(0,.9f,4.09f),new Vector3(4.5f,.10f,.06f),blue);
    Box("Corridor room door",new Vector3(1.15f,1.12f,4.12f),new Vector3(.96f,2.24f,.05f),blue);
-   Label("Corridor wayfinding","진료구역  →\nCLINICAL UNIT",new Vector3(-.55f,1.85f,4.09f),0,1.5f,.5f,3,new Color(.12f,.27f,.3f));
+   Label("Corridor wayfinding","CLINICAL UNIT  >",new Vector3(-.55f,1.85f,4.09f),0,1.5f,.5f,3,new Color(.12f,.27f,.3f));
    Lamp("Corridor LED",new Vector3(.6f,2.64f,3.3f),new Vector3(1.15f,.02f,.45f),true);
    // Wall-mounted hand hygiene station occupies the unused west/front corner.
    Box("Handwash cabinet",new Vector3(-2.03f,.43f,1.15f),new Vector3(.45f,.78f,.78f),white,true);
@@ -110,12 +110,12 @@ namespace RadCare.HospitalTreatment.Editor {
    Box("Paper towel dispenser",new Vector3(-2.19f,1.5f,1.63f),new Vector3(.16f,.28f,.27f),white);
    Box("Towel opening",new Vector3(-2.10f,1.4f,1.63f),new Vector3(.015f,.035f,.19f),dark);
    Box("Hygiene sign",new Vector3(-2.25f,1.77f,1.13f),new Vector3(.03f,.32f,.65f),blue);
-   Label("Hand hygiene text","손 위생\nHAND HYGIENE",new Vector3(-2.23f,1.77f,1.13f),-90,.6f,.28f,2,Color.white);
+   Label("Hand hygiene text","HAND HYGIENE",new Vector3(-2.23f,1.77f,1.13f),-90,.58f,.20f,2,Color.white);
    Box("Supply wall cabinet",new Vector3(2.12f,1.89f,-1.2f),new Vector3(.28f,.5f,1.17f),white);
    for(int i=0;i<3;i++){float z=-1.59f+i*.39f;Box("Supply cabinet front",new Vector3(1.971f,1.89f,z),new Vector3(.018f,.46f,.37f),wall);Box("Supply cabinet pull",new Vector3(1.95f,1.76f,z),new Vector3(.02f,.025f,.12f),metal);}
-   Label("Supply cabinet label","멸균 물품  /  STERILE SUPPLIES",new Vector3(1.95f,2.02f,-1.2f),90,1.1f,.14f,1.5f,new Color(.12f,.27f,.3f));
+   Label("Supply cabinet label","STERILE\nSUPPLIES",new Vector3(1.95f,2.02f,-1.2f),90,.31f,.13f,1.2f,new Color(.12f,.27f,.3f));
    Box("Bed bay sign",new Vector3(-.22f,2.28f,-2.255f),new Vector3(1.1f,.26f,.025f),blue);
-   Label("Bed bay text","02   병원 처치실",new Vector3(-.22f,2.28f,-2.234f),180,1,.22f,2.5f,Color.white);
+   Label("Bed bay text","02  TREATMENT ROOM",new Vector3(-.22f,2.28f,-2.234f),180,1,.22f,2.5f,Color.white);
    AssetDatabase.SaveAssets();
    foreach(var t in scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)))if(previous.TryGetValue(t.GetInstanceID(),out var before)&&t.localToWorldMatrix!=before)throw new Exception("Existing transform changed: "+t.name);
    Refine();EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);CaptureAll();
@@ -123,7 +123,7 @@ namespace RadCare.HospitalTreatment.Editor {
   }
   static void Refine(){
    root=Find("Hospital_Environment_Upgrade");
-   foreach(var t in root.GetComponentsInChildren<TextMeshPro>()){t.enableAutoSizing=true;t.fontSizeMin=.1f;t.fontSizeMax=3;t.margin=new Vector4(.025f,.015f,.025f,.015f);t.ForceMeshUpdate();}
+   foreach(var t in root.GetComponentsInChildren<TextMeshPro>()){t.enableAutoSizing=true;t.fontSizeMin=.1f;t.fontSizeMax=t.name=="Supply cabinet label"?1.2f:3;t.margin=new Vector4(.015f,.01f,.015f,.01f);t.ForceMeshUpdate();}
    Find("Corridor wayfinding").GetComponent<TextMeshPro>().color=new Color(.12f,.27f,.3f);
    foreach(var l in root.GetComponentsInChildren<Light>())l.intensity=.95f;
    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());

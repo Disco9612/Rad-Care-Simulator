@@ -72,7 +72,8 @@ public class TrainingNavigation : MonoBehaviour
         // These scenarios retain menu navigation without a head-locked return hint.
         if (scene.name == "Emergency_Decon_Tutorial"
             || scene.name == "Emergency_Decon_Tutorial_Hand"
-            || scene.name == "Emergency_Decon_Evaluation")
+            || scene.name == "Emergency_Decon_Evaluation"
+            || scene.name == "Hospital_Evaluation")
         {
             return;
         }

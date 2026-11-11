@@ -28,6 +28,7 @@ namespace RadCare.HospitalTreatment
         readonly GrabState rightGrab=new GrabState(),leftGrab=new GrabState();
         public const float NearGrabDistance=.07f;
         void Start() {
+            if(scenario.Evaluation!=null&&hud!=null)hud.gameObject.SetActive(false);
             palms=rig.GetComponentsInChildren<HandGrabInteractor>(true).Where(h=>h.Hand!=null).ToArray();
             // Disable legacy keyboard shortcuts only during this scenario, without changing their sources.
             navigation=TrainingNavigation.Instance;

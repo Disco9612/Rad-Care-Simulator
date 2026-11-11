@@ -51,8 +51,20 @@ public static class FreeEvaluationCheck
  }
  static void Render(){var scene=EditorSceneManager.NewPreviewScene();try{
   var root=new GameObject("Evaluation preview");SceneManager.MoveGameObjectToScene(root,scene);var menu=root.AddComponent<TutorialCompletionMenu>();Set(menu,"catalog",Resources.Load<TrainingCatalog>("TrainingCatalog"));
-  var record=new FreeEvaluationRecord{scenario="Preview",procedures=Enumerable.Range(1,21).Select(i=>new FreeEvaluationRecord.Procedure("p"+i,i%2==0?"처치 후 세 부위 재측정":"오염 소모품 폐기")).ToArray()};record.Begin();for(int i=0;i<19;i++){record.Tick(43);record.Add("p"+(i+2),i%2==0?"처치 후 세 부위 재측정":"오염 소모품 폐기",10);}record.finished=true;Set(menu,"report",record);Invoke(menu,"BuildReport");
-  Canvas.ForceUpdateCanvases();foreach(var text in root.GetComponentsInChildren<TMP_Text>()){text.ForceMeshUpdate(true,true);Require(!text.isTextOverflowing,"Result text overflow: "+text.text);}
+  string[] labels={"초기 오염 측정","측정기 반환","식염수 세척","식염수 반환","집게 처치","오염물 폐기","집게 반환","처치 후 재측정","측정기 반환"};
+  var record=new FreeEvaluationRecord{scenario="Emergency_Decon",procedures=labels.Select((label,i)=>new FreeEvaluationRecord.Procedure("s"+i,label)).ToArray()};record.Begin();
+  foreach(int action in new[]{0,1,4,2,3,4,5,6,7}){record.Tick(38);record.Add("s"+action,labels[action],action==2?10:4);}int completedBeforeGrab=record.CompletedCount;record.Add("grab_Saline","식염수 집기",0,false,"집기");Require(record.CompletedCount==completedBeforeGrab,"Grab counted as treatment completion");record.finished=true;Set(menu,"report",record);Invoke(menu,"BuildReport");
+  var view=root.GetComponent<EvaluationReportView>();
+  for(int page=0;page<3;page++){
+   view.Refresh(page,page);
+   Canvas.ForceUpdateCanvases();foreach(var text in root.GetComponentsInChildren<TMP_Text>()){text.ForceMeshUpdate(true,true);Require(!text.isTextOverflowing,"Result text overflow: "+text.text);}
+  }
+  Require(!view.CanSelect(3)&&!view.CanSelect(5),"Last page buttons enabled");
+  Require(root.GetComponentsInChildren<TMP_Text>().Any(t=>t.text=="집기 완료"),"Grab completion badge missing");
+  view.Refresh(0,0);Require(!view.CanSelect(2)&&!view.CanSelect(4)&&view.CanSelect(3)&&view.CanSelect(5),"First page controls invalid");
+  foreach(var button in view.Buttons)foreach(var other in view.Buttons)if(button!=other){var point=other.rectTransform.InverseTransformPoint(button.rectTransform.position);Require(!other.rectTransform.rect.Contains(new Vector2(point.x,point.y)),"Overlapping button hit areas");}
+  view.Refresh(1,1);Require(root.GetComponentsInChildren<TMP_Text>().Any(t=>t.text=="재수행"),"Repeated event badge missing");view.Refresh(0,0);
+  Canvas.ForceUpdateCanvases();foreach(var text in root.GetComponentsInChildren<TMP_Text>())text.ForceMeshUpdate(true,true);foreach(var renderer in root.GetComponentsInChildren<CanvasRenderer>())renderer.cull=false;
   var go=new GameObject("Preview camera");SceneManager.MoveGameObjectToScene(go,scene);var camera=go.AddComponent<Camera>();camera.enabled=false;camera.scene=scene;camera.orthographic=true;camera.orthographicSize=.60f;camera.transform.position=new Vector3(0,0,-2);camera.nearClipPlane=.01f;camera.farClipPlane=10;camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.01f,.02f,.03f);camera.GetUniversalAdditionalCameraData().allowXRRendering=false;
   var rt=new RenderTexture(1600,1050,24);rt.Create();var old=RenderTexture.active;var image=new Texture2D(1600,1050,TextureFormat.RGB24,false);try{RenderPipeline.SubmitRenderRequest(camera,new UniversalRenderPipeline.SingleCameraRequest{destination=rt});RenderTexture.active=rt;image.ReadPixels(new Rect(0,0,1600,1050),0,0);image.Apply();File.WriteAllBytes("Temp/FreeEvaluationResults.png",image.EncodeToPNG());}finally{RenderTexture.active=old;UnityEngine.Object.DestroyImmediate(image);rt.Release();UnityEngine.Object.DestroyImmediate(rt);}
  }finally{EditorSceneManager.ClosePreviewScene(scene);}}

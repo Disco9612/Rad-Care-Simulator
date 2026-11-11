@@ -93,44 +93,14 @@ public sealed class TutorialCompletionMenu : MonoBehaviour
         dot=TrainingUI.Panel(canvas,"Pointer",Vector2.zero,new Vector2(10,10),new Color(.4f,1,.9f));
         Recenter();
     }
+    EvaluationReportView reportView;
     void BuildReport(){
         if(report==null)report=hospital!=null?hospital.Evaluation.Session.Record:deconEvaluation.Session.Record;
-        canvas=TrainingUI.Canvas("Free evaluation results",transform,new Vector2(1220,850));
-        canvas.localScale=Vector3.one*.0013f;
-        TrainingUI.Panel(canvas,"Background",Vector2.zero,canvas.sizeDelta,new Color(.025f,.055f,.085f));
-        heading=TrainingUI.Label(canvas,catalog.font,"평가 결과 · 자유 수행",new Vector2(0,365),new Vector2(1160,65),38);
-        metrics=TrainingUI.Label(canvas,catalog.font,$"총 수행 시간  {FormatDuration(report.seconds)}     |     절차 수행률  {report.CompletedCount}/{report.procedures.Length} ({report.CompletionPercent:0}%)     |     순서 오류 {report.OrderErrorCount}회",new Vector2(0,285),new Vector2(1160,65),24);
-        TrainingUI.Label(canvas,catalog.font,"절차별 수행 결과 · 표준 순서",new Vector2(-300,215),new Vector2(560,50),28);
-        TrainingUI.Label(canvas,catalog.font,"수행 타임라인 · 실제 행동 순서",new Vector2(300,215),new Vector2(560,50),28);
-        procedureRows=TrainingUI.Label(canvas,catalog.font,"",new Vector2(-300,-5),new Vector2(550,380),21);procedureRows.alignment=TextAlignmentOptions.TopLeft;
-        timelineRows=TrainingUI.Label(canvas,catalog.font,"",new Vector2(300,-5),new Vector2(550,380),21);timelineRows.alignment=TextAlignmentOptions.TopLeft;
-        string[] names={"메인 로비","다시 평가하기","이전 절차","다음 절차","이전 기록","다음 기록"};
-        Vector2[] positions={new Vector2(-300,-350),new Vector2(300,-350),new Vector2(-440,-250),new Vector2(-150,-250),new Vector2(150,-250),new Vector2(440,-250)};
-        buttons=new Image[names.Length];
-        for(int i=0;i<buttons.Length;i++){var size=new Vector2(i<2?520:260,65);buttons[i]=TrainingUI.Panel(canvas,names[i],positions[i],size,normal);TrainingUI.Label(buttons[i].transform,catalog.font,names[i],Vector2.zero,size,25);}
-        status=TrainingUI.Label(canvas,catalog.font,"수행 시점 / 소요 시간 · 완료된 절차는 중복 없이 집계",new Vector2(0,-405),new Vector2(1180,35),20);
-        dot=TrainingUI.Panel(canvas,"Pointer",Vector2.zero,new Vector2(10,10),new Color(.4f,1,.9f));
-        RefreshReport();
+        reportView=gameObject.AddComponent<EvaluationReportView>();
+        reportView.Initialize(report,catalog.font);
+        canvas=reportView.Canvas;buttons=reportView.Buttons;dot=reportView.Pointer;status=reportView.Status;
     }
-    static string Clock(float time){int seconds=Mathf.FloorToInt(Mathf.Max(0,time));return $"{seconds/60:00}:{seconds%60:00}";}
-    void RefreshReport(){
-        var left=new System.Text.StringBuilder();
-        for(int i=procedurePage*RowsPerPage;i<Mathf.Min(report.procedures.Length,(procedurePage+1)*RowsPerPage);i++){
-            var p=report.procedures[i];var entry=report.timeline.FirstOrDefault(e=>e.completed&&e.key==p.key);
-            var error=report.timeline.FirstOrDefault(e=>e.key==p.key&&e.orderError);
-            left.AppendLine($"{i+1}. <color={(error!=null?"#FF9A75":entry!=null?"#66F5A0":"#FFC76A")}>{(error!=null?"[수행·순서 오류]":entry!=null?"[완료]":"[미수행]")}</color> {p.label}");
-            left.AppendLine(entry==null?"     수행 —   /   소요 —":$"     수행 {Clock(entry.at)}   /   소요 {Clock(entry.duration)}");
-            left.AppendLine(error!=null?$"     먼저 수행할 절차: {error.expectedLabel}":"");
-        }
-        var right=new System.Text.StringBuilder();
-        foreach(var e in report.timeline.Skip(timelinePage*RowsPerPage).Take(RowsPerPage)){
-            right.AppendLine($"{e.order}. {(e.orderError?"<color=#FF9A75>[순서 오류]</color>":"["+e.kind+"]")} {e.label}");right.AppendLine($"     {Clock(e.at)}   /   소요 {Clock(e.duration)}");
-            right.AppendLine(e.orderError?$"     먼저 수행할 절차: {e.expectedLabel}":"");
-        }
-        if(report.timeline.Count==0)right.Append("수행 기록이 없습니다.");
-        procedureRows.text=left.ToString();timelineRows.text=right.ToString();
-        status.text=$"절차 {procedurePage+1}/{Mathf.Max(1,(report.procedures.Length+RowsPerPage-1)/RowsPerPage)} 페이지 · 기록 {timelinePage+1}/{Mathf.Max(1,(report.timeline.Count+RowsPerPage-1)/RowsPerPage)} 페이지  |  수행 시점 / 소요 시간 (분:초)";
-    }
+    void RefreshReport(){reportView.Refresh(procedurePage,timelinePage);}
     public static string FormatDuration(float seconds)
     {
         int total=Mathf.FloorToInt(Mathf.Max(0,seconds));
@@ -187,11 +157,12 @@ public sealed class TutorialCompletionMenu : MonoBehaviour
                 for(int i=0;i<buttons.Length;i++)
                 {
                     var p=buttons[i].rectTransform.InverseTransformPoint(point);
-                    if(buttons[i].gameObject.activeSelf && buttons[i].rectTransform.rect.Contains(new Vector2(p.x,p.y)))selected=i;
+                    if((reportView==null||reportView.CanSelect(i)) && buttons[i].gameObject.activeSelf && buttons[i].rectTransform.rect.Contains(new Vector2(p.x,p.y)))selected=i;
                 }
             }
         }
-        for(int i=0;i<buttons.Length;i++)buttons[i].color=selected==i?hover:normal;
+        if(reportView!=null)reportView.SetHover(selected);
+        else for(int i=0;i<buttons.Length;i++)buttons[i].color=selected==i?hover:normal;
         if (!pressed) { if(Time.unscaledTime-shownAt>.5f)armed=true;return; }
         if (!armed)return;
         armed=false;

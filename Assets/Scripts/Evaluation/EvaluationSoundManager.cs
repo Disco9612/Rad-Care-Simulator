@@ -48,6 +48,7 @@ public class EvaluationSoundManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Update(){if(!TrainingInputFocus.Available&&sfxSource!=null&&sfxSource.isPlaying)StopSFX();}
     public void PlaySFX(AudioClip clip, float volume = 1.0f)
     {
         if (clip == null) return;
@@ -80,12 +81,7 @@ public class EvaluationSoundManager : MonoBehaviour
 
     public void PlayNPC(AudioClip clip, float volume = 2.0f)
     {
-        if (clip == null) return;
-        npcQueue.Enqueue(new NPCMessage(clip, volume));
-        if (!isPlayingNPC)
-        {
-            StartCoroutine(ProcessNPCQueue());
-        }
+        // Free evaluation has no scenario narration.
     }
 
     private IEnumerator ProcessNPCQueue()

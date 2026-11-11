@@ -14,7 +14,7 @@ public class QuestControllerScene : MonoBehaviour
     [SerializeField] private float deadZone = 0.15f;
     [SerializeField] private LayerMask obstacleLayer = 1 << 9;
     [SerializeField] private float collisionRadius = 0.2f;
-    [SerializeField] private bool leftStickSnapTurn;
+    [SerializeField] private bool rightStickSnapTurn;
 
     private OVRCameraRig cameraRig;
     private bool turnArmed;
@@ -96,19 +96,19 @@ public class QuestControllerScene : MonoBehaviour
 
     private void Update()
     {
-        if (!OVRManager.hasInputFocus)
+        if (!TrainingInputFocus.Available)
         {
             turnArmed = false;
             return;
         }
 
-        bool leftConnected = OVRInput.IsControllerConnected(OVRInput.Controller.LTouch);
-        if (leftStickSnapTurn)
+        bool rightConnected = OVRInput.IsControllerConnected(OVRInput.Controller.RTouch);
+        if (rightStickSnapTurn)
         {
-            if (!leftConnected) turnArmed = false;
+            if (!rightConnected) turnArmed = false;
             else
             {
-                float turn = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, OVRInput.Controller.LTouch).x;
+                float turn = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, OVRInput.Controller.RTouch).x;
                 if (Mathf.Abs(turn) < 0.25f) turnArmed = true;
                 else if (turnArmed && Mathf.Abs(turn) > 0.7f)
                 {
@@ -117,8 +117,8 @@ public class QuestControllerScene : MonoBehaviour
                 }
             }
         }
-        // The configured scenes use the left stick to turn and the right stick to move.
-        OVRInput.Controller moveController = leftStickSnapTurn ? OVRInput.Controller.RTouch : OVRInput.Controller.LTouch;
+        // Match Hospital: left stick moves; right stick snaps 30 degrees around the head.
+        OVRInput.Controller moveController = OVRInput.Controller.LTouch;
         if (!OVRInput.IsControllerConnected(moveController)) return;
         Vector2 stick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, moveController);
         if (stick.magnitude <= deadZone)

@@ -51,7 +51,7 @@ namespace RadCare.HospitalTreatment
             ((narration.source != null && narration.source.isPlaying) || narration.EquipmentFeedbackPlaying) ? .35f : 1f);
         void Play(string key, Vector3 point)
         {
-            if (!isActiveAndEnabled || !Application.isFocused) return;
+            if (!isActiveAndEnabled || !TrainingInputFocus.Available) return;
             effects.transform.position = point;
             effects.volume = Gain;
             effects.PlayOneShot(Clip(key));
@@ -73,7 +73,7 @@ namespace RadCare.HospitalTreatment
         {
             effects.volume = Gain;
             water.volume = Gain * .45f;
-            bool active = scenario != null && scenario.Ready && scenario.enabled && Application.isFocused
+            bool active = scenario != null && scenario.Ready && scenario.enabled && TrainingInputFocus.Available
                 && scenario.input != null && scenario.input.isActiveAndEnabled
                 && scenario.Evaluation?.IsRestarting != true && scenario.Procedure.IsWashing && scenario.Irrigating;
             if (active)

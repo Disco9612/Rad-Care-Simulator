@@ -30,13 +30,21 @@ namespace RadCare.HospitalTreatment
         public float AssistantSeconds {get;private set;}
         public bool AssistantReportReady {get;private set;}
         public static bool IsMeasurement(HospitalAction action)=>action==HospitalAction.MeasureWound||action==HospitalAction.MeasureSkin||action==HospitalAction.MeasureReference;
-        public string AssistantMessage=>AssistantSeconds>0?"보조자: 세 부위를 측정하고 있습니다…":AssistantReportReady?(Procedure.Current.Stage==1?"보조자: 상처 120 · 주변 90 · 대조 30입니다. 결과를 확인해 주세요.":"보조자: 상처 35 · 주변 28 · 대조 12입니다. 결과를 확인해 주세요."):"보조자에게 측정을 요청하세요.";
+        public string AssistantMessage=>AssistantSeconds>0?"보조자: 세 부위를 측정하고 있습니다…":AssistantReportReady?((Evaluation!=null?!Evaluation.Session.Record.Has("WashFirst"):Procedure.Current.Stage==1)?"보조자: 상처 120 · 주변 90 · 대조 30입니다. 결과를 확인해 주세요.":"보조자: 상처 35 · 주변 28 · 대조 12입니다. 결과를 확인해 주세요."):"보조자에게 측정을 요청하세요.";
         public void AdvanceAssistantMeasurement(float seconds){
             if(AssistantSeconds<=0)return;
             AssistantSeconds=Mathf.Max(0,AssistantSeconds-seconds);
             if(AssistantSeconds==0){AssistantReportReady=true;Feedback=AssistantMessage;Refresh();}
         }
         void AskAssistant(){
+            if(Evaluation!=null){
+                if(AssistantSeconds>0)return;
+                if(!AssistantReportReady){AssistantSeconds=6;Feedback="측정 중";Refresh();return;}
+                AssistantReportReady=false;Evaluation.RecordMeasurement(6);
+                bool afterWash=Evaluation.Session.Record.Has("WashFirst");
+                if(afterWash)after=new float[]{35,28,12};else before=new float[]{120,90,30};
+                Feedback="측정 결과를 확인했습니다.";Refresh();return;
+            }
             if(AssistantSeconds>0){Feedback=AssistantMessage;return;}
             if(!AssistantReportReady){AssistantSeconds=6;Feedback=AssistantMessage;Refresh();return;}
             AssistantReportReady=false;
@@ -56,11 +64,11 @@ namespace RadCare.HospitalTreatment
             if(statusText==null||chartText==null||input==null||wound==null||receiver==null||targets==null||targets.Length==0) {
                 Debug.LogError("Hospital scenario bindings are incomplete.",this);enabled=false;return;
             }
+            if(Evaluation!=null)statusText.gameObject.SetActive(false);
             Ready=true;chartText.transform.parent.gameObject.SetActive(false);Refresh();
         }
         void Update() {
-            Procedure.Tick(Time.deltaTime);
-            AdvanceAssistantMeasurement(Time.deltaTime);
+            if(TrainingInputFocus.Available&&!Procedure.Complete){Procedure.Tick(Time.deltaTime);AdvanceAssistantMeasurement(Time.deltaTime);}
             RefreshStatus();
         }
         void LateUpdate() { RefreshArmLabels(); }
@@ -88,6 +96,13 @@ namespace RadCare.HospitalTreatment
         }
         public bool CanUse(HospitalInteractable target) {
             if(!Ready||target==null||target.retired||Procedure.Complete||Evaluation?.IsRestarting==true)return false;
+            if(Evaluation!=null){
+                if(!Procedure.Started)return target.action==HospitalAction.Start;
+                if(target.action==HospitalAction.Start)return false;
+                // Keep only one physical assistant control for each repeated measurement action.
+                if(IsMeasurement(target.action))return target==System.Array.Find(targets,t=>IsMeasurement(t.action));
+                return true;
+            }
             if(target.kind==HospitalInteraction.WrongChoice)return false;
             if(target.action==HospitalAction.RespondPain&&input.Held!=null)return false;
             if(target.kind==HospitalInteraction.Irrigator)return Procedure.Current.Action==HospitalAction.SelectSterile||Procedure.IsWashing||Procedure.Current.Action==HospitalAction.ReturnSyringe;
@@ -115,13 +130,13 @@ namespace RadCare.HospitalTreatment
         }
         public void Act(HospitalInteractable target) {
             if(!Ready||Procedure.Complete||Evaluation?.IsRestarting==true)return;
-            if(Evaluation!=null&&target!=null&&target.kind==HospitalInteraction.WrongChoice){Evaluation.RecordMistake("잘못된 치료 선택",true);Feedback="선택을 다시 검토하세요.";return;}
+            if(Evaluation!=null&&target!=null&&target.kind==HospitalInteraction.WrongChoice){Evaluation.RecordMistake(target.label,true);Feedback="선택을 다시 검토하세요.";return;}
             if(!CanUse(target)){Evaluation?.RecordMistake("순서에 맞지 않는 대상 선택",false);Feedback="현재 안내된 행동을 먼저 완료하세요.";return;}
             if(target.action==HospitalAction.SecureDressing){Feedback="테이프를 직접 집어 드레싱 위에 붙이세요.";return;}
             if(IsMeasurement(target.action)){if(AssistantSeconds<=0)InteractionAudio.Confirmed(target);AskAssistant();return;}
             if(target.kind==HospitalInteraction.WrongChoice){Evaluation?.RecordMistake("잘못된 치료 선택",true);Feedback="모의 지시는 보호 드레싱과 관찰입니다. 지시를 다시 확인하세요.";return;}
             if(target.action==HospitalAction.ClearWaste){Evaluation?.RecordMistake("폐기물 직접 수거 누락",false);Feedback="세척 도구를 카트에 놓고 오염 소모품을 직접 집어 폐기함 안에 넣으세요.";return;}
-            if(target.action==HospitalAction.RespondPain&&!paused){Evaluation?.RecordMistake("통증 호소 중 세척 지속",true);Feedback="트리거를 놓아 세척을 중단한 뒤 상태를 확인하세요.";return;}
+            if(target.action==HospitalAction.RespondPain&&!paused&&Evaluation==null){Evaluation?.RecordMistake("통증 호소 중 세척 지속",true);Feedback="트리거를 놓아 세척을 중단한 뒤 상태를 확인하세요.";return;}
             if(target.action==HospitalAction.SaveChart&&!SaveRecord())return;
             InteractionAudio.Confirmed(target);
             Accept(target.action);
@@ -130,12 +145,13 @@ namespace RadCare.HospitalTreatment
             target.SetHeld(true);
             InteractionAudio.Picked(target);
             if(target.action==HospitalAction.RemoveDressing||target.action==HospitalAction.SelectSterile)Accept(target.action);
-            else Feedback="발광하는 목표 오브젝트에 잠시 가져가면 자동으로 놓습니다.";
+            else Feedback=Evaluation!=null?"":"발광하는 목표 오브젝트에 잠시 가져가면 자동으로 놓습니다.";
             Refresh();
         }
         public void ReportToolReturned(HospitalInteractable tool) {
             if(!Ready||Procedure.Complete||Evaluation?.IsRestarting==true||input.Held!=null)return;
             if(tool!=null)InteractionAudio.Returned(tool);
+            if(Evaluation!=null&&tool!=null){if(tool.kind==HospitalInteraction.Irrigator)Accept(HospitalAction.ReturnSyringe,Evaluation.HeldDuration(tool));else Evaluation.Session.Record.Add("return_"+tool.itemId,tool.label+" 반환",Evaluation.HeldDuration(tool),false,"반환");return;}
             if(tool!=null&&tool.kind==HospitalInteraction.Irrigator&&Procedure.Current.Action==HospitalAction.ReturnSyringe
                 &&Vector3.Distance(tool.movable.position,tool.homePosition)<.001f)Accept(HospitalAction.ReturnSyringe);
         }
@@ -150,7 +166,7 @@ namespace RadCare.HospitalTreatment
             if(socket.action==HospitalAction.PlaceReceiver)ReceiverPlaced=true;
             if(socket.action==HospitalAction.PlaceDrape)drapePlaced=true;
             InteractionAudio.Placed(socket);
-            Accept(socket.action);return true;
+            Accept(socket.action,Evaluation!=null?Evaluation.HeldDuration(item):0);return true;
         }
         public void Irrigate(HospitalInteractable item,bool pressed,float deltaSeconds=-1) {
             if(Evaluation?.IsRestarting==true){Irrigating=false;IrrigationAligned=false;stream.enabled=false;return;}
@@ -163,6 +179,7 @@ namespace RadCare.HospitalTreatment
             stream.enabled=false;
             if(valid) {
                 if(Procedure.Irrigate(deltaSeconds<0?Time.deltaTime:deltaSeconds,true)) {
+                    if(Evaluation!=null){Evaluation.RecordAction(Evaluation.Session.Record.Has("WashFirst")?HospitalAction.WashSecond:HospitalAction.WashFirst,10);Feedback="";Refresh();return;}
                     Feedback=Procedure.Current.Action==HospitalAction.RespondPain?"환자: ‘통증이 심해졌어요.’ 주사기를 카트에 내려놓고 모니터에서 상태를 확인하세요.":"세척 완료. 트리거를 놓고 주사기를 카트의 원래 자리에 내려놓으세요.";
                     if(Procedure.Current.Action==HospitalAction.RespondPain)pain="초기 5/10 → 세척 중 7/10 (모의 응답)";
                     Refresh();
@@ -170,17 +187,18 @@ namespace RadCare.HospitalTreatment
             } else if(pressed&&Procedure.IsWashing)Feedback="주사기 분출구를 상처의 발광 부위에 대세요. 청록색 접촉 표시가 켜진 상태에서 트리거를 누르세요.";
         }
         public bool IsIrrigationAligned(HospitalInteractable item) {
-            if(item==null||item.kind!=HospitalInteraction.Irrigator||item.tip==null||!Procedure.IsWashing||!drapePlaced||!ReceiverPlaced)return false;
-            if(Vector3.Distance(receiver.position,wound.position)>=.55f||receiver.position.y>=wound.position.y)return false;
+            if(item==null||item.kind!=HospitalInteraction.Irrigator||item.tip==null||!Procedure.IsWashing||(Evaluation==null&&(!drapePlaced||!ReceiverPlaced)))return false;
+            if(Evaluation==null&&(Vector3.Distance(receiver.position,wound.position)>=.55f||receiver.position.y>=wound.position.y))return false;
             var offset=item.tip.position-IrrigationPoint;
             float depth=Vector3.Dot(offset,IrrigationNormal);
             return Mathf.Abs(depth)<=IrrigationRange&&Vector3.ProjectOnPlane(offset,IrrigationNormal).magnitude<=IrrigationRadius
                 &&Vector3.Dot(item.tip.forward,IrrigationNormal)<-.25f;
         }
 
-        void Accept(HospitalAction action) {
+        void Accept(HospitalAction action,float duration=0) {
             int stage=Procedure.Current.Stage;
             if(!Procedure.Try(action))return;
+            Evaluation?.RecordAction(action,duration);
             Feedback="확인했습니다.";
             if(action==HospitalAction.AskPain)pain="초기 통증 5/10 (모의 응답)";
             if(action==HospitalAction.RespondPain){pain="5/10 → 7/10 → 중단·확인 후 4/10 (모의 응답)";Feedback="모의 의료진 지시: 상태 확인 후 부드럽게 세척 재개.";}
@@ -218,8 +236,8 @@ namespace RadCare.HospitalTreatment
                 foreach(var c in t.GetComponents<Collider>())c.enabled=selectable&&!t.IsMovable&&!HospitalChartScreen.UsesMonitor(t);
                 if(t.grabCollider!=null)t.grabCollider.enabled=selectable;
                 var label=t.GetComponentInChildren<TMP_Text>(true);
-                if(IsMeasurement(t.action)){t.label=AssistantSeconds>0?"보조자 · 측정 중…":AssistantReportReady?"보조자 측정 결과 확인":"보조자에게 측정 요청";if(label!=null)label.text=AssistantReportReady?(Procedure.Current.Stage==1?"상처 120 · 주변 90 · 대조 30\n모의 측정 결과 확인":"상처 35 · 주변 28 · 대조 12\n모의 측정 결과 확인"):t.label;}
-                if(label!=null)label.transform.parent.gameObject.SetActive(active&&!HospitalChartScreen.UsesMonitor(t));
+                if(IsMeasurement(t.action)){t.label=AssistantSeconds>0?"보조자 · 측정 중…":AssistantReportReady?"보조자 측정 결과 확인":"보조자에게 측정 요청";if(label!=null)label.text=AssistantReportReady?((Evaluation!=null?!Evaluation.Session.Record.Has("WashFirst"):Procedure.Current.Stage==1)?"상처 120 · 주변 90 · 대조 30\n모의 측정 결과 확인":"상처 35 · 주변 28 · 대조 12\n모의 측정 결과 확인"):t.label;}
+                if(label!=null)label.transform.parent.gameObject.SetActive(active&&!HospitalChartScreen.UsesMonitor(t)&&!(Evaluation!=null&&t.kind==HospitalInteraction.Socket));
                 var renderer=t.GetComponent<Renderer>();if(renderer!=null)renderer.enabled=false;
             }
             if(!Procedure.Complete&&Procedure.Current.Action==HospitalAction.SecureDressing)tapeVisual.SetActive(true);

@@ -22,6 +22,7 @@ namespace RadCare.HospitalTreatment
         public bool EquipmentFeedbackPlaying => evaluationFeedback!=null&&evaluationFeedback.isPlaying;
 
         public void PlayEquipmentFeedback() {
+            if(scenario!=null&&scenario.Evaluation!=null)return;
             if(EquipmentFeedbackPlaying)return;
             if(equipmentFeedback==null)equipmentFeedback=Resources.Load<AudioClip>("HospitalTreatment/equipment_not_for_step");
             if(equipmentFeedback==null){Debug.LogWarning("Hospital equipment feedback audio missing",this);return;}
@@ -33,9 +34,10 @@ namespace RadCare.HospitalTreatment
             EquipmentFeedbackCount++;
         }
 
-        void Update() { RefreshNarration(); }
+        void Update() { if(scenario!=null&&scenario.Evaluation!=null){if(source!=null&&source.isPlaying)ResetForStepRetry();return;} RefreshNarration(); }
         public void RefreshNarration()
         {
+            if(scenario!=null&&scenario.Evaluation!=null)return;
             if(scenario==null||!scenario.Ready||source==null||scenario.Evaluation?.IsRestarting==true||EquipmentFeedbackPlaying)return;
             var procedure=scenario.Procedure;
             string key=procedure.Complete?"complete":HospitalProcedure.NarrationKey(procedure.Index);

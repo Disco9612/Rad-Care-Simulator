@@ -54,6 +54,7 @@ public class TrainingNavigation : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        TutorialCompletionMenu.Install(scene, catalog, this);
         returnHeld = 0f;
         returnArmed = false;
         returnLabel = null;

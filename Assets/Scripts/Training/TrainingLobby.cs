@@ -31,6 +31,8 @@ public class TrainingLobby : MonoBehaviour
     private bool stickReleased = true;
     private bool ready;
     private bool controllerWasTracked;
+    private TrainingMenuPointer menuPointer;
+    private bool triggerWasPressed;
     private readonly Color normalColor = new Color(0.10f, 0.20f, 0.28f, 1f);
     private readonly Color selectedColor = new Color(0.03f, 0.46f, 0.53f, 1f);
     private const int PageSize = 4;
@@ -79,6 +81,7 @@ public class TrainingLobby : MonoBehaviour
         Recenter();
         yield return new WaitForSecondsRealtime(0.5f);
         Recenter();
+        menuPointer=gameObject.AddComponent<TrainingMenuPointer>();
         ready = true;
     }
 
@@ -180,13 +183,14 @@ public class TrainingLobby : MonoBehaviour
     private int PointedChoice()
     {
         pointerDot.gameObject.SetActive(false);
-        Transform pointer = rig.rightControllerAnchor;
-        Ray ray = new Ray(pointer.position, pointer.forward);
+        Ray ray = menuPointer.Ray;
+        menuPointer.Draw(2f);
         Plane plane = new Plane(canvas.forward, canvas.position);
-        if (!plane.Raycast(ray, out float distance) || distance > 5f)
+        if (!plane.Raycast(ray, out float distance) || distance <= 0f || distance > 5f)
         {
             return -1;
         }
+        menuPointer.Draw(distance);
         Vector3 hit = ray.GetPoint(distance);
         Vector3 localHit = canvas.InverseTransformPoint(hit);
         if (canvas.rect.Contains(localHit))
@@ -213,17 +217,19 @@ public class TrainingLobby : MonoBehaviour
         }
         Keyboard keyboard = Application.isEditor ? Keyboard.current : null;
         bool focused = OVRManager.hasInputFocus;
-        bool tracked = focused && OVRInput.IsControllerConnected(OVRInput.Controller.RTouch)
-            && OVRInput.GetControllerPositionTracked(OVRInput.Controller.RTouch);
-        if (tracked && !controllerWasTracked)
+        bool tracked = menuPointer.Read(rig);
+        if (tracked && (!controllerWasTracked || menuPointer.Recovered))
         {
             Recenter();
+            triggerWasPressed=false;
         }
         controllerWasTracked = tracked;
         int pointedIndex = tracked ? PointedChoice() : -1;
         if (!tracked)
         {
             pointerDot.gameObject.SetActive(false);
+            menuPointer.Hide();
+            triggerWasPressed=false;
         }
         if (hoveredIndex != pointedIndex)
         {
@@ -269,7 +275,8 @@ public class TrainingLobby : MonoBehaviour
             selectedIndex = (selectedIndex + direction + choices.Count) % choices.Count;
             Highlight();
         }
-        bool trigger = tracked && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch);
+        bool trigger = tracked && menuPointer.Pressed && !triggerWasPressed;
+        triggerWasPressed=tracked && menuPointer.Pressed;
         if (trigger)
         {
             int pointed = pointedIndex;

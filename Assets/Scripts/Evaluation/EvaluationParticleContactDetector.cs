@@ -23,7 +23,7 @@ public class EvaluationParticleContactDetector : MonoBehaviour
     private void OnParticleTrigger()
     {
         EvaluationGameManager manager = EvaluationGameManager.Instance;
-        if (liquidParticle == null || manager == null || !manager.CanWash
+        if (!TrainingInputFocus.Available || liquidParticle == null || manager == null || !manager.CanWash
             || bottle == null || !manager.IsToolInUse(bottle) || liquidParticle.particleCount <= 0)
         {
             ResetContact();
@@ -47,7 +47,7 @@ public class EvaluationParticleContactDetector : MonoBehaviour
         while (elapsed < requiredTime)
         {
             EvaluationGameManager manager = EvaluationGameManager.Instance;
-            if (!isContacting || !manager.CanWash || !manager.IsToolInUse(bottle))
+            if (!TrainingInputFocus.Available || !isContacting || !manager.CanWash || !manager.IsToolInUse(bottle))
             {
                 checkCoroutine = null;
                 yield break;
@@ -55,7 +55,7 @@ public class EvaluationParticleContactDetector : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        if (EvaluationGameManager.Instance.ReportWashingCompleted())
+        if (EvaluationGameManager.Instance.ReportWashingCompleted(elapsed))
         {
             bottle.ShowReturnTarget();
         }

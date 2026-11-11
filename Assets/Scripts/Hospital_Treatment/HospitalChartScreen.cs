@@ -1,4 +1,6 @@
-﻿using TMPro;
+using System.Linq;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -12,6 +14,10 @@ namespace RadCare.HospitalTreatment {
   public Vector2 screenSize;
   TMP_Text actionText,confirmText,alternateText;
   Image confirmBackground,alternateBackground;
+  readonly List<Image> freeButtons=new List<Image>();
+  readonly List<TMP_Text> freeLabels=new List<TMP_Text>();
+  HospitalInteractable[] FreeTargets()=>scenario.targets.Where(t=>UsesMonitor(t)&&t.action!=HospitalAction.Start).GroupBy(t=>new{t.action,t.kind}).Select(g=>g.First()).ToArray();
+  Rect FreeRect(int i)=>new Rect(-460+(i%3)*310,-100-(i/3)*80,300,75);
   bool IsChoice=>!scenario.Procedure.Complete&&scenario.Procedure.Current.Action==HospitalAction.ProtectChoice;
   public Rect ConfirmRect(bool wrong=false)=>new Rect((IsChoice?(wrong?-235:235):0)-190,-352,380,90);
   public Vector3 ConfirmPoint=>ScreenCenter+screen.transform.TransformDirection(localRight).normalized*(ConfirmRect().center.x/1024*screenSize.x)+screen.transform.TransformDirection(localUp).normalized*(ConfirmRect().center.y/768*screenSize.y);
@@ -31,6 +37,7 @@ namespace RadCare.HospitalTreatment {
    float x=Vector3.Dot(delta,right),y=Vector3.Dot(delta,up);
    if(Mathf.Abs(x)>screenSize.x*.5f||Mathf.Abs(y)>screenSize.y*.5f)return null;
    var pixel=new Vector2(x/screenSize.x*1024,y/screenSize.y*768);
+   if(scenario.Evaluation!=null&&scenario.Procedure.Started){var options=FreeTargets();for(int i=0;i<options.Length;i++)if(FreeRect(i).Contains(pixel)&&scenario.CanUse(options[i]))return options[i];return null;}
    bool wrong=IsChoice&&ConfirmRect(true).Contains(pixel);
    if(!wrong&&!ConfirmRect().Contains(pixel))return null;
    foreach(var t in scenario.targets)if(UsesMonitor(t)&&scenario.CanUse(t)) {
@@ -92,6 +99,7 @@ namespace RadCare.HospitalTreatment {
   void LateUpdate(){if(Time.unscaledTime>=nextUpdate){nextUpdate=Time.unscaledTime+.1f;RefreshScreen();}ApplyTexture();}
   public void RefreshScreen(){
    if(scenario==null||!scenario.Ready||screen==null)return;Initialize();
+   if(scenario.Evaluation!=null&&scenario.Procedure.Started){RefreshFreeScreen();RenderCurrent();return;}
    bool done=scenario.Procedure.Complete;
    bool pain=!done&&scenario.Procedure.Current.Action==HospitalAction.RespondPain;
    StateLabel=done?"처치 완료 · 기록 저장":pain?"통증 호소 · 세척 중단":scenario.Procedure.IsWashing?(scenario.Irrigating?"상처 세척 진행 중":"상처 세척 · 접촉 대기"):HospitalProcedure.Stages[scenario.Procedure.Current.Stage];
@@ -111,6 +119,9 @@ namespace RadCare.HospitalTreatment {
     confirmText.text=IsChoice?"보호 드레싱 확인":"확인";confirmText.fontSizeMax=IsChoice?30:40;alternateText.text="추가 세척 확인";
     title.color=banner.color=pain?new Color(1,.45f,.25f):done?new Color(.3f,1,.65f):new Color(.35f,.85f,1);
    }
+   RenderCurrent();
+  }
+  void RenderCurrent(){
    // Canvas/font geometry can settle after the text changes. Refresh the entire
    // off-screen image at the existing 10 Hz cadence, even when its text is unchanged.
    Canvas.ForceUpdateCanvases();
@@ -122,6 +133,17 @@ namespace RadCare.HospitalTreatment {
    foreach(var renderer in displayRoot.GetComponentsInChildren<CanvasRenderer>())renderer.cull=false;
    RenderPipeline.SubmitRenderRequest(displayCamera,new UniversalRenderPipeline.SingleCameraRequest{destination=Display});Revision++;
    ApplyTexture();
+  }
+  void RefreshFreeScreen(){
+   StateLabel=scenario.Procedure.Complete?"평가 종료":"환자 차트";title.text=StateLabel;
+   body.rectTransform.anchoredPosition=new Vector2(0,105);body.rectTransform.sizeDelta=new Vector2(940,240);body.fontSizeMax=20;body.fontSizeMin=16;
+   body.text=scenario.chartText.text;
+   confirmBackground.gameObject.SetActive(false);alternateBackground.gameObject.SetActive(false);confirmText.gameObject.SetActive(false);alternateText.gameObject.SetActive(false);
+   actionText.rectTransform.anchoredPosition=new Vector2(0,-300);actionText.text="평가 종료: 왼쪽 X 버튼 3초 누르기";
+   var options=FreeTargets();
+   for(int i=freeButtons.Count;i<options.Length;i++){var bg=ButtonBackground(title.transform.parent,"Free action");var label=Text(title.transform.parent,"Free action label",Vector2.zero,new Vector2(280,65),24);label.fontSizeMin=18;freeButtons.Add(bg);freeLabels.Add(label);}
+   for(int i=0;i<options.Length;i++){var rect=FreeRect(i);freeButtons[i].rectTransform.anchoredPosition=rect.center;freeButtons[i].rectTransform.sizeDelta=rect.size;freeLabels[i].rectTransform.anchoredPosition=rect.center;freeLabels[i].text=options[i].kind==HospitalInteraction.WrongChoice?options[i].label:HospitalEvaluation.ActionLabel(options[i].action);freeButtons[i].gameObject.SetActive(!scenario.Procedure.Complete);freeLabels[i].gameObject.SetActive(!scenario.Procedure.Complete);}
+   foreach(var label in freeLabels)label.ForceMeshUpdate();
   }
   void ApplyTexture(){if(Display==null)return;screen.GetPropertyBlock(block);block.SetTexture("_BaseMap",Display);block.SetTexture("_EmissionMap",Display);block.SetColor("_EmissionColor",Color.white);block.SetColor("_BaseColor",Color.white);screen.SetPropertyBlock(block);
    // Per-slot properties take precedence over renderer-wide glow properties.

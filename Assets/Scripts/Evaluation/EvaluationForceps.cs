@@ -80,7 +80,7 @@ public class EvaluationForceps : EvaluationTool
             if (elapsed >= requiredTime3)
             {
                 Manager.ReportTreatmentProgress(3);
-                if (Manager.ReportTreatmentCompleted())
+                if (Manager.ReportTreatmentCompleted(elapsed))
                 {
                     targetObject.SetActive(false);
                     SetFirstMaterial(bloodMaterial);
@@ -90,6 +90,7 @@ public class EvaluationForceps : EvaluationTool
             yield return null;
         }
         contactRoutine = null;
+        contacting = false;
     }
 
     public void ApplyDisposalVisuals()

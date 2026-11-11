@@ -50,13 +50,16 @@ namespace RadCare.HospitalTreatment
         };
         [Serializable] public sealed class Entry { public string action; public int stage; public float seconds; }
         public int Index { get; private set; }
-        public bool Complete => Index >= Steps.Length;
+        public bool FreeEvaluation {get;set;}
+        bool freeEnded;
+        public void EndEvaluation(){freeEnded=true;}
+        public bool Complete => FreeEvaluation ? freeEnded : Index >= Steps.Length;
         public bool Started => Index > 0;
         public Step Current => Complete ? null : Steps[Index];
         public float Elapsed { get; private set; }
         public float WashSeconds { get; private set; }
         public readonly List<Entry> Entries=new List<Entry>();
-        public bool IsWashing => !Complete && (Current.Action==HospitalAction.WashFirst || Current.Action==HospitalAction.WashSecond);
+        public bool IsWashing => !Complete && (FreeEvaluation && Started || Current.Action==HospitalAction.WashFirst || Current.Action==HospitalAction.WashSecond);
         // Existing cleanup speech covers returning the syringe and then collecting waste.
         // Keep saved step_N audio bindings stable when inserting the physical return step.
         public static string NarrationKey(int index) {
@@ -68,6 +71,7 @@ namespace RadCare.HospitalTreatment
         // A retry repeats the current action; completed actions and evaluation time remain recorded.
         public void RestartCurrentStep() { if(!Complete)WashSeconds=0; }
         public bool Try(HospitalAction action) {
+            if(FreeEvaluation){if(Complete||(!Started&&action!=HospitalAction.Start))return false;if(action==HospitalAction.Start){if(Started)return false;Index=1;}Entries.Add(new Entry{action=action.ToString(),stage=0,seconds=Elapsed});return true;}
             if(Complete||Current.Action!=action||IsWashing)return false;
             Advance();return true;
         }
@@ -75,6 +79,7 @@ namespace RadCare.HospitalTreatment
             if(!IsWashing||!valid||seconds<=0)return false;
             WashSeconds=Math.Min(10,WashSeconds+seconds);
             if(WashSeconds<10)return false;
+            if(FreeEvaluation){WashSeconds=0;return true;}
             Advance();return true;
         }
         void Advance() {

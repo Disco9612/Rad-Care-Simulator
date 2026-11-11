@@ -44,7 +44,7 @@ namespace RadCare.HospitalTreatment
             if(scenario.Evaluation?.IsRestarting==true){pointer.enabled=false;hint.text=scenario.Evaluation.RetryMessage;return;}
             bool rightConnected=OVRInput.IsControllerConnected(OVRInput.Controller.RTouch);
             bool leftConnected=OVRInput.IsControllerConnected(OVRInput.Controller.LTouch);
-            if(!Application.isFocused||!OVRManager.hasInputFocus||(!rightConnected&&!leftConnected)) {
+            if(!TrainingInputFocus.Available||(!rightConnected&&!leftConnected)) {
                 scenario.Irrigate(null,false);pointer.enabled=false;
                 placementSeconds=0;pendingSocket=null;useArmed=false;
                 controlsArmed=false;menuArmed=false;menuSeconds=0;turnArmed=false;
@@ -84,7 +84,7 @@ namespace RadCare.HospitalTreatment
             if(close!=null)target=close;
             pointer.enabled=true;pointer.SetPosition(0,ray.origin);pointer.SetPosition(1,close!=null?close.grabCollider.ClosestPoint(palm):ray.GetPoint(nearest));
             hint.text=scenario.Evaluation!=null
-                ? (scenario.Evaluation.RetryMessage??(target!=null?target.label:"평가 진행 중 · 장비와 차트를 직접 확인하세요."))+"\n양손 트리거/그립: 집기 · 트리거: 선택/세척 · 왼쪽 메뉴 1.5초: 로비"
+                ? (scenario.Evaluation.RetryMessage??(target!=null?target.label:"장비와 차트를 직접 확인하세요."))+"\n양손 트리거/그립: 집기 · 트리거: 선택/세척 · 왼쪽 메뉴 1.5초: 로비"
                 : (target!=null?target.label:"안내된 대상의 표시를 조준하세요.")+"\n트리거 또는 그립 한 번: 집기 유지 · 지정 위치: 자동 놓기\n트리거: 선택/세척 · 왼쪽 스틱: 이동 · 오른쪽 스틱: 회전 · 왼쪽 메뉴 1.5초: 로비";
             ShowNavigationFeedback(menu);
             bool click=OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,OVRInput.Controller.RTouch);
@@ -173,12 +173,13 @@ namespace RadCare.HospitalTreatment
             }
             return best;
         }
+        bool leftHome;
         public bool TryGrab(HospitalInteractable target) {
             if(Held!=null||target==null||!target.IsMovable||!scenario.CanSelect(target))return false;
             var evaluation=scenario.Evaluation;
             if(evaluation!=null){if(!evaluation.ReportToolGrab(target))return false;}
             else if(!scenario.CanUse(target))return false;
-            Held=target;useArmed=false;placementSeconds=0;pendingSocket=null;scenario.Picked(target);return true;
+            Held=target;leftHome=false;useArmed=false;placementSeconds=0;pendingSocket=null;scenario.Picked(target);return true;
         }
         public bool TryCompletePlacement(float seconds,bool triggerPressed=false) {
             if(Held==null||scenario.Procedure.Complete||scenario.Evaluation?.IsRestarting==true)return false;
@@ -192,8 +193,10 @@ namespace RadCare.HospitalTreatment
                 }
                 if(s.kind==HospitalInteraction.Socket&&scenario.CanUse(s)&&s.itemId==Held.itemId&&d<distance&&inOpening){socket=s;distance=d;}
             }
-            bool returnTool=Held.kind==HospitalInteraction.Irrigator&&(scenario.Procedure.Current.Action==HospitalAction.ReturnSyringe||scenario.Procedure.Current.Action==HospitalAction.RespondPain)
-                &&!triggerPressed&&Vector3.Distance(Held.movable.position,Held.homePosition)<.10f;
+            float homeDistance=Vector3.Distance(Held.movable.position,Held.homePosition);
+            if(homeDistance>.15f)leftHome=true;
+            bool returnTool=(scenario.Evaluation!=null?leftHome:Held.kind==HospitalInteraction.Irrigator&&(scenario.Procedure.Current.Action==HospitalAction.ReturnSyringe||scenario.Procedure.Current.Action==HospitalAction.RespondPain))
+                &&!triggerPressed&&homeDistance<.10f;
             if(socket==null&&!returnTool){placementSeconds=0;pendingSocket=null;return false;}
             if(pendingSocket!=socket){placementSeconds=0;pendingSocket=socket;}
             placementSeconds+=Mathf.Max(0,seconds);

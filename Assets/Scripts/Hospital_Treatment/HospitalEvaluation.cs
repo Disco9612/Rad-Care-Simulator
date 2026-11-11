@@ -32,38 +32,40 @@ namespace RadCare.HospitalTreatment
         public string Status {
             get {
                 if(scenario==null||!scenario.Ready)return "평가 준비 중";
-                if(FinalReport!=null)return $"평가 완료 · {FinalReport.score}점 ({FinalReport.grade})\n실수 {MistakeCount}회 · 일반 오류 {OrdinaryErrors} · 중대 오류 {CriticalErrors}\n왼쪽 메뉴 버튼 길게 누르기: 로비";
+                if(FinalReport!=null)return "평가가 종료되었습니다. 종료 메뉴에서 평가 결과를 확인하세요.";
                 var p=scenario.Procedure;
                 string feedback=IsRestarting||Time.unscaledTime<feedbackUntil?retryFeedback:"차트와 환자 상태를 확인하며 처치를 진행하세요.";
                 if(!IsRestarting&&p.Current?.Action==HospitalAction.ReturnSyringe)feedback="세척 완료 · 트리거를 놓고 주사기를 카트의 원래 자리에 놓으세요.";
-                return $"병원 상처 처치 평가 · {p.Elapsed/60:00}:{p.Elapsed%60:00}\n완료 항목 {p.Index}/{HospitalProcedure.Steps.Length} · 실수 {MistakeCount}회 · 일반 {OrdinaryErrors} · 중대 {CriticalErrors}\n{feedback}";
+                return $"병원 상처 처치 평가 · {p.Elapsed/60:00}:{p.Elapsed%60:00}\n완료 항목 {p.Index}/{HospitalProcedure.Steps.Length}\n{feedback}";
             }
         }
         readonly List<ErrorEntry> mistakes=new List<ErrorEntry>();
-        void Awake(){if(scenario==null)scenario=GetComponent<HospitalScenario>();}
-        void Update(){if(scenario!=null&&scenario.Ready&&scenario.Procedure.Complete&&FinalReport==null)Save(true);}
-        // Shared by every Carry/Irrigator grab, including ray and near-hand selection.
-        public bool ReportToolGrab(HospitalInteractable tool){
-            if(tool==null||!tool.IsMovable||!scenario.CanSelect(tool))return false;
-            if(scenario.CanUse(tool))return true;
-            RecordMistake("순서에 맞지 않는 도구 선택",false,tool);
-            return false;
+        public FreeEvaluationSession Session {get;private set;}
+        public bool FreeMode=>true;
+        readonly Dictionary<HospitalInteractable,float> grabbed=new Dictionary<HospitalInteractable,float>();
+        void Awake(){
+            if(scenario==null)scenario=GetComponent<HospitalScenario>();
+            scenario.Procedure.FreeEvaluation=true;
+            Session=gameObject.AddComponent<FreeEvaluationSession>();
+            var definitions=new List<FreeEvaluationRecord.Procedure>();
+            var actions=new[]{HospitalAction.Chart,HospitalAction.AskPain,HospitalAction.RemoveDressing,HospitalAction.DisposeDressing,HospitalAction.AdjustLight,HospitalAction.RecordBefore,HospitalAction.PlaceDrape,HospitalAction.PlaceReceiver,HospitalAction.SelectSterile,HospitalAction.WashFirst,HospitalAction.RespondPain,HospitalAction.WashSecond,HospitalAction.ReturnSyringe,HospitalAction.ClearWaste,HospitalAction.RecordAfter,HospitalAction.ApplyDressing,HospitalAction.SecureDressing,HospitalAction.ExplainPlan,HospitalAction.SaveChart};
+            foreach(var action in actions)definitions.Add(new FreeEvaluationRecord.Procedure(action.ToString(),ActionLabel(action)));
+            definitions.Insert(5,new FreeEvaluationRecord.Procedure("measure_before","처치 전 세 부위 측정"));
+            definitions.Insert(15,new FreeEvaluationRecord.Procedure("measure_after","처치 후 세 부위 재측정"));
+            Session.Configure("Hospital",definitions.ToArray());Session.Finished+=()=>{scenario.Procedure.EndEvaluation();scenario.input.ResetForStepRetry();scenario.InteractionAudio?.StopAll();scenario.Refresh();};
         }
-        public void RecordMistake(string reason,bool critical,HospitalInteractable selectedTool=null){
-            if(scenario==null||!scenario.Ready||!scenario.Procedure.Started||scenario.Procedure.Complete||IsRestarting||FinalReport!=null)return;
-            float seconds=scenario.Procedure.Elapsed;
-            IsRestarting=true;
-            mistakes.Add(new ErrorEntry{reason=reason,critical=critical,seconds=seconds,
-                stepIndex=scenario.Procedure.Index,action=scenario.Procedure.Current.Action.ToString(),selectedTool=selectedTool!=null?selectedTool.name:null});
-            if(critical)CriticalErrors++;else OrdinaryErrors++;
-            retryFeedback=$"실수 +1 · {reason}"+(selectedTool!=null?$" ({selectedTool.label})":"")+"\n현재 단계부터 다시 진행하세요.";
-            feedbackUntil=Time.unscaledTime+2.25f;
-            scenario.RestartCurrentStep();
-            if(selectedTool!=null&&selectedTool.IsMovable&&!selectedTool.retired)selectedTool.ReturnHome();
-            if(selectedTool!=null)scenario.GetComponent<HospitalNarration>()?.PlayEquipmentFeedback();
-            Physics.SyncTransforms();
-            StartCoroutine(FinishRestart());
+        public static string ActionLabel(HospitalAction a){
+            switch(a){
+                case HospitalAction.ReviewOrder:return "의료진 지시 확인";case HospitalAction.ProtectChoice:return "보호 드레싱 선택";case HospitalAction.Chart:return "환자 인계 확인";case HospitalAction.AskPain:return "초기 통증 확인";case HospitalAction.RemoveDressing:return "기존 드레싱 제거";case HospitalAction.DisposeDressing:return "기존 드레싱 폐기";case HospitalAction.AdjustLight:return "처치등 조절";case HospitalAction.RecordBefore:return "처치 전 측정 기록";case HospitalAction.PlaceDrape:return "방수포 배치";case HospitalAction.PlaceReceiver:return "체액 받이 배치";case HospitalAction.SelectSterile:return "멸균 세척 도구 선택";case HospitalAction.WashFirst:return "첫 번째 세척";case HospitalAction.RespondPain:return "환자 상태 확인";case HospitalAction.WashSecond:return "두 번째 세척";case HospitalAction.ReturnSyringe:return "주사기 반환";case HospitalAction.ClearWaste:return "오염 소모품 폐기";case HospitalAction.RecordAfter:return "재측정 결과 기록";case HospitalAction.ApplyDressing:return "새 드레싱 적용";case HospitalAction.SecureDressing:return "고정 테이프 부착";case HospitalAction.ExplainPlan:return "후속 계획 설명";case HospitalAction.SaveChart:return "차트 저장";default:return a.ToString();}
         }
+        public void RecordAction(HospitalAction action,float duration=0){
+            if(action==HospitalAction.Start){Session.Record.Begin();return;}
+            Session.Record.Add(action.ToString(),ActionLabel(action),duration);
+        }
+        public void RecordMeasurement(float duration){bool after=Session.Record.Has("WashFirst");Session.Record.Add(after?"measure_after":"measure_before",after?"처치 후 세 부위 재측정":"처치 전 세 부위 측정",duration);}
+        public bool ReportToolGrab(HospitalInteractable tool){if(tool==null||!scenario.CanSelect(tool))return false;grabbed[tool]=Session.Record.seconds;Session.Record.Add("grab_"+tool.itemId,tool.label,0,false,"집기");return true;}
+        public float HeldDuration(HospitalInteractable item)=>grabbed.TryGetValue(item,out float time)?Session.Record.seconds-time:0;
+        public void RecordMistake(string reason,bool critical,HospitalInteractable selectedTool=null){Session.Record.Add("attempt",reason,0,false,"시도");}
         IEnumerator FinishRestart(){
             yield return new WaitForSecondsRealtime(.25f);
             IsRestarting=false;
@@ -83,6 +85,6 @@ namespace RadCare.HospitalTreatment
                 File.WriteAllText(ReportPath,JsonUtility.ToJson(report,true));FinalReport=report;
             }catch(Exception e){Debug.LogWarning("Hospital evaluation report save failed: "+e.Message,this);}
         }
-        void OnDestroy(){if(FinalReport==null&&scenario!=null&&scenario.Ready&&scenario.Procedure.Started)Save(scenario.Procedure.Complete);}
+        void OnDestroy(){}
     }
 }

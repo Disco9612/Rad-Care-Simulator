@@ -14,10 +14,12 @@ public abstract class EvaluationTool : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private Rigidbody body;
+    bool leftHome;
+    void LateUpdate(){if(!IsInUse){leftHome=false;return;}if(Vector3.Distance(transform.position,initialPosition)>.15f)leftHome=true;}
 
     public abstract EvaluationToolKind Kind { get; }
     protected EvaluationGameManager Manager => EvaluationGameManager.Instance;
-    protected bool IsInUse => Manager != null && Manager.IsToolInUse(this);
+    protected bool IsInUse => TrainingInputFocus.Available && Manager != null && Manager.IsToolInUse(this);
 
     protected virtual void Awake()
     {
@@ -77,7 +79,7 @@ public abstract class EvaluationTool : MonoBehaviour
 
     protected bool TryReturn(Collider other)
     {
-        if (!IsInUse || placeHolder == null || !placeHolder.activeInHierarchy
+        if (!IsInUse || !leftHome || placeHolder == null || !placeHolder.activeInHierarchy
             || !other.transform.IsChildOf(placeHolder.transform) || !Manager.CanReturn(Kind))
         {
             return false;

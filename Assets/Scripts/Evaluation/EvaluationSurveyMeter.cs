@@ -15,6 +15,7 @@ public class EvaluationSurveyMeter : EvaluationTool
 
     private void OnTriggerStay(Collider other)
     {
+        if(!TrainingInputFocus.Available){ResetTimers();return;}
         if (!IsInUse || !Manager.CanScan)
         {
             return;
@@ -32,7 +33,7 @@ public class EvaluationSurveyMeter : EvaluationTool
             bloodContactTimer += Time.deltaTime;
             if (bloodContactTimer >= 1f)
             {
-                Manager.ReportMeasurementCompleted();
+                Manager.ReportMeasurementCompleted(Manager.CanVerifyTreatment ? rescanTime : bloodContactTimer);
             }
             return;
         }
@@ -46,7 +47,7 @@ public class EvaluationSurveyMeter : EvaluationTool
             rescanTime += Time.deltaTime;
             if (rescanTime >= 2f)
             {
-                Manager.ReportMeasurementCompleted();
+                Manager.ReportMeasurementCompleted(Manager.CanVerifyTreatment ? rescanTime : bloodContactTimer);
             }
         }
     }

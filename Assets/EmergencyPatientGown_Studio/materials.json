@@ -1,0 +1,136 @@
+{
+  "materials": [
+    {
+      "id": "MAT_pale_teal_cotton",
+      "texture": "MAT_pale_teal_cotton.png",
+      "roughness": 0.9599999785423279,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    },
+    {
+      "id": "MAT_teal_seam",
+      "texture": "MAT_teal_seam.png",
+      "roughness": 0.9800000190734863,
+      "metallic": 0.0,
+      "alpha_cutout": false
+    }
+  ],
+  "assignments": [
+    {
+      "part": "emergency_patient_wrap_gown_front_v_neck_body",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_right_body_side",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_left_body_side",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_right_panel",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_left_panel",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_right_shoulder_bridge",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_left_shoulder_bridge",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_left_elbow_length_open_sleeve",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_right_cut_open_treatment_sleeve",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_wrap_diagonal_front_binding",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_v_neck_right_binding",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_front_hem_left",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_front_hem_right",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_side_waist_tie_knot",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_side_tie_hanging_long",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_side_tie_hanging_short",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_waist_strap_right",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_waist_strap_left",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_waist_knot",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_waist_tie_tail_right",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_waist_tie_tail_left",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_neck_tie_bridge",
+      "material": "MAT_teal_seam"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_neck_knot",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_neck_tie_right",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_back_neck_tie_left",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_front_skirt_soft_fold_right",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_front_skirt_soft_fold_left",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_side_waist_soft_gather",
+      "material": "MAT_pale_teal_cotton"
+    },
+    {
+      "part": "emergency_patient_wrap_gown_left_sleeve_clean_hem",
+      "material": "MAT_teal_seam"
+    }
+  ]
+}

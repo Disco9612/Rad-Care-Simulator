@@ -1,0 +1,3 @@
+Emergency_Decon_Evaluation: PASS right arm surface, saline trigger, original forceps reference, wound removal and rescan; center=(-1.00, 0.73, -3.38)
+Emergency_Decon_Tutorial: PASS right arm surface, saline trigger, original forceps reference, wound removal and rescan; center=(-1.00, 0.73, -3.38)
+Emergency_Decon_Tutorial_Hand: PASS right arm surface, saline trigger, original forceps reference, wound removal and rescan; center=(-1.00, 0.73, -3.38)

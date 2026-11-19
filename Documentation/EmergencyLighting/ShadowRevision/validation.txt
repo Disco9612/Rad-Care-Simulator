@@ -1,0 +1,3 @@
+Emergency_Decon_Evaluation: two real-time soft-shadow spots; fill 0.35; baked data retained; PASS
+Emergency_Decon_Tutorial: two real-time soft-shadow spots; fill 0.35; baked data retained; PASS
+Emergency_Decon_Tutorial_Hand: two real-time soft-shadow spots; fill 0.35; baked data retained; PASS

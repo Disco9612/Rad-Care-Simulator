@@ -18,41 +18,49 @@ public class ParticleContactDetector : MonoBehaviour
         }
     }
 
-    // Inside = Callback 으로 설정되어 있을 때 매 프레임 호출됨
-    void OnParticleTrigger()
+    private float lastWaterContact = float.NegativeInfinity;
+    private readonly List<ParticleCollisionEvent> waterCollisions = new List<ParticleCollisionEvent>();
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (liquidParticle == null) return;
+        int count = liquidParticle.GetCollisionEvents(other, waterCollisions);
+        var trigger = liquidParticle.trigger;
+        for (int i = 0; i < count; i++)
+        for (int j = 0; j < trigger.colliderCount; j++)
+        {
+            Collider wound = trigger.GetCollider(j) as Collider;
+            if (wound == null || !wound.enabled || !wound.gameObject.activeInHierarchy) continue;
+            Vector3 point = waterCollisions[i].intersection;
+            // Only surface impacts at the existing wound volume count as washing.
+            if ((wound.ClosestPoint(point) - point).sqrMagnitude <= 0.015f * 0.015f)
+                lastWaterContact = Time.time;
+        }
+    }
+
+    private void OnParticleTrigger()
+    {
+        if (liquidParticle == null) return;
+        var particles = new List<ParticleSystem.Particle>();
+        if (liquidParticle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, particles) > 0)
+            lastWaterContact = Time.time;
+    }
+
+    private void Update()
     {
         if (liquidParticle == null || GameManager.Instance == null || !GameManager.Instance.CanWash)
         {
+            lastWaterContact = float.NegativeInfinity;
             ResetContact();
             return;
         }
-
-        // [핵심 방어 1] 화면에 살아있는 파티클이 아예 없다면 무시 (나오지도 않았는데 작동하는 버그 원천 차단)
-        if (liquidParticle.particleCount <= 0)
+        bool touching = Time.time - lastWaterContact <= 0.12f;
+        if (touching && !isContacting)
         {
-            ResetContact();
-            return;
-        }
-
-        List<ParticleSystem.Particle> insideParticles = new List<ParticleSystem.Particle>();
-        int numInside = liquidParticle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, insideParticles);
-
-        bool currentlyTouching = (numInside > 0);
-
-        // 실제로 파티클이 트리거 내부로 들어와 있고, 아직 타이머가 시작 안 된 경우
-        if (currentlyTouching && !isContacting)
-        {
-            Debug.Log($"파티클 Inside 감지 시작 (내부 파티클 수: {numInside})");
             isContacting = true;
-            if (checkCoroutine != null) StopCoroutine(checkCoroutine);
             checkCoroutine = StartCoroutine(ContactTimer());
         }
-        // 파티클이 더 이상 내부에 없는데 타이머가 돌고 있던 경우 -> 즉시 중단
-        else if (!currentlyTouching && isContacting)
-        {
-            Debug.Log("파티클 Inside 벗어남 - 타이머 중단");
-            ResetContact();
-        }
+        else if (!touching) ResetContact();
     }
 
     void ResetContact()
@@ -69,14 +77,14 @@ public class ParticleContactDetector : MonoBehaviour
     {
         float elapsed = 0f;
 
-        while (elapsed < requiredTime && GameManager.Instance.CanWash)
+        while (elapsed < requiredTime && isContacting && GameManager.Instance.CanWash)
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         // 지정된 시간 동안 Inside 상태가 유지되었을 때 실행
-        TriggerSpecialEvent();
+        if (isContacting && GameManager.Instance.CanWash && elapsed >= requiredTime) TriggerSpecialEvent();
 
         // 이벤트 실행 후 상태 초기화
         ResetContact();

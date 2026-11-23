@@ -20,25 +20,50 @@ public class EvaluationParticleContactDetector : MonoBehaviour
         bottle = GetComponentInParent<EvaluationSalineBottle>();
     }
 
+    private float lastWaterContact = float.NegativeInfinity;
+    private readonly List<ParticleCollisionEvent> waterCollisions = new List<ParticleCollisionEvent>();
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (liquidParticle == null) return;
+        int count = liquidParticle.GetCollisionEvents(other, waterCollisions);
+        var trigger = liquidParticle.trigger;
+        for (int i = 0; i < count; i++)
+        for (int j = 0; j < trigger.colliderCount; j++)
+        {
+            Collider wound = trigger.GetCollider(j) as Collider;
+            if (wound == null || !wound.enabled || !wound.gameObject.activeInHierarchy) continue;
+            Vector3 point = waterCollisions[i].intersection;
+            // Only surface impacts at the existing wound volume count as washing.
+            if ((wound.ClosestPoint(point) - point).sqrMagnitude <= 0.015f * 0.015f)
+                lastWaterContact = Time.time;
+        }
+    }
+
     private void OnParticleTrigger()
     {
+        if (liquidParticle == null) return;
+        var particles = new List<ParticleSystem.Particle>();
+        if (liquidParticle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, particles) > 0)
+            lastWaterContact = Time.time;
+    }
+
+    private void Update()
+    {
         EvaluationGameManager manager = EvaluationGameManager.Instance;
-        if (!TrainingInputFocus.Available || liquidParticle == null || manager == null || !manager.CanWash
-            || bottle == null || !manager.IsToolInUse(bottle) || liquidParticle.particleCount <= 0)
+        if (!TrainingInputFocus.Available || liquidParticle == null || manager == null || !manager.CanWash || bottle == null || !manager.IsToolInUse(bottle))
         {
+            lastWaterContact = float.NegativeInfinity;
             ResetContact();
             return;
         }
-        int count = liquidParticle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, insideParticles);
-        if (count > 0 && !isContacting)
+        bool touching = Time.time - lastWaterContact <= 0.12f;
+        if (touching && !isContacting)
         {
             isContacting = true;
             checkCoroutine = StartCoroutine(ContactTimer());
         }
-        else if (count == 0)
-        {
-            ResetContact();
-        }
+        else if (!touching) ResetContact();
     }
 
     private IEnumerator ContactTimer()

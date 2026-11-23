@@ -59,7 +59,9 @@ public static class ToolSurfaceMotionGuard
             Mathf.CeilToInt(distance / MaximumSampleSpacing),
             Mathf.CeilToInt(angle / 8f)), 1, MaximumSweepSamples);
 
-        Collider[] toolColliders = held.Colliders;
+        // HandGrabInteractable.Colliders describes the grip, not necessarily the
+        // bottle nozzle or the forceps tip. Use the complete physical tool.
+        Collider[] toolColliders = toolRoot.GetComponentsInChildren<Collider>(true);
         if (toolColliders == null || toolColliders.Length == 0)
         {
             state.SafePosition = desiredPosition;

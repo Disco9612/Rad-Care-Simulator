@@ -127,6 +127,8 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
         }
     }
 
+    private void OnEnable() => Application.onBeforeRender += LateUpdate;
+
     private void ConfigureGripPose(HandBinding hand, HandGrabInteractable target)
     {
         bool isBottle = target.GetComponentInParent<EvaluationSalineBottle>() != null;
@@ -306,6 +308,7 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
     }
     private void OnDisable()
     {
+        Application.onBeforeRender -= LateUpdate;
         ReleaseAll();
     }
 }

@@ -87,8 +87,6 @@ public class QuestTriggerGrab : MonoBehaviour
         }
     }
 
-
-
     private void ConfigureGripPose(HandBinding hand, HandGrabInteractable target)
     {
         bool isBottle = target.GetComponentInParent<SalineBottle>() != null;

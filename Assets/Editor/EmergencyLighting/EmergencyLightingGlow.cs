@@ -31,7 +31,7 @@ public static partial class EmergencyLightingWorkbench
             AssetDatabase.AddObjectToAsset(bloom, profile);
         }
         bloom.active = true;
-        bloom.threshold.Override(1.2f);
+        bloom.threshold.Override(2.2f);
         bloom.intensity.Override(.22f);
         bloom.scatter.Override(.65f);
         bloom.highQualityFiltering.Override(false);
@@ -39,7 +39,7 @@ public static partial class EmergencyLightingWorkbench
         EditorUtility.SetDirty(profile);
         var diffuser = AssetDatabase.LoadAssetAtPath<Material>(AssetsRoot + "/LED_Diffuser.mat");
         // URP Unlit uses BaseColor, not EmissionColor, for its HDR radiance.
-        diffuser.SetColor("_BaseColor", new Color(5f, 4.88f, 4.64f, 1f));
+        diffuser.SetColor("_BaseColor", new Color(9f, 8.784f, 8.352f, 1f));
         EditorUtility.SetDirty(diffuser);
         foreach (string path in new[] { "Assets/Settings/Mobile_RPAsset.asset", "Assets/Settings/PC_RPAsset.asset" })
         {

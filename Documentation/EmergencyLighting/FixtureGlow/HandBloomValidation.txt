@@ -1,0 +1,5 @@
+Emergency_Decon_Evaluation: four primary hand renderers use bounded HDR output; PASS
+Emergency_Decon_Tutorial: four primary hand renderers use bounded HDR output; PASS
+Emergency_Decon_Tutorial_Hand: four primary hand renderers use bounded HDR output; PASS
+Interaction/OculusHand: HDR peak=2048
+RadCare/BloomSafeHand: HDR peak=1

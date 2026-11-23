@@ -21581,7 +21581,7 @@ PrefabInstance:
     - target: {fileID: 2295201657191556265, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e5784159c2553864e8f89dd36b60df66, type: 2}
+      objectReference: {fileID: 2100000, guid: 5860cdb843d407548b41d5302989d316, type: 2}
     - target: {fileID: 2295201657191556265, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -24566,6 +24566,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6147449420414275629, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 14b21533064e6c34ba3bcf7bc91122c7, type: 2}
     - target: {fileID: 6147449420463102463, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 1
@@ -25993,7 +25997,7 @@ PrefabInstance:
     - target: {fileID: 7571697209268880050, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e5784159c2553864e8f89dd36b60df66, type: 2}
+      objectReference: {fileID: 2100000, guid: 5860cdb843d407548b41d5302989d316, type: 2}
     - target: {fileID: 7571697209268880050, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -26558,6 +26562,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8702425412432602677, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 14b21533064e6c34ba3bcf7bc91122c7, type: 2}
     - target: {fileID: 8702425412432602679, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0

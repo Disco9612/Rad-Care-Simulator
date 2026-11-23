@@ -55,6 +55,10 @@ public static class ToolSurfaceMotionGuard
         Quaternion startRotation = state.SafeRotation;
         float distance = Vector3.Distance(startPosition, desiredPosition);
         float angle = Quaternion.Angle(startRotation, desiredRotation);
+        if (distance < 0.001f && angle < 0.5f)
+        {
+            return;
+        }
         int samples = Mathf.Clamp(Mathf.Max(
             Mathf.CeilToInt(distance / MaximumSampleSpacing),
             Mathf.CeilToInt(angle / 8f)), 1, MaximumSweepSamples);
@@ -133,7 +137,7 @@ public static class ToolSurfaceMotionGuard
         var depths = new Dictionary<Collider, Dictionary<Collider, float>>();
         foreach (Collider toolCollider in toolColliders)
         {
-            if (toolCollider == null || !toolCollider.enabled || !toolCollider.gameObject.activeInHierarchy)
+            if (toolCollider == null || toolCollider.isTrigger || !toolCollider.enabled || !toolCollider.gameObject.activeInHierarchy)
             {
                 continue;
             }
@@ -171,7 +175,7 @@ public static class ToolSurfaceMotionGuard
     {
         foreach (Collider toolCollider in toolColliders)
         {
-            if (toolCollider == null || !toolCollider.enabled || !toolCollider.gameObject.activeInHierarchy)
+            if (toolCollider == null || toolCollider.isTrigger || !toolCollider.enabled || !toolCollider.gameObject.activeInHierarchy)
             {
                 continue;
             }

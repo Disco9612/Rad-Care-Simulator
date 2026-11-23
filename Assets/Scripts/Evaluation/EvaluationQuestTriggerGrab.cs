@@ -5,7 +5,7 @@ using Oculus.Interaction.HandGrab;
 using Oculus.Interaction.Input;
 using UnityEngine;
 
-[DefaultExecutionOrder(10000)]
+[DefaultExecutionOrder(-90)]
 [RequireComponent(typeof(OVRCameraRig))]
 public class EvaluationQuestTriggerGrab : MonoBehaviour
 {
@@ -19,7 +19,6 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
         public OVRInput.Controller Controller;
         public HandGrabInteractable Held;
         public bool Approved;
-        public readonly ToolSurfaceMotionGuard.State Motion = new ToolSurfaceMotionGuard.State();
     }
 
     private readonly List<HandBinding> hands = new List<HandBinding>();
@@ -109,25 +108,11 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
                 ConfigureGripPose(hand, target);
                 hand.Held = target;
                 hand.Approved = false;
-                ToolSurfaceMotionGuard.Begin(hand.Motion, target);
                 hand.Interactor.ForceSelect(target, false);
             }
         }
     }
 
-    private void LateUpdate()
-    {
-        foreach (HandBinding hand in hands)
-        {
-            if (hand.Held != null && hand.Approved && hand.Interactor != null
-                && hand.Interactor.SelectedInteractable == hand.Held)
-            {
-                ToolSurfaceMotionGuard.Constrain(hand.Motion, transform.root, hand.Held);
-            }
-        }
-    }
-
-    private void OnEnable() => Application.onBeforeRender += LateUpdate;
 
     private void ConfigureGripPose(HandBinding hand, HandGrabInteractable target)
     {
@@ -268,7 +253,6 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
         hand.Interactor.SetComputeShouldSelectOverride(() => false, false);
         hand.Held = null;
         hand.Approved = false;
-        ToolSurfaceMotionGuard.Reset(hand.Motion);
     }
 
     public bool IsHolding(EvaluationTool tool)
@@ -308,7 +292,6 @@ public class EvaluationQuestTriggerGrab : MonoBehaviour
     }
     private void OnDisable()
     {
-        Application.onBeforeRender -= LateUpdate;
         ReleaseAll();
     }
 }

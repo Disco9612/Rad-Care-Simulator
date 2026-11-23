@@ -106,6 +106,7 @@ public abstract class EvaluationTool : MonoBehaviour
     private void SetPose(Vector3 position, Quaternion rotation)
     {
         transform.SetPositionAndRotation(position, rotation);
+        GetComponent<DeconPhysicalContact>()?.AcceptTeleport();
         if (body != null)
         {
             if (!body.isKinematic)

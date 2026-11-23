@@ -69,6 +69,11 @@ public static class ToolSurfaceMotionGuard
             return;
         }
 
+        // The grab system has already moved the tool to the desired pose.
+        // Baseline penetration must come from the last accepted pose; otherwise
+        // a tool already inside a bed or arm is treated as a valid starting state.
+        toolRoot.SetPositionAndRotation(startPosition, startRotation);
+        Physics.SyncTransforms();
         Dictionary<Collider, Dictionary<Collider, float>> startingDepths =
             GetPenetrationDepths(toolRoot, rigRoot, toolColliders);
         int safeSample = 0;

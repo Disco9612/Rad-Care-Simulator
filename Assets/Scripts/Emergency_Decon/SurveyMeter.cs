@@ -15,6 +15,21 @@ public class SurveyMeter: MonoBehaviour
     public bool isTreatmentComplete => GameManager.Instance != null && GameManager.Instance.IsTreatmentComplete;
     private Color[] _originalEmissionColors;
 
+    private bool Held => GetComponent<Oculus.Interaction.Grabbable>() is Oculus.Interaction.Grabbable grab && grab.GrabPoints.Count > 0;
+    private void Update()
+    {
+        if (!Held || !TrainingInputFocus.Available || GameManager.Instance == null || !GameManager.Instance.CanScan) StopMeterAudio();
+    }
+    private void OnDisable() => StopMeterAudio();
+    private void StopMeterAudio()
+    {
+        var sound = SoundManager.Instance;
+        if (sound != null && sound.sfxSource != null
+            && (sound.sfxSource.clip == sound.scanSound || (isWarningPlaying && sound.sfxSource.clip == null))) sound.StopSFX();
+        isScanningPlaying = false; isWarningPlaying = false;
+        bloodContactTimer = 0f; rescanTime = 0f;
+    }
+
     private void Start()
     {
         GameManager.Instance.OnStepChanged += HandleStepChanged;
@@ -72,7 +87,9 @@ public class SurveyMeter: MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        bool isStepValid = GameManager.Instance.CanScan;
+        if (!Held || !TrainingInputFocus.Available) { StopMeterAudio(); return; }
+        bool isStepValid = GameManager.Instance != null && GameManager.Instance.CanScan;
+        if (!isStepValid) { StopMeterAudio(); return; }
 
         // 1. Blood 충돌 처리 (우선순위: 경고음이 더 중요함)
         if (other.name == "Blood" && GameManager.Instance.CanDetectContamination)
@@ -149,6 +166,7 @@ public class SurveyMeter: MonoBehaviour
     private void HandleStepChanged(ScenarioStep newStep)
     {
         StopGlow();
+        StopMeterAudio();
         bloodContactTimer = 0f;
         rescanTime = 0f;
         isScanningPlaying = false;

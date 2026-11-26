@@ -37,7 +37,7 @@ public sealed class DeconFieldAtmosphere : MonoBehaviour
         if (table != null && table.TryGetComponent<Renderer>(out var renderer))
         {
             Bounds b = renderer.bounds;
-            Vector3 corner = new Vector3(b.min.x + .16f, b.max.y + .004f, b.min.z + .15f);
+            Vector3 corner = new Vector3(b.min.x + .48f, b.max.y + .004f, b.min.z + .15f);
             for (int i=0;i<2;i++)
             {
                 var packet = new GameObject("Opened gauze packet " + (i+1));
@@ -82,7 +82,8 @@ public sealed class DeconFieldAtmosphere : MonoBehaviour
             && SoundManager.Instance.NPCSource.isPlaying;
         // Slowly fade in; the master ambience remains quieter than tool feedback.
         fade=Mathf.MoveTowards(fade,1,Time.unscaledDeltaTime*.25f);
-        float target=TrainingInputFocus.Available ? (speaking ? .018f : .045f)*fade : 0;
+        bool audible = Application.isEditor || TrainingInputFocus.Available;
+        float target=audible ? (speaking ? .018f : .045f)*fade : 0;
         ambience.volume=Mathf.MoveTowards(ambience.volume,target,Time.unscaledDeltaTime*.06f);
     }
 
